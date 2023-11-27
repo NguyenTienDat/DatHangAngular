@@ -1,3 +1,4 @@
+
 @use 'themes' as *;
 
 @use '@nebular/theme/styles/globals' as *;
@@ -6,3 +7,7 @@
   @include nb-theme-global();
 };
 /* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+* {
+  font-family: 'Roboto', sans-serif;
+}
