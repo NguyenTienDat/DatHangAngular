@@ -1,0 +1,24 @@
+<p-table
+  [value]="products"
+  responsiveLayout="stack"
+  [breakpoint]="'960px'"
+  [tableStyle]="{ 'min-width': '50rem' }"
+>
+  <ng-template pTemplate="header">
+    <ng-container>
+      <tr>
+        <ng-container *ngFor="let td of headers">
+          <th>{{ td.name }}</th>
+        </ng-container>
+      </tr>
+    </ng-container>
+  </ng-template>
+  <ng-template pTemplate="body" let-product>
+    <tr>
+      <td>{{ product.code }}</td>
+      <td>{{ product.name }}</td>
+      <td>{{ product.category }}</td>
+      <td>{{ product.quantity }}</td>
+    </tr>
+  </ng-template>
+</p-table>
