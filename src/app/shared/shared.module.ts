@@ -4,13 +4,15 @@ import { LeftMenuComponent } from './left-menu/left-menu.component';
 import { CommonModule } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
+import { NbIconModule } from '@nebular/theme';
 
 const components = [LeftMenuComponent, FooterComponent];
 
 @NgModule({
   declarations: [...components],
-  imports: [CommonModule, BrowserModule, FormsModule],
+  imports: [CommonModule, BrowserModule, FormsModule, RouterModule, NbIconModule],
   providers: [],
   exports: [...components],
 })
-export class SharedModule {}
+export class SharedModule { }

@@ -7,10 +7,23 @@
       [ngClass]="isOpen ? 'bx-menu-alt-right' : 'bx-menu'"
       id="btn"
       (click)="btnClick()"
-    ></i>
+    >
+    </i>
   </div>
   <ul class="nav-list">
-    <li>
+    <ng-container *ngFor="let item of leftMenu">
+      <li [routerLink]="item.path" routerLinkActive="menu-active">
+        <a href="javascript:void(0)">
+          <i>
+            <nb-icon [icon]="item.icon"> </nb-icon>
+          </i>
+          <span class="links_name">{{ item.name }}</span>
+        </a>
+        <span class="tooltip">{{ item.tooltip }}</span>
+      </li>
+    </ng-container>
+
+    <!-- <li>
       <i class="bx bx-search"></i>
       <input type="text" placeholder="Search..." />
       <span class="tooltip">Search</span>
@@ -70,7 +83,7 @@
         <span class="links_name">Setting</span>
       </a>
       <span class="tooltip">Setting</span>
-    </li>
+    </li> -->
     <li class="profile">
       <div class="profile-details">
         <img

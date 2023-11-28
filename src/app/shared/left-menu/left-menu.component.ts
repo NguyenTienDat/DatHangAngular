@@ -4,6 +4,7 @@ interface LeftMenu {
   name: string;
   path: string;
   icon: string;
+  tooltip: string;
 }
 
 @Component({
@@ -12,17 +13,26 @@ interface LeftMenu {
   styleUrls: ['./left-menu.component.scss'],
 })
 export class LeftMenuComponent {
+
   leftMenu: LeftMenu[] = [
     {
       name: 'Facebook',
+      tooltip: 'Quản lý các đơn hàng bán trên Facebook',
       path: 'facebook',
-      icon: 'fa facebook',
+      icon: 'facebook-outline',
     },
     {
       name: 'TMĐT',
       path: 'tmdt',
-      icon: 'fa facebook',
+      tooltip: 'Quản lý các đơn hàng bán các sàn như Shopee, Lazada',
+      icon: 'shopping-cart-outline',
     },
+    // {
+    //   name: 'Search',
+    //   tooltip: 'Search',
+    //   path: '#',
+    //   icon: 'bx bx-search',
+    // },
   ];
 
   isOpen = true;

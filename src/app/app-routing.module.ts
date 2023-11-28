@@ -8,6 +8,11 @@ const routes: Routes = [
       import('./facebook/facebook.module').then((m) => m.FacebookModule),
   },
   {
+    path: 'tmdt',
+    loadChildren: () =>
+      import('./tmdt/tmdt.module').then((m) => m.TmdtModule),
+  },
+  {
     path: '',
     redirectTo: '',
     pathMatch: 'full',
@@ -18,4 +23,4 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }
