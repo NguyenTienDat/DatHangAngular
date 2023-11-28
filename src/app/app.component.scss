@@ -1,13 +1,21 @@
-.home-section .text{
+.home-section .text {
   display: inline-block;
   color: #11101d;
   font-size: 25px;
   font-weight: 500;
   margin: 18px
 }
+
 @media (max-width: 420px) {
-  .sidebar li .tooltip{
+  .sidebar li .tooltip {
     display: none;
   }
 }
 
+nb-layout-footer ::ng-deep nav {
+  height: 60px;
+}
+
+.container-wrap {
+  height: 100%;
+}

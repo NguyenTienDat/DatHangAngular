@@ -1,14 +1,16 @@
 <nb-layout>
-  <nb-layout-column>
-    <div class="container-wrap">
-      <app-left-menu></app-left-menu>
-      as
-      <button type="button" routerLink="/facebook">Customers</button>
-      <button type="button" routerLink="/">Orders</button>
-      <button type="button" routerLink="">Home</button>
-
-      <router-outlet></router-outlet>
+  <nb-layout-column class="p-0">
+    <div class="container-wrap d-flex">
+      <div>
+        <app-left-menu></app-left-menu>
+      </div>
+      <div>
+        <button type="button" routerLink="/facebook">Customers</button>
+        <button type="button" routerLink="/">Orders</button>
+        <button type="button" routerLink="">Home</button>
+        <router-outlet></router-outlet>
+      </div>
     </div>
   </nb-layout-column>
-  <nb-layout-footer fixed><app-footer></app-footer> </nb-layout-footer>
+  <nb-layout-footer fixed class="d-none d-md-block boder-0"><app-footer></app-footer> </nb-layout-footer>
 </nb-layout>
