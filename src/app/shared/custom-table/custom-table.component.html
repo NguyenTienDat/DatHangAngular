@@ -1,5 +1,5 @@
 <p-table
-  [value]="products"
+  [value]="dataTable"
   responsiveLayout="stack"
   [breakpoint]="'960px'"
   [tableStyle]="{ 'min-width': '50rem' }"
@@ -15,8 +15,8 @@
   </ng-template>
   <ng-template pTemplate="body" let-product>
     <tr>
-      <td>{{ product.code }}</td>
-      <td>{{ product.name }}</td>
+      <td>{{ product.imagelink }}</td>
+      <td>{{ product.customer }}</td>
       <td>{{ product.category }}</td>
       <td>{{ product.quantity }}</td>
     </tr>

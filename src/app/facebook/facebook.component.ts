@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HeadersTable } from '../shared/custom-table/custom-table.component';
+import { CustomHttpClientService } from '../shared/services/custom-http-client.service';
 
 @Component({
   selector: 'app-facebook',
@@ -46,7 +47,14 @@ export class FacebookComponent implements OnInit {
     },
   ];
 
-  constructor() {}
+  orders = [];
 
-  ngOnInit() {}
+  constructor(private customHttpClientService: CustomHttpClientService) {}
+
+  ngOnInit() {
+    this.customHttpClientService.getFacebookJSON().subscribe((res) => {
+      this.orders = res;
+      console.log(res);
+    });
+  }
 }

@@ -11,7 +11,7 @@ export interface HeadersTable {
   styleUrls: ['./custom-table.component.scss'],
 })
 export class CustomTableComponent implements OnInit {
-  products = [];
+  @Input() dataTable = [];
   @Input() headers!: HeadersTable[];
   constructor() {}
 

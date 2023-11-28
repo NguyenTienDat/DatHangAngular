@@ -8,6 +8,7 @@ import { NbThemeModule, NbLayoutModule } from '@nebular/theme';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { SharedModule } from './shared/shared.module';
 import { FacebookModule } from './facebook/facebook.module';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [AppComponent],
@@ -20,6 +21,7 @@ import { FacebookModule } from './facebook/facebook.module';
     NbEvaIconsModule,
     SharedModule,
     FacebookModule,
+    HttpClientModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
