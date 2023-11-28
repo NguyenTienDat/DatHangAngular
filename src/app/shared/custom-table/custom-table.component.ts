@@ -1,8 +1,11 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { renderLink } from '../utils';
 
 export interface HeadersTable {
   name: string;
-  field?: string;
+  field: string;
+  type: 'string' | 'image' | 'number' | 'link';
+  className?: string;
 }
 
 @Component({
@@ -13,6 +16,7 @@ export interface HeadersTable {
 export class CustomTableComponent implements OnInit {
   @Input() dataTable = [];
   @Input() headers!: HeadersTable[];
+  renderLink = renderLink;
   constructor() {}
 
   ngOnInit() {}

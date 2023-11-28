@@ -5,20 +5,29 @@
   [tableStyle]="{ 'min-width': '50rem' }"
 >
   <ng-template pTemplate="header">
-    <ng-container>
-      <tr>
-        <ng-container *ngFor="let td of headers">
-          <th>{{ td.name }}</th>
-        </ng-container>
-      </tr>
-    </ng-container>
+    <tr>
+      <ng-container *ngFor="let td of headers">
+        <th>{{ td.name }}</th>
+      </ng-container>
+    </tr>
   </ng-template>
   <ng-template pTemplate="body" let-product>
-    <tr>
-      <td>{{ product.imagelink }}</td>
-      <td>{{ product.customer }}</td>
-      <td>{{ product.category }}</td>
-      <td>{{ product.quantity }}</td>
-    </tr>
+    <ng-container>
+      <tr>
+        <td *ngFor="let td of headers" [ngClass]="td.className">
+          <ng-container [ngSwitch]="td.type">
+            <ng-container *ngSwitchCase="'image'">
+              <img [src]="product[td.field]" />
+            </ng-container>
+            <ng-container *ngSwitchCase="'link'">
+              <div [innerHTML]="renderLink(product[td.field])"></div>
+            </ng-container>
+            <ng-container *ngSwitchDefault>
+              {{ product[td.field] }}
+            </ng-container>
+          </ng-container>
+        </td>
+      </tr>
+    </ng-container>
   </ng-template>
 </p-table>
