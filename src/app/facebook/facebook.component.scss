@@ -2,4 +2,9 @@
   .image-col img {
     width: 100px;
   }
+
+  .description-col {
+    max-width: 250px;
+    word-break: break-all;
+  }
 }

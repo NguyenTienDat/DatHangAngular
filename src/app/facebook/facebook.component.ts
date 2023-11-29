@@ -14,11 +14,13 @@ export class FacebookComponent implements OnInit {
       field: 'imageLink',
       type: 'image',
       className: 'image-col',
+      noFilter: true,
     },
     {
       name: 'Phân loại',
       field: 'prop',
       type: 'string',
+      noFilter: true,
     },
     {
       name: 'Khách hàng',
@@ -30,6 +32,7 @@ export class FacebookComponent implements OnInit {
       name: 'Ghi chú',
       field: 'description',
       type: 'string',
+      className: 'description-col',
     },
     {
       name: 'Trạng thái',
@@ -45,31 +48,37 @@ export class FacebookComponent implements OnInit {
       name: 'Giá nhập',
       field: 'price',
       type: 'number',
+      noFilter: true,
     },
     {
       name: 'Giá bán',
       field: 'price2',
       type: 'number',
+      noFilter: true,
     },
     {
       name: 'Tệ',
       field: 'CNY_price',
       type: 'number',
+      noFilter: true,
     },
     {
       name: 'Cân',
       field: 'weight',
       type: 'number',
+      noFilter: true,
     },
     {
       name: 'Giá cân',
       field: 'weight_price',
       type: 'number',
+      noFilter: true,
     },
     {
       name: 'Tỉ giá',
       field: 'exchange',
       type: 'number',
+      noFilter: true,
     },
   ];
 

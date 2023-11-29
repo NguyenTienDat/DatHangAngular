@@ -7,7 +7,17 @@
   <ng-template pTemplate="header">
     <tr>
       <ng-container *ngFor="let td of headers">
-        <th>{{ td.name }}</th>
+        <th [ngClass]="td.headerClassName" pSortableColumn="{{ td.field }}">
+          <div class="flex align-items-center">
+            {{ td.name }}
+            <p-columnFilter
+              *ngIf="!td.noFilter"
+              type="text"
+              [field]="td.field"
+              display="menu"
+            ></p-columnFilter>
+          </div>
+        </th>
       </ng-container>
     </tr>
   </ng-template>
@@ -15,17 +25,19 @@
     <ng-container>
       <tr>
         <td *ngFor="let td of headers" [ngClass]="td.className">
-          <ng-container [ngSwitch]="td.type">
-            <ng-container *ngSwitchCase="'image'">
-              <img [src]="product[td.field]" />
+          <div class="table-cell">
+            <ng-container [ngSwitch]="td.type">
+              <ng-container *ngSwitchCase="'image'">
+                <img [src]="product[td.field]" />
+              </ng-container>
+              <ng-container *ngSwitchCase="'link'">
+                <div [innerHTML]="renderLink(product[td.field])"></div>
+              </ng-container>
+              <ng-container *ngSwitchDefault>
+                {{ product[td.field] }}
+              </ng-container>
             </ng-container>
-            <ng-container *ngSwitchCase="'link'">
-              <div [innerHTML]="renderLink(product[td.field])"></div>
-            </ng-container>
-            <ng-container *ngSwitchDefault>
-              {{ product[td.field] }}
-            </ng-container>
-          </ng-container>
+          </div>
         </td>
       </tr>
     </ng-container>

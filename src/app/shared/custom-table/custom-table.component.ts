@@ -6,6 +6,8 @@ export interface HeadersTable {
   field: string;
   type: 'string' | 'image' | 'number' | 'link';
   className?: string;
+  headerClassName?: string;
+  noFilter?: boolean;
 }
 
 @Component({
