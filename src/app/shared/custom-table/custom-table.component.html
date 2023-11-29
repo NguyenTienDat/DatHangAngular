@@ -33,6 +33,10 @@
               <ng-container *ngSwitchCase="'link'">
                 <div [innerHTML]="renderLink(product[td.field])"></div>
               </ng-container>
+              <ng-container *ngSwitchCase="'number'">
+                {{ +product[td.field] | number }}
+              </ng-container>
+
               <ng-container *ngSwitchDefault>
                 {{ product[td.field] }}
               </ng-container>
