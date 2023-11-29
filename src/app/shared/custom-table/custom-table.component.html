@@ -2,6 +2,10 @@
   [value]="dataTable"
   responsiveLayout="stack"
   [breakpoint]="'960px'"
+  [rows]="10"
+  [rowsPerPageOptions]="[10, 25, 50, 100, 500, 1000]"
+  [paginator]="true"
+  [showCurrentPageReport]="true"
   [tableStyle]="{ 'min-width': '50rem' }"
 >
   <ng-template pTemplate="header">
