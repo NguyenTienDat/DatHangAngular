@@ -46,13 +46,13 @@ export class CustomTableComponent implements OnInit {
 
   ngOnInit() {}
 
-  openSelectFile(item: any, field: string, e: any, image: any) {
-    e.data = {
+  openSelectFile(item: any, field: string, inputImg: any, image: any) {
+    inputImg.data = {
       item,
       field,
       image,
     };
-    e.click();
+    inputImg.click();
   }
 
   changeValue(item: any, header: HeadersTable, value: any) {

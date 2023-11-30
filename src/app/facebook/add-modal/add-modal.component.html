@@ -8,12 +8,9 @@
         <div class="value-input">
           <ng-container [ngSwitch]="td.type">
             <ng-container *ngSwitchCase="'image'">
-              <img
-                width="100px"
-                #image
-                class="cursor-pointer"
-                [src]="IMG_DEFAULT"
-              />
+              <app-image-select
+                (imageOutput)="output[td.field] = $event"
+              ></app-image-select>
             </ng-container>
 
             <ng-container *ngSwitchCase="'link'">
@@ -21,12 +18,17 @@
                 cols="25"
                 pInputTextarea
                 [autoResize]="true"
+                [(ngModel)]="output[td.field]"
                 (ngModelChange)="changeValue(td, $event)"
               ></textarea>
             </ng-container>
 
             <ng-container *ngSwitchCase="'string'">
-              <input pInputText (ngModelChange)="changeValue(td, $event)" />
+              <input
+                pInputText
+                [(ngModel)]="output[td.field]"
+                (ngModelChange)="changeValue(td, $event)"
+              />
             </ng-container>
 
             <ng-container *ngSwitchCase="'number'">
@@ -35,6 +37,7 @@
                 [minFractionDigits]="0"
                 [maxFractionDigits]="5"
                 [inputStyleClass]="'input-number'"
+                [(ngModel)]="output[td.field]"
                 (ngModelChange)="changeValue(td, $event)"
               ></p-inputNumber>
             </ng-container>
@@ -47,6 +50,7 @@
                 [options]="td.filter.dropdownOptions ?? []"
                 [showClear]="false"
                 [readonly]="false"
+                [(ngModel)]="output[td.field]"
                 (onChange)="changeValue(td, $event)"
               ></p-dropdown>
             </ng-container>
@@ -55,6 +59,7 @@
               <ng-template pTemplate="input">
                 <textarea
                   pInputTextarea
+                  [(ngModel)]="output[td.field]"
                   (ngModelChange)="changeValue(td, $event)"
                 ></textarea>
               </ng-template>
@@ -76,6 +81,7 @@
       label="Add"
       styleClass="p-button-success"
       icon="pi pi-plus"
+      (onClick)="submit()"
     ></p-button>
   </div>
 </div>

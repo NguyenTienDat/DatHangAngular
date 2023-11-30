@@ -16,8 +16,14 @@ import { FileUploadModule } from 'primeng/fileupload';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { DialogService, DynamicDialogModule } from 'primeng/dynamicdialog';
+import { ImageSelectComponent } from './image-select/image-select.component';
 
-const components = [LeftMenuComponent, FooterComponent, CustomTableComponent];
+const components = [
+  LeftMenuComponent,
+  FooterComponent,
+  CustomTableComponent,
+  ImageSelectComponent,
+];
 const primengModules = [
   TableModule,
   DropdownModule,

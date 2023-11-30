@@ -10,6 +10,8 @@ import { NO_IMG } from 'src/app/shared/utils';
 })
 export class AddModalComponent implements OnInit {
   data!: HeadersTable[];
+  output: any = {};
+
   IMG_DEFAULT = NO_IMG;
 
   constructor(
@@ -23,6 +25,11 @@ export class AddModalComponent implements OnInit {
 
   changeValue(td: any, event: any) {
     console.log(td, event);
+    console.log('output', this.output);
+  }
+
+  submit() {
+    console.log('Submit', this.output);
   }
 
   close() {
