@@ -13,7 +13,6 @@ interface LeftMenu {
   styleUrls: ['./left-menu.component.scss'],
 })
 export class LeftMenuComponent {
-
   leftMenu: LeftMenu[] = [
     {
       name: 'Facebook',

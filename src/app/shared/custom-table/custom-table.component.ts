@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { renderLink } from '../utils';
+import { NO_IMG, encodeImageFileAsURL, renderLink } from '../utils';
 
 interface ConfigFilterTable {
   noFilter?: boolean;
@@ -26,6 +26,7 @@ export interface HeadersTable {
   className?: string;
   headerClassName?: string;
   filter: ConfigFilterTable;
+  styles?: any;
 }
 
 @Component({
@@ -37,7 +38,29 @@ export class CustomTableComponent implements OnInit {
   @Input() dataTable = [];
   @Input() headers!: HeadersTable[];
   renderLink = renderLink;
+  IMG_DEFAULT = NO_IMG;
+
   constructor() {}
 
   ngOnInit() {}
+
+  openSelectFile(item: any, field: string, e: any, image: any) {
+    e.data = {
+      item,
+      field,
+      image,
+    };
+    e.click();
+  }
+
+  changeValue(item: any, field: string, value: any) {
+    console.log({ item }, field, value);
+  }
+
+  changeImg(fileElement: any, event: any) {
+    console.log({ fileElement }, event);
+    encodeImageFileAsURL(fileElement, (src: any) => {
+      fileElement.data.image.src = src;
+    });
+  }
 }

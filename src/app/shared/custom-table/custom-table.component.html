@@ -1,3 +1,11 @@
+<input
+  class="input-file-img"
+  type="file"
+  accept="image/*"
+  #inputImg
+  (change)="changeImg(inputImg, $event)"
+/>
+
 <p-table
   [value]="dataTable"
   responsiveLayout="stack"
@@ -6,12 +14,18 @@
   [rowsPerPageOptions]="[10, 25, 50, 100, 500, 1000]"
   [paginator]="true"
   [showCurrentPageReport]="true"
-  [tableStyle]="{ 'min-width': '50rem' }"
+  class="w-full"
+  [tableStyle]="{ flex: 1, width: '100%' }"
 >
   <ng-template pTemplate="header">
     <tr>
       <ng-container *ngFor="let td of headers">
-        <th [ngClass]="td.headerClassName" pSortableColumn="{{ td.field }}">
+        <th
+          class="table-header"
+          [ngClass]="td.headerClassName"
+          [ngStyle]="td.styles"
+          pSortableColumn="{{ td.field }}"
+        >
           <div class="flex align-items-center">
             {{ td.name }}
             <p-columnFilter
@@ -51,18 +65,80 @@
   <ng-template pTemplate="body" let-product>
     <ng-container>
       <tr>
-        <td *ngFor="let td of headers" [ngClass]="td.className">
-          <div class="table-cell">
+        <td
+          *ngFor="let td of headers"
+          [ngClass]="td.className"
+          [pEditableColumn]="product[td.field]"
+          [pEditableColumnField]="td.field"
+        >
+          <span class="p-column-title">{{ td.name }}</span>
+          <div class="table-cell" [ngStyle]="td.styles">
             <ng-container [ngSwitch]="td.type">
               <ng-container *ngSwitchCase="'image'">
-                <img [src]="product[td.field]" />
+                <img
+                  #image
+                  class="cursor-pointer"
+                  [src]="product[td.field] ?? IMG_DEFAULT"
+                  (click)="openSelectFile(product, td.field, inputImg, image)"
+                />
               </ng-container>
+
               <ng-container *ngSwitchCase="'link'">
-                <div [innerHTML]="renderLink(product[td.field])"></div>
+                <p-cellEditor>
+                  <ng-template pTemplate="input">
+                    <textarea
+                      [ngStyle]="td.styles"
+                      pInputTextarea
+                      [autoResize]="true"
+                      [(ngModel)]="product[td.field]"
+                      (ngModelChange)="changeValue(product, td.field, $event)"
+                    ></textarea>
+                  </ng-template>
+                  <ng-template pTemplate="output">
+                    <div [innerHTML]="renderLink(product[td.field])"></div>
+                  </ng-template>
+                </p-cellEditor>
               </ng-container>
+
+              <ng-container *ngSwitchCase="'string'">
+                <p-cellEditor>
+                  <ng-template pTemplate="input">
+                    <input
+                      pInputText
+                      [ngStyle]="td.styles"
+                      [(ngModel)]="product[td.field]"
+                      (ngModelChange)="changeValue(product, td.field, $event)"
+                    />
+                  </ng-template>
+                  <ng-template pTemplate="output">
+                    {{ product[td.field] }}
+                  </ng-template>
+                </p-cellEditor>
+              </ng-container>
+
               <ng-container *ngSwitchCase="'number'">
-                {{ +product[td.field] | number }}
+                <p-cellEditor>
+                  <ng-template pTemplate="input">
+                    <p-inputNumber
+                      [(ngModel)]="product[td.field]"
+                      mode="decimal"
+                      [inputStyle]="td.styles"
+                      [minFractionDigits]="0"
+                      [maxFractionDigits]="5"
+                      (ngModelChange)="changeValue(product, td.field, $event)"
+                    >
+                    </p-inputNumber>
+                  </ng-template>
+                  <ng-template pTemplate="output">
+                    {{
+                      +product[td.field] === 0
+                        ? "-"
+                        : (+product[td.field] | number)
+                    }}
+                  </ng-template>
+                </p-cellEditor>
               </ng-container>
+
               <ng-container *ngSwitchCase="'dropdown'">
                 <p-dropdown
                   id="value"
@@ -71,12 +147,26 @@
                   [options]="td.filter.dropdownOptions ?? []"
                   [showClear]="false"
                   [ngModel]="product[td.field]"
-                  [readonly]="true"
+                  [readonly]="false"
+                  [ngStyle]="td.styles"
+                  (onChange)="changeValue(product, td.field, $event)"
                 ></p-dropdown>
               </ng-container>
 
               <ng-container *ngSwitchDefault>
-                {{ product[td.field] }}
+                <p-cellEditor>
+                  <ng-template pTemplate="input">
+                    <textarea
+                      pInputTextarea
+                      [ngStyle]="td.styles"
+                      [(ngModel)]="product[td.field]"
+                      (ngModelChange)="changeValue(product, td.field, $event)"
+                    ></textarea>
+                  </ng-template>
+                  <ng-template pTemplate="output">
+                    {{ product[td.field] }}
+                  </ng-template>
+                </p-cellEditor>
               </ng-container>
             </ng-container>
           </div>

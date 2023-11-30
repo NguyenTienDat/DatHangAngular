@@ -9,6 +9,17 @@ import { STATUS_LIST } from '../shared/models';
   styleUrls: ['./facebook.component.scss'],
 })
 export class FacebookComponent implements OnInit {
+  numberDefaultConfig: HeadersTable = {
+    name: '',
+    field: '',
+    type: 'number',
+    filter: { noFilter: true },
+    styles: {
+      width: '80px',
+      'text-align': 'right',
+    },
+  };
+
   headers: HeadersTable[] = [
     {
       name: 'Image',
@@ -16,12 +27,18 @@ export class FacebookComponent implements OnInit {
       type: 'image',
       className: 'image-col',
       filter: { noFilter: true },
+      styles: {
+        width: '100px',
+      },
     },
     {
       name: 'Phân loại',
       field: 'prop',
       type: 'string',
       filter: { noFilter: true },
+      styles: {
+        width: '100px',
+      },
     },
     {
       name: 'Khách hàng',
@@ -29,13 +46,19 @@ export class FacebookComponent implements OnInit {
       type: 'link',
       className: 'custom-link',
       filter: {},
+      styles: {
+        width: '150px',
+      },
     },
     {
       name: 'Ghi chú',
       field: 'description',
       type: 'string',
-      className: 'description-col',
       filter: {},
+      styles: {
+        wordBreak: 'break-all',
+        width: '100%',
+      },
     },
     {
       name: 'Trạng thái',
@@ -46,48 +69,46 @@ export class FacebookComponent implements OnInit {
         filterValue: [],
         matchMode: 'in',
       },
+      styles: {
+        width: '150px',
+        'text-align': 'center',
+      },
     },
     {
       name: 'Mã vận đơn',
       field: 'orderID',
       type: 'string',
       filter: {},
+      styles: {
+        width: '160px',
+      },
     },
     {
+      ...this.numberDefaultConfig,
       name: 'Giá nhập',
       field: 'price',
-      type: 'number',
-      filter: { noFilter: true },
+      className: 'text-warning',
     },
     {
+      ...this.numberDefaultConfig,
       name: 'Giá bán',
       field: 'price2',
-      type: 'number',
-      filter: { noFilter: true },
     },
     {
+      ...this.numberDefaultConfig,
       name: 'Tệ',
       field: 'CNY_price',
-      type: 'number',
-      filter: { noFilter: true },
     },
+    { ...this.numberDefaultConfig, name: 'Cân', field: 'weight' },
     {
-      name: 'Cân',
-      field: 'weight',
-      type: 'number',
-      filter: { noFilter: true },
-    },
-    {
+      ...this.numberDefaultConfig,
       name: 'Giá cân',
       field: 'weight_price',
-      type: 'number',
-      filter: { noFilter: true },
     },
     {
+      ...this.numberDefaultConfig,
       name: 'Tỉ giá',
       field: 'exchange',
-      type: 'number',
-      filter: { noFilter: true },
     },
   ];
 

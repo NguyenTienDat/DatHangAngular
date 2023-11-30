@@ -9,6 +9,11 @@ import { CustomTableComponent } from './custom-table/custom-table.component';
 import { TableModule } from 'primeng/table';
 import { DropdownModule } from 'primeng/dropdown';
 import { MultiSelectModule } from 'primeng/multiselect';
+import { InputTextModule } from 'primeng/inputtext';
+import { InputTextareaModule } from 'primeng/inputtextarea';
+import { InputNumberModule } from 'primeng/inputnumber';
+import { FileUploadModule } from 'primeng/fileupload';
+
 const components = [LeftMenuComponent, FooterComponent, CustomTableComponent];
 
 @NgModule({
@@ -21,6 +26,10 @@ const components = [LeftMenuComponent, FooterComponent, CustomTableComponent];
     TableModule,
     DropdownModule,
     MultiSelectModule,
+    InputTextModule,
+    InputTextareaModule,
+    InputNumberModule,
+    FileUploadModule,
   ],
   providers: [],
   exports: [...components],
