@@ -90,17 +90,19 @@ export class FacebookComponent implements OnInit, OnDestroy {
       ...this.numberDefaultConfig,
       name: 'Giá nhập',
       field: 'price',
-      className: 'text-warning',
+      className: 'text-primary',
     },
     {
       ...this.numberDefaultConfig,
       name: 'Giá bán',
       field: 'price2',
+      className: 'text-info',
     },
     {
       ...this.numberDefaultConfig,
       name: 'Tệ',
       field: 'CNY_price',
+      className: 'text-danger',
     },
     { ...this.numberDefaultConfig, name: 'Cân', field: 'weight' },
     {

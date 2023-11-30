@@ -1,6 +1,5 @@
-import { DialogService, DynamicDialogConfig } from 'primeng/dynamicdialog';
-import { Component, Input, OnInit } from '@angular/core';
-import { DynamicDialogInjector } from 'primeng/dynamicdialog';
+import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { Component, OnInit } from '@angular/core';
 import { HeadersTable } from 'src/app/shared/custom-table/custom-table.component';
 import { NO_IMG } from 'src/app/shared/utils';
 
@@ -13,7 +12,10 @@ export class AddModalComponent implements OnInit {
   data!: HeadersTable[];
   IMG_DEFAULT = NO_IMG;
 
-  constructor(private dialogService: DynamicDialogConfig) {
+  constructor(
+    private dialogService: DynamicDialogConfig,
+    private ref: DynamicDialogRef
+  ) {
     this.data = this.dialogService.data;
   }
 
@@ -21,5 +23,9 @@ export class AddModalComponent implements OnInit {
 
   changeValue(td: any, event: any) {
     console.log(td, event);
+  }
+
+  close() {
+    this.ref.close();
   }
 }
