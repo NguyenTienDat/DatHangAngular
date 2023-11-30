@@ -1,1 +1,13 @@
-<app-custom-table [headers]="headers" [dataTable]="orders"></app-custom-table>
+<app-custom-table
+  [headers]="headers"
+  [dataTable]="orders"
+  (valueChanged)="valueChanged($event)"
+></app-custom-table>
+<p-toast></p-toast>
+
+<p-button
+  class="flat-button-add"
+  icon="pi pi-plus"
+  styleClass="p-button-rounded"
+  (onClick)="showAddModal()"
+></p-button>

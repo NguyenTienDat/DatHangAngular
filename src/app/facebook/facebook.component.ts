@@ -1,14 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { HeadersTable } from '../shared/custom-table/custom-table.component';
 import { CustomHttpClientService } from '../shared/services/custom-http-client.service';
 import { STATUS_LIST } from '../shared/models';
+import { MessageService } from 'primeng/api';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { AddModalComponent } from './add-modal/add-modal.component';
 
 @Component({
   selector: 'app-facebook',
   templateUrl: './facebook.component.html',
   styleUrls: ['./facebook.component.scss'],
 })
-export class FacebookComponent implements OnInit {
+export class FacebookComponent implements OnInit, OnDestroy {
   numberDefaultConfig: HeadersTable = {
     name: '',
     field: '',
@@ -114,12 +117,66 @@ export class FacebookComponent implements OnInit {
 
   orders = [];
 
-  constructor(private customHttpClientService: CustomHttpClientService) {}
+  ref!: DynamicDialogRef;
+
+  constructor(
+    private customHttpClientService: CustomHttpClientService,
+    private messageService: MessageService,
+    public dialogService: DialogService
+  ) {}
 
   ngOnInit() {
     this.customHttpClientService.getFacebookJSON().subscribe((res) => {
       this.orders = res;
       console.log(res);
     });
+  }
+
+  valueChanged(event: any) {
+    this.messageService.add({
+      severity: 'success',
+      summary: `${event.item.customer} success`,
+      detail: `${event.header.name} = ${event.value}`,
+    });
+  }
+  show() {
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Success',
+      detail: 'Message Content',
+    });
+  }
+
+  showAddModal() {
+    this.ref = this.dialogService.open(AddModalComponent, {
+      header: 'Đơn hàng mới',
+      width: '700px',
+      contentStyle: { overflow: 'auto' },
+      baseZIndex: 10000,
+      maximizable: true,
+      data: this.headers,
+    });
+
+    this.ref.onClose.subscribe((product: any) => {
+      this.messageService.add({
+        severity: 'info',
+        summary: 'Product Selected',
+        detail: 'close',
+      });
+    });
+
+    this.ref.onMaximize.subscribe((value) => {
+      this.messageService.add({
+        severity: 'info',
+        summary: 'Maximized',
+        detail: `maximized: ${value.maximized}`,
+      });
+    });
+  }
+
+  ngOnDestroy() {
+    if (this.ref) {
+      this.ref.close();
+    }
   }
 }

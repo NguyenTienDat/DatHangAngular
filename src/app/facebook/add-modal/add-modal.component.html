@@ -1,0 +1,80 @@
+<div class="wrap-modal">
+  <div class="wrap-input">
+    <ng-container *ngFor="let td of data">
+      <div class="d-flex justify-content-between my-2">
+        <div class="label">
+          {{ td.name }}
+        </div>
+        <div class="value-input">
+          <ng-container [ngSwitch]="td.type">
+            <ng-container *ngSwitchCase="'image'">
+              <img
+                width="100px"
+                #image
+                class="cursor-pointer"
+                [src]="IMG_DEFAULT"
+              />
+            </ng-container>
+
+            <ng-container *ngSwitchCase="'link'">
+              <textarea
+                cols="25"
+                pInputTextarea
+                [autoResize]="true"
+                (ngModelChange)="changeValue(td, $event)"
+              ></textarea>
+            </ng-container>
+
+            <ng-container *ngSwitchCase="'string'">
+              <input pInputText (ngModelChange)="changeValue(td, $event)" />
+            </ng-container>
+
+            <ng-container *ngSwitchCase="'number'">
+              <p-inputNumber
+                mode="decimal"
+                [minFractionDigits]="0"
+                [maxFractionDigits]="5"
+                [inputStyleClass]="'input-number'"
+                (ngModelChange)="changeValue(td, $event)"
+              ></p-inputNumber>
+            </ng-container>
+
+            <ng-container *ngSwitchCase="'dropdown'">
+              <p-dropdown
+                id="value"
+                optionLabel="name"
+                optionValue="value"
+                [options]="td.filter.dropdownOptions ?? []"
+                [showClear]="false"
+                [readonly]="false"
+                (onChange)="changeValue(td, $event)"
+              ></p-dropdown>
+            </ng-container>
+
+            <ng-container *ngSwitchDefault>
+              <ng-template pTemplate="input">
+                <textarea
+                  pInputTextarea
+                  (ngModelChange)="changeValue(td, $event)"
+                ></textarea>
+              </ng-template>
+            </ng-container>
+          </ng-container>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+  <div class="actions-wrap mt-4">
+    <p-button
+      label="Cancel"
+      styleClass="mx-2 p-button-outlined  p-button-secondary"
+      icon="pi pi-times"
+    ></p-button>
+
+    <p-button
+      label="Add"
+      styleClass="p-button-success"
+      icon="pi pi-plus"
+    ></p-button>
+  </div>
+</div>

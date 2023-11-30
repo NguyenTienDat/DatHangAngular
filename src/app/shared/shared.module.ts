@@ -13,9 +13,22 @@ import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { FileUploadModule } from 'primeng/fileupload';
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
+import { DialogService, DynamicDialogModule } from 'primeng/dynamicdialog';
 
 const components = [LeftMenuComponent, FooterComponent, CustomTableComponent];
-
+const primengModules = [
+  TableModule,
+  DropdownModule,
+  MultiSelectModule,
+  InputTextModule,
+  InputTextareaModule,
+  InputNumberModule,
+  FileUploadModule,
+  ToastModule,
+  DynamicDialogModule,
+];
 @NgModule({
   declarations: [...components],
   imports: [
@@ -23,15 +36,9 @@ const components = [LeftMenuComponent, FooterComponent, CustomTableComponent];
     FormsModule,
     RouterModule,
     NbIconModule,
-    TableModule,
-    DropdownModule,
-    MultiSelectModule,
-    InputTextModule,
-    InputTextareaModule,
-    InputNumberModule,
-    FileUploadModule,
+    ...primengModules,
   ],
-  providers: [],
-  exports: [...components],
+  providers: [MessageService, DialogService],
+  exports: [...components, ...primengModules],
 })
 export class SharedModule {}

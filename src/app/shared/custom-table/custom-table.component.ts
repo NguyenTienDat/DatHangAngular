@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { NO_IMG, encodeImageFileAsURL, renderLink } from '../utils';
 
 interface ConfigFilterTable {
@@ -37,6 +37,8 @@ export interface HeadersTable {
 export class CustomTableComponent implements OnInit {
   @Input() dataTable = [];
   @Input() headers!: HeadersTable[];
+  @Output() valueChanged = new EventEmitter();
+
   renderLink = renderLink;
   IMG_DEFAULT = NO_IMG;
 
@@ -53,8 +55,9 @@ export class CustomTableComponent implements OnInit {
     e.click();
   }
 
-  changeValue(item: any, field: string, value: any) {
-    console.log({ item }, field, value);
+  changeValue(item: any, header: HeadersTable, value: any) {
+    console.log({ item }, header, value);
+    this.valueChanged.emit({ item, header, value });
   }
 
   changeImg(fileElement: any, event: any) {

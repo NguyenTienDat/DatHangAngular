@@ -1,5 +1,5 @@
 <input
-  class="input-file-img"
+  class="d-none"
   type="file"
   accept="image/*"
   #inputImg
@@ -91,7 +91,7 @@
                       pInputTextarea
                       [autoResize]="true"
                       [(ngModel)]="product[td.field]"
-                      (ngModelChange)="changeValue(product, td.field, $event)"
+                      (ngModelChange)="changeValue(product, td, $event)"
                     ></textarea>
                   </ng-template>
                   <ng-template pTemplate="output">
@@ -107,7 +107,7 @@
                       pInputText
                       [ngStyle]="td.styles"
                       [(ngModel)]="product[td.field]"
-                      (ngModelChange)="changeValue(product, td.field, $event)"
+                      (ngModelChange)="changeValue(product, td, $event)"
                     />
                   </ng-template>
                   <ng-template pTemplate="output">
@@ -125,7 +125,7 @@
                       [inputStyle]="td.styles"
                       [minFractionDigits]="0"
                       [maxFractionDigits]="5"
-                      (ngModelChange)="changeValue(product, td.field, $event)"
+                      (ngModelChange)="changeValue(product, td, $event)"
                     >
                     </p-inputNumber>
                   </ng-template>
@@ -149,7 +149,7 @@
                   [ngModel]="product[td.field]"
                   [readonly]="false"
                   [ngStyle]="td.styles"
-                  (onChange)="changeValue(product, td.field, $event)"
+                  (onChange)="changeValue(product, td, $event)"
                 ></p-dropdown>
               </ng-container>
 
@@ -160,7 +160,7 @@
                       pInputTextarea
                       [ngStyle]="td.styles"
                       [(ngModel)]="product[td.field]"
-                      (ngModelChange)="changeValue(product, td.field, $event)"
+                      (ngModelChange)="changeValue(product, td, $event)"
                     ></textarea>
                   </ng-template>
                   <ng-template pTemplate="output">
