@@ -5,6 +5,7 @@ import { STATUS_LIST } from '../shared/models';
 import { MessageService } from 'primeng/api';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { AddModalComponent } from './add-modal/add-modal.component';
+import { FirebaseServiceService } from '../shared/services/firebase-service.service';
 
 @Component({
   selector: 'app-facebook',
@@ -124,13 +125,19 @@ export class FacebookComponent implements OnInit, OnDestroy {
   constructor(
     private customHttpClientService: CustomHttpClientService,
     private messageService: MessageService,
-    public dialogService: DialogService
+    public dialogService: DialogService,
+    private firebaseServiceService: FirebaseServiceService
   ) {}
 
   ngOnInit() {
-    this.customHttpClientService.getFacebookJSON().subscribe((res) => {
+    // this.customHttpClientService.getFacebookJSON().subscribe((res) => {
+    //   this.orders = res;
+    //   console.log(res);
+    // });
+
+    this.firebaseServiceService.getFacebook().subscribe((res: any) => {
+      console.log({ res });
       this.orders = res;
-      console.log(res);
     });
   }
 
@@ -167,7 +174,7 @@ export class FacebookComponent implements OnInit, OnDestroy {
       });
     });
 
-    this.ref.onMaximize.subscribe((value) => {
+    this.ref.onMaximize.subscribe((value: any) => {
       this.messageService.add({
         severity: 'info',
         summary: 'Maximized',

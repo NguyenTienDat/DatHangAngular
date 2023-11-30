@@ -9,6 +9,17 @@ import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { SharedModule } from './shared/shared.module';
 import { FacebookModule } from './facebook/facebook.module';
 import { HttpClientModule } from '@angular/common/http';
+import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
+import { getFirestore, provideFirestore } from '@angular/fire/firestore';
+
+const firebaseConfig = {
+  apiKey: 'AIzaSyAmWtEdw-4PjzdDXkYFKEyxz1S2L38vZ1o',
+  authDomain: 'dathangjs.firebaseapp.com',
+  projectId: 'dathangjs',
+  storageBucket: 'dathangjs.appspot.com',
+  messagingSenderId: '118350461604',
+  appId: '1:118350461604:web:522c2624e4248f51bc0431',
+};
 
 @NgModule({
   declarations: [AppComponent],
@@ -22,6 +33,9 @@ import { HttpClientModule } from '@angular/common/http';
     SharedModule,
     FacebookModule,
     HttpClientModule,
+    // https://github.com/angular/angularfire/blob/master/docs/version-7-upgrade.md
+    provideFirebaseApp(() => initializeApp(firebaseConfig)),
+    provideFirestore(() => getFirestore()),
   ],
   providers: [],
   bootstrap: [AppComponent],
