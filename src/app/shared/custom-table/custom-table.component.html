@@ -109,6 +109,7 @@
                       [(ngModel)]="product[td.field]"
                       (ngModelChange)="changeValue(product, td, $event)"
                     />
+                    <span class="invisible"> {{ product[td.field] }}</span>
                   </ng-template>
                   <ng-template pTemplate="output">
                     {{ product[td.field] }}
