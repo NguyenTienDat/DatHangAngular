@@ -36,9 +36,9 @@
                 mode="decimal"
                 [minFractionDigits]="0"
                 [maxFractionDigits]="5"
-                [inputStyleClass]="'input-number'"
+                [inputStyleClass]="td.className ?? '' + 'input-number'"
                 [(ngModel)]="output[td.field]"
-                (ngModelChange)="changeValue(td, $event)"
+                (ngModelChange)="autoCalculatePrices(td, $event)"
               ></p-inputNumber>
             </ng-container>
 

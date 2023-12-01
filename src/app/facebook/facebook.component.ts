@@ -98,13 +98,13 @@ export class FacebookComponent implements OnInit, OnDestroy {
       ...this.numberDefaultConfig,
       name: 'Giá nhập',
       field: 'price',
-      className: 'text-primary',
+      className: 'text-info',
     },
     {
       ...this.numberDefaultConfig,
       name: 'Giá bán',
       field: 'price2',
-      className: 'text-info',
+      className: 'text-primary',
     },
     {
       ...this.numberDefaultConfig,
@@ -112,16 +112,23 @@ export class FacebookComponent implements OnInit, OnDestroy {
       field: 'CNY_price',
       className: 'text-danger',
     },
-    { ...this.numberDefaultConfig, name: 'Cân', field: 'weight' },
+    {
+      ...this.numberDefaultConfig,
+      name: 'Cân',
+      field: 'weight',
+      className: 'text-danger',
+    },
     {
       ...this.numberDefaultConfig,
       name: 'Giá cân',
       field: 'weight_price',
+      className: 'text-danger',
     },
     {
       ...this.numberDefaultConfig,
       name: 'Tỉ giá',
       field: 'exchange',
+      className: 'text-danger',
     },
   ];
 

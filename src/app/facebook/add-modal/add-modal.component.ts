@@ -31,8 +31,10 @@ export class AddModalComponent implements OnInit {
   }
 
   changeValue(td: any, event: any) {
+    this.output[td.field] = event;
     console.log(td, event);
     console.log('output', this.output);
+    this.output = JSON.parse(JSON.stringify(this.output));
   }
 
   submit() {
@@ -41,5 +43,37 @@ export class AddModalComponent implements OnInit {
 
   close() {
     this.ref.close();
+  }
+
+  autoCalculatePrices(td: any, event: any) {
+    this.output[td.field] = event;
+    if (td !== 'price' && td !== 'price2') {
+      // gia nhap = tệ * tỉ giá + cân * giá cân
+      // gia ban = gia nhap + 35k
+      const product_cny = this.output.CNY_price ?? 0;
+      const product_weight = this.output.weight ?? 0;
+      const product_weight_price = this.output.weight_price ?? 0;
+      const product_exchange = this.output.exchange ?? 0;
+      // console.log('product_cny', product_cny);
+      // console.log('product_weight', product_weight);
+      // console.log('product_weight_price', product_weight_price);
+      // console.log('product_exchange', product_exchange);
+
+      const giaNhap =
+        product_cny * product_exchange + product_weight * product_weight_price;
+
+      if (!this.output.price) {
+        this.output.price = giaNhap;
+      }
+
+      if (!this.output.price2) {
+        this.output.price2 =
+          giaNhap + this.firebaseServiceService.INCOME_PER_ORDER$.value;
+      }
+
+      this.output = JSON.parse(JSON.stringify(this.output));
+    }
+
+    this.changeValue(td, event);
   }
 }

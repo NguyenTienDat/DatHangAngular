@@ -22,8 +22,18 @@ import { Observable, from, BehaviorSubject } from 'rxjs';
 export class FirebaseServiceService {
   private readonly PRODUCTS_COLLECTION = 'products';
   private productsCol: CollectionReference;
+  /**
+   * Tiền vận chuyển / 1kg hiện tại
+   */
   DEFAULT_WEIGHT_PRICE$: BehaviorSubject<number> = new BehaviorSubject(25000);
+  /**
+   * Tỉ giá hiện tại
+   */
   DEFAULT_EXCHANGE$: BehaviorSubject<number> = new BehaviorSubject(3600);
+  /**
+   * Tiền lãi trên 1 đơn hàng; Giá bán = Giá nhâp + LÃI
+   */
+  INCOME_PER_ORDER$: BehaviorSubject<number> = new BehaviorSubject(35000);
 
   constructor(private firestore: Firestore) {
     this.productsCol = collection(this.firestore, this.PRODUCTS_COLLECTION);
