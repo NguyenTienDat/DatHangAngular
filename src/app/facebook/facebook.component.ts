@@ -135,8 +135,8 @@ export class FacebookComponent implements OnInit, OnDestroy {
     //   console.log(res);
     // });
 
-    this.firebaseServiceService.getFacebook().subscribe((res: any) => {
-      console.log({ res });
+    this.firebaseServiceService.fbQueryProducts().subscribe((res: any) => {
+      console.log(res);
       this.orders = res;
     });
   }
