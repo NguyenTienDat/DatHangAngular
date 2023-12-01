@@ -270,13 +270,15 @@
   z-index: 2;
 }
 
-.sidebar.open ~ .home-section {
+.sidebar.open~.home-section {
   left: 250px;
   width: calc(100% - 250px);
 }
+
 // ========================================================
 .sidebar {
-  position: relative;
+  position: fixed;
+
   .logo-details {
     position: sticky;
     top: 10px;

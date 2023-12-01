@@ -20,6 +20,7 @@ export class FacebookComponent implements OnInit, OnDestroy {
     filter: { noFilter: true },
     styles: {
       width: '80px',
+      'min-width': '5vw',
       'text-align': 'right',
     },
   };
@@ -32,6 +33,7 @@ export class FacebookComponent implements OnInit, OnDestroy {
       className: 'image-col',
       filter: { noFilter: true },
       styles: {
+        'min-width': '100px',
         width: '100px',
       },
     },
@@ -41,6 +43,7 @@ export class FacebookComponent implements OnInit, OnDestroy {
       type: 'string',
       filter: { noFilter: true },
       styles: {
+        'min-width': '100px',
         width: '100px',
       },
     },
@@ -51,6 +54,7 @@ export class FacebookComponent implements OnInit, OnDestroy {
       className: 'custom-link',
       filter: {},
       styles: {
+        'min-width': '150px',
         width: '150px',
       },
     },
@@ -75,6 +79,7 @@ export class FacebookComponent implements OnInit, OnDestroy {
       },
       styles: {
         width: '150px',
+        'min-width': '150px',
         'text-align': 'center',
       },
     },
@@ -85,6 +90,7 @@ export class FacebookComponent implements OnInit, OnDestroy {
       filter: {},
       styles: {
         width: '160px',
+        'min-width': '160px',
       },
     },
     {

@@ -18,4 +18,14 @@ nb-layout-footer ::ng-deep nav {
 
 .container-wrap {
   height: 100%;
+
+  .content-outlet {
+    margin-left: 78px;
+    transition: all 0.5s ease;
+    overflow: hidden;
+  }
+}
+
+.container-wrap.menu-open .content-outlet {
+  margin-left: 250px;
 }

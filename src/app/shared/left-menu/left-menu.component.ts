@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Output, EventEmitter } from '@angular/core';
 
 interface LeftMenu {
   name: string;
@@ -13,6 +13,7 @@ interface LeftMenu {
   styleUrls: ['./left-menu.component.scss'],
 })
 export class LeftMenuComponent {
+  @Output() open = new EventEmitter<boolean>();
   leftMenu: LeftMenu[] = [
     {
       name: 'Facebook',
@@ -34,13 +35,15 @@ export class LeftMenuComponent {
     // },
   ];
 
-  isOpen = true;
+  isOpen = false;
 
   close() {
     this.isOpen = false;
+    this.open.emit(this.isOpen);
   }
 
   btnClick() {
     this.isOpen = !this.isOpen;
+    this.open.emit(this.isOpen);
   }
 }
