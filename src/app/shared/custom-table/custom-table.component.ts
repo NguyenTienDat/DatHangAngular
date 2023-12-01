@@ -27,6 +27,7 @@ export interface HeadersTable {
   headerClassName?: string;
   filter: ConfigFilterTable;
   styles?: any;
+  defaultIfNoData?: any;
 }
 
 @Component({

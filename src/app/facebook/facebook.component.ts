@@ -66,6 +66,7 @@ export class FacebookComponent implements OnInit, OnDestroy {
       styles: {
         wordBreak: 'break-all',
         width: '100%',
+        'min-width': '100px',
       },
     },
     {

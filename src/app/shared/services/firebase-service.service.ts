@@ -14,7 +14,7 @@ import {
   Query,
   DocumentData,
 } from '@angular/fire/firestore';
-import { Observable, from } from 'rxjs';
+import { Observable, from, BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -22,21 +22,11 @@ import { Observable, from } from 'rxjs';
 export class FirebaseServiceService {
   private readonly PRODUCTS_COLLECTION = 'products';
   private productsCol: CollectionReference;
-  constructor(private firestore: Firestore) {
-    this.productsCol = collection(this.firestore, 'products');
-  }
+  DEFAULT_WEIGHT_PRICE$: BehaviorSubject<number> = new BehaviorSubject(25000);
+  DEFAULT_EXCHANGE$: BehaviorSubject<number> = new BehaviorSubject(3600);
 
-  getFacebook() {
-    const docc = doc(this.firestore, 'products');
-    console.log({ docc });
-    // const productList = citySnapshot.docs.map((doc) => {
-    //   return {
-    //     ...doc.data(),
-    //     _id: doc.id,
-    //   };
-    // });
-    // return from(productList);
-    return docSnapshots(docc);
+  constructor(private firestore: Firestore) {
+    this.productsCol = collection(this.firestore, this.PRODUCTS_COLLECTION);
   }
 
   fbGetProducts() {
