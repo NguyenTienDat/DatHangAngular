@@ -13,8 +13,9 @@ import {
   query,
   Query,
   DocumentData,
+  orderBy,
 } from '@angular/fire/firestore';
-import { Observable, from, BehaviorSubject } from 'rxjs';
+import { Observable, from, BehaviorSubject, catchError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -45,7 +46,12 @@ export class FirebaseServiceService {
 
   fbQueryProducts(): Observable<any> {
     const q = query(this.productsCol, where('status', '!=', 3));
-    return this.getCustomDocs(q);
+    return this.getCustomDocs(q).pipe(
+      catchError((err, caught) => {
+        this.handerErr(err);
+        return caught;
+      })
+    );
   }
 
   private getCustomDocs(q: Query<DocumentData>): Observable<any> {
@@ -59,5 +65,10 @@ export class FirebaseServiceService {
         });
       })
     );
+  }
+
+  private handerErr(err: any) {
+    console.log({ err });
+    alert('Err' + err.toString());
   }
 }
