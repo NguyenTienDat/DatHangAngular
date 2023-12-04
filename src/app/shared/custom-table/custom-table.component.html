@@ -5,6 +5,7 @@
   #inputImg
   (change)="changeImg(inputImg, $event)"
 />
+<p-contextMenu #cm [model]="items"></p-contextMenu>
 
 <p-table
   [value]="dataTable"
@@ -15,6 +16,8 @@
   [paginator]="true"
   [showCurrentPageReport]="true"
   class="w-full"
+  [(contextMenuSelection)]="selectedProduct"
+  [contextMenu]="cm"
   [tableStyle]="{ flex: 1, width: '100%' }"
 >
   <ng-template pTemplate="header">
@@ -70,6 +73,7 @@
           [ngClass]="td.className"
           [pEditableColumn]="product[td.field]"
           [pEditableColumnField]="td.field"
+          [pContextMenuRow]="td"
         >
           <span class="p-column-title">{{ td.name }}</span>
           <div class="table-cell" [ngStyle]="td.styles">

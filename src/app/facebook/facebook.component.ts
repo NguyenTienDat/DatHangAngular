@@ -2,10 +2,10 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { HeadersTable } from '../shared/custom-table/custom-table.component';
 import { CustomHttpClientService } from '../shared/services/custom-http-client.service';
 import { STATUS_LIST } from '../shared/models';
-import { MessageService } from 'primeng/api';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { AddModalComponent } from './add-modal/add-modal.component';
 import { FirebaseServiceService } from '../shared/services/firebase-service.service';
+import { ToastServiceService } from '../shared/services/toast-service.service';
 
 @Component({
   selector: 'app-facebook',
@@ -138,7 +138,7 @@ export class FacebookComponent implements OnInit, OnDestroy {
 
   constructor(
     private customHttpClientService: CustomHttpClientService,
-    private messageService: MessageService,
+    private toastServiceService: ToastServiceService,
     public dialogService: DialogService,
     private firebaseServiceService: FirebaseServiceService
   ) {}
@@ -151,19 +151,20 @@ export class FacebookComponent implements OnInit, OnDestroy {
 
     this.firebaseServiceService.fbQueryProducts().subscribe((res: any) => {
       console.log(res);
+      res.sort((a: any, b: any) => (a.created < b.created ? 1 : -1));
       this.orders = res;
     });
   }
 
   valueChanged(event: any) {
-    this.messageService.add({
+    this.toastServiceService.add({
       severity: 'success',
       summary: `${event.item.customer} success`,
       detail: `${event.header.name} = ${event.value}`,
     });
   }
   show() {
-    this.messageService.add({
+    this.toastServiceService.add({
       severity: 'success',
       summary: 'Success',
       detail: 'Message Content',
@@ -181,7 +182,7 @@ export class FacebookComponent implements OnInit, OnDestroy {
     });
 
     this.ref.onClose.subscribe((product: any) => {
-      this.messageService.add({
+      this.toastServiceService.add({
         severity: 'info',
         summary: 'Product Selected',
         detail: 'close',
@@ -189,7 +190,7 @@ export class FacebookComponent implements OnInit, OnDestroy {
     });
 
     this.ref.onMaximize.subscribe((value: any) => {
-      this.messageService.add({
+      this.toastServiceService.add({
         severity: 'info',
         summary: 'Maximized',
         detail: `maximized: ${value.maximized}`,

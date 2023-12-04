@@ -1,5 +1,8 @@
+import { ToastServiceService } from 'src/app/shared/services/toast-service.service';
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { NO_IMG, encodeImageFileAsURL, renderLink } from '../utils';
+import { FacebookProduct } from '../models';
+import { MenuItem } from 'primeng/api';
 
 interface ConfigFilterTable {
   noFilter?: boolean;
@@ -40,12 +43,39 @@ export class CustomTableComponent implements OnInit {
   @Input() headers!: HeadersTable[];
   @Output() valueChanged = new EventEmitter();
 
+  selectedProduct!: FacebookProduct;
+  items!: MenuItem[];
   renderLink = renderLink;
   IMG_DEFAULT = NO_IMG;
 
-  constructor() {}
+  constructor(private toastServiceService: ToastServiceService) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.items = [
+      {
+        label: 'View',
+        icon: 'pi pi-fw pi-search',
+        command: () => this.viewProduct(this.selectedProduct),
+      },
+      {
+        label: 'Delete',
+        icon: 'pi pi-fw pi-times',
+        command: () => this.deleteProduct(this.selectedProduct),
+      },
+    ];
+  }
+
+  viewProduct(product: FacebookProduct) {
+    this.toastServiceService.add({
+      severity: 'info',
+      summary: 'Product Selected',
+      detail: product.customer,
+    });
+  }
+
+  deleteProduct(product: FacebookProduct) {
+    console.log('delete', product);
+  }
 
   openSelectFile(item: any, field: string, inputImg: any, image: any) {
     inputImg.data = {

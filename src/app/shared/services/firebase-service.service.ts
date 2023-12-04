@@ -14,8 +14,10 @@ import {
   Query,
   DocumentData,
   orderBy,
+  addDoc,
 } from '@angular/fire/firestore';
 import { Observable, from, BehaviorSubject, catchError } from 'rxjs';
+import { FacebookProduct, STATUS_DROPDOWN } from '../models';
 
 @Injectable({
   providedIn: 'root',
@@ -45,7 +47,10 @@ export class FirebaseServiceService {
   }
 
   fbQueryProducts(): Observable<any> {
-    const q = query(this.productsCol, where('status', '!=', 3));
+    const q = query(
+      this.productsCol,
+      where('status', '!=', STATUS_DROPDOWN.DONE)
+    );
     return this.getCustomDocs(q).pipe(
       catchError((err, caught) => {
         this.handerErr(err);
@@ -54,6 +59,29 @@ export class FirebaseServiceService {
     );
   }
 
+  fbAddProducts(docData: FacebookProduct): Observable<any> {
+    docData.created = Date.now();
+    return from(addDoc(this.productsCol, docData)).pipe(
+      catchError((err, caught) => {
+        this.handerErr(err);
+        return caught;
+      })
+    );
+  }
+
+  // export async function fbAddProducts(docData) {
+  //   await addDoc(collection(dbFirebase, "products"), docData);
+  // }
+
+  // export async function fbUpdateProducts(docData, id) {
+  //   await updateDoc(doc(dbFirebase, "products", id), docData);
+  // }
+
+  // export async function fbDeleteProducts(id) {
+  //   await deleteDoc(doc(dbFirebase, "products", id));
+  // }
+
+  // SUPPORT ========================================
   private getCustomDocs(q: Query<DocumentData>): Observable<any> {
     return from(
       getDocs(q).then((item) => {

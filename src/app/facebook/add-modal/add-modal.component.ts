@@ -1,9 +1,10 @@
 import { FirebaseServiceService } from '../../shared/services/firebase-service.service';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { HeadersTable } from 'src/app/shared/custom-table/custom-table.component';
 import { NO_IMG } from 'src/app/shared/utils';
 import { FacebookProduct } from 'src/app/shared/models';
+import { ToastServiceService } from 'src/app/shared/services/toast-service.service';
 
 @Component({
   selector: 'app-add-modal',
@@ -13,13 +14,15 @@ import { FacebookProduct } from 'src/app/shared/models';
 export class AddModalComponent implements OnInit {
   data!: HeadersTable[];
   output: FacebookProduct | any = {};
+  @Output() added = new EventEmitter();
 
   IMG_DEFAULT = NO_IMG;
 
   constructor(
     private dialogService: DynamicDialogConfig,
     private ref: DynamicDialogRef,
-    private firebaseServiceService: FirebaseServiceService
+    private firebaseServiceService: FirebaseServiceService,
+    private toastServiceService: ToastServiceService
   ) {
     this.data = this.dialogService.data;
   }
@@ -39,6 +42,13 @@ export class AddModalComponent implements OnInit {
 
   submit() {
     console.log('Submit', this.output);
+    this.firebaseServiceService.fbAddProducts(this.output).subscribe((res) => {
+      console.log('added', res);
+      this.toastServiceService.showToastSuccess(
+        'Added new order successfully!'
+      );
+      this.added.emit();
+    });
   }
 
   close() {
