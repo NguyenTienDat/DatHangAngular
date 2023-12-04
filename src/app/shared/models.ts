@@ -48,3 +48,8 @@ export interface FacebookProduct {
   weight_price?: number;
   _id?: string;
 }
+
+export enum CONTEXT_MENU_EVENT {
+  'DELETE_ACCEPT',
+  'DELETE_REJECT_CANCEL',
+}

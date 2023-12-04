@@ -14,7 +14,6 @@ import { ToastServiceService } from 'src/app/shared/services/toast-service.servi
 export class AddModalComponent implements OnInit {
   data!: HeadersTable[];
   output: FacebookProduct | any = {};
-  @Output() added = new EventEmitter();
 
   IMG_DEFAULT = NO_IMG;
 
@@ -24,7 +23,7 @@ export class AddModalComponent implements OnInit {
     private firebaseServiceService: FirebaseServiceService,
     private toastServiceService: ToastServiceService
   ) {
-    this.data = this.dialogService.data;
+    this.data = this.dialogService.data.data;
   }
 
   ngOnInit() {
@@ -42,13 +41,7 @@ export class AddModalComponent implements OnInit {
 
   submit() {
     console.log('Submit', this.output);
-    this.firebaseServiceService.fbAddProducts(this.output).subscribe((res) => {
-      console.log('added', res);
-      this.toastServiceService.showToastSuccess(
-        'Added new order successfully!'
-      );
-      this.added.emit();
-    });
+    this.dialogService.data.callBackAdded(this.output);
   }
 
   close() {

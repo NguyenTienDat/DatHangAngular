@@ -18,6 +18,7 @@ import { MessageService } from 'primeng/api';
 import { DialogService, DynamicDialogModule } from 'primeng/dynamicdialog';
 import { ImageSelectComponent } from './image-select/image-select.component';
 import { ContextMenuModule } from 'primeng/contextmenu';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
 const components = [
   LeftMenuComponent,
@@ -36,6 +37,7 @@ const primengModules = [
   ToastModule,
   DynamicDialogModule,
   ContextMenuModule,
+  ConfirmDialogModule,
 ];
 @NgModule({
   declarations: [...components],

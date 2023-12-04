@@ -1,7 +1,11 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { HeadersTable } from '../shared/custom-table/custom-table.component';
 import { CustomHttpClientService } from '../shared/services/custom-http-client.service';
-import { STATUS_LIST } from '../shared/models';
+import {
+  CONTEXT_MENU_EVENT,
+  FacebookProduct,
+  STATUS_LIST,
+} from '../shared/models';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { AddModalComponent } from './add-modal/add-modal.component';
 import { FirebaseServiceService } from '../shared/services/firebase-service.service';
@@ -149,6 +153,10 @@ export class FacebookComponent implements OnInit, OnDestroy {
     //   console.log(res);
     // });
 
+    this.getData();
+  }
+
+  private getData() {
     this.firebaseServiceService.fbQueryProducts().subscribe((res: any) => {
       console.log(res);
       res.sort((a: any, b: any) => (a.created < b.created ? 1 : -1));
@@ -178,24 +186,44 @@ export class FacebookComponent implements OnInit, OnDestroy {
       contentStyle: { overflow: 'auto' },
       baseZIndex: 10000,
       maximizable: true,
-      data: this.headers,
+      data: {
+        data: this.headers,
+        callBackAdded: (output: FacebookProduct) => {
+          this.firebaseServiceService.fbAddProducts(output).subscribe((res) => {
+            console.log('added', res);
+            this.toastServiceService.showToastSuccess(
+              'Added new order successfully!'
+            );
+            this.ref.close();
+            this.getData();
+          });
+        },
+      },
     });
+  }
 
-    this.ref.onClose.subscribe((product: any) => {
-      this.toastServiceService.add({
-        severity: 'info',
-        summary: 'Product Selected',
-        detail: 'close',
-      });
-    });
+  contextMenuClick(event: {
+    type: CONTEXT_MENU_EVENT;
+    value: FacebookProduct;
+  }) {
+    console.log(event);
+    switch (event.type) {
+      case CONTEXT_MENU_EVENT.DELETE_ACCEPT:
+        this.firebaseServiceService
+          .fbDeleteProducts(event.value._id!)
+          .subscribe(() => {
+            this.toastServiceService.showToastSuccess(
+              `Deleted record: ${event.value.customer}`
+            );
+            this.getData();
+          });
+        break;
+      case CONTEXT_MENU_EVENT.DELETE_REJECT_CANCEL:
+        break;
 
-    this.ref.onMaximize.subscribe((value: any) => {
-      this.toastServiceService.add({
-        severity: 'info',
-        summary: 'Maximized',
-        detail: `maximized: ${value.maximized}`,
-      });
-    });
+      default:
+        break;
+    }
   }
 
   ngOnDestroy() {

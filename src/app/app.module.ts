@@ -11,6 +11,7 @@ import { FacebookModule } from './facebook/facebook.module';
 import { HttpClientModule } from '@angular/common/http';
 import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
+import { ConfirmationService } from 'primeng/api';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyAmWtEdw-4PjzdDXkYFKEyxz1S2L38vZ1o',
@@ -37,7 +38,7 @@ const firebaseConfig = {
     provideFirebaseApp(() => initializeApp(firebaseConfig)),
     provideFirestore(() => getFirestore()),
   ],
-  providers: [],
+  providers: [ConfirmationService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

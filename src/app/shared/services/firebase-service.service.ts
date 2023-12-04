@@ -15,6 +15,7 @@ import {
   DocumentData,
   orderBy,
   addDoc,
+  deleteDoc,
 } from '@angular/fire/firestore';
 import { Observable, from, BehaviorSubject, catchError } from 'rxjs';
 import { FacebookProduct, STATUS_DROPDOWN } from '../models';
@@ -69,17 +70,20 @@ export class FirebaseServiceService {
     );
   }
 
-  // export async function fbAddProducts(docData) {
-  //   await addDoc(collection(dbFirebase, "products"), docData);
-  // }
-
   // export async function fbUpdateProducts(docData, id) {
   //   await updateDoc(doc(dbFirebase, "products", id), docData);
   // }
 
-  // export async function fbDeleteProducts(id) {
-  //   await deleteDoc(doc(dbFirebase, "products", id));
-  // }
+  fbDeleteProducts(id: string) {
+    return from(
+      deleteDoc(doc(this.firestore, this.PRODUCTS_COLLECTION, id))
+    ).pipe(
+      catchError((err, caught) => {
+        this.handerErr(err);
+        return caught;
+      })
+    );
+  }
 
   // SUPPORT ========================================
   private getCustomDocs(q: Query<DocumentData>): Observable<any> {

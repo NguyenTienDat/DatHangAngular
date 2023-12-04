@@ -1,8 +1,8 @@
 import { ToastServiceService } from 'src/app/shared/services/toast-service.service';
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { NO_IMG, encodeImageFileAsURL, renderLink } from '../utils';
-import { FacebookProduct } from '../models';
-import { MenuItem } from 'primeng/api';
+import { CONTEXT_MENU_EVENT, FacebookProduct } from '../models';
+import { ConfirmEventType, ConfirmationService, MenuItem } from 'primeng/api';
 
 interface ConfigFilterTable {
   noFilter?: boolean;
@@ -42,16 +42,23 @@ export class CustomTableComponent implements OnInit {
   @Input() dataTable = [];
   @Input() headers!: HeadersTable[];
   @Output() valueChanged = new EventEmitter();
+  @Output() contextMenuOutput = new EventEmitter<{
+    type: CONTEXT_MENU_EVENT;
+    value: any;
+  }>();
 
   selectedProduct!: FacebookProduct;
-  items!: MenuItem[];
+  contextMenu!: MenuItem[];
   renderLink = renderLink;
   IMG_DEFAULT = NO_IMG;
 
-  constructor(private toastServiceService: ToastServiceService) {}
+  constructor(
+    private toastServiceService: ToastServiceService,
+    private confirmationService: ConfirmationService
+  ) {}
 
   ngOnInit() {
-    this.items = [
+    this.contextMenu = [
       {
         label: 'View',
         icon: 'pi pi-fw pi-search',
@@ -60,7 +67,7 @@ export class CustomTableComponent implements OnInit {
       {
         label: 'Delete',
         icon: 'pi pi-fw pi-times',
-        command: () => this.deleteProduct(this.selectedProduct),
+        command: () => this.confirmDelete(),
       },
     ];
   }
@@ -73,8 +80,26 @@ export class CustomTableComponent implements OnInit {
     });
   }
 
-  deleteProduct(product: FacebookProduct) {
-    console.log('delete', product);
+  confirmDelete() {
+    this.confirmationService.confirm({
+      message: 'Do you want to delete this record?',
+      header: 'Delete Confirmation',
+      icon: 'pi pi-info-circle',
+      accept: () => {
+        this.contextMenuOutput.emit({
+          type: CONTEXT_MENU_EVENT.DELETE_ACCEPT,
+          value: this.selectedProduct,
+        });
+        this.selectedProduct = {};
+      },
+      reject: (type: ConfirmEventType) => {
+        this.contextMenuOutput.emit({
+          type: CONTEXT_MENU_EVENT.DELETE_REJECT_CANCEL,
+          value: this.selectedProduct,
+        });
+        this.selectedProduct = {};
+      },
+    });
   }
 
   openSelectFile(item: any, field: string, inputImg: any, image: any) {

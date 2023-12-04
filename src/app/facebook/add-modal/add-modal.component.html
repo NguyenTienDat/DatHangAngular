@@ -50,7 +50,6 @@
                 [options]="td.filter.dropdownOptions ?? []"
                 [showClear]="false"
                 [readonly]="false"
-                [(ngModel)]="output[td.field]"
                 (onChange)="changeValue(td, $event)"
               ></p-dropdown>
             </ng-container>
