@@ -16,6 +16,10 @@ const routes: Routes = [
     redirectTo: 'facebook',
     pathMatch: 'full',
   },
+  {
+    path: '**',
+    redirectTo: 'facebook',
+  },
 ];
 
 @NgModule({
