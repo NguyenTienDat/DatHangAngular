@@ -1,0 +1,13 @@
+<app-custom-table
+  [headers]="headers"
+  [dataTable]="orders"
+  (valueChanged)="valueChanged($event)"
+  (contextMenuOutput)="contextMenuClick($event)"
+></app-custom-table>
+
+<p-button
+  class="flat-button-add"
+  icon="pi pi-plus"
+  styleClass="p-button-rounded"
+  (onClick)="showAddModal()"
+></p-button>

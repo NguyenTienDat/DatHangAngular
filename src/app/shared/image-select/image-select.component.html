@@ -1,0 +1,15 @@
+<img
+  width="100px"
+  #image
+  class="cursor-pointer"
+  [src]="IMG_DEFAULT"
+  (click)="openSelectFile(inputImg, image)"
+/>
+
+<input
+  class="d-none"
+  type="file"
+  accept="image/*"
+  #inputImg
+  (change)="changeImg(inputImg, $event)"
+/>

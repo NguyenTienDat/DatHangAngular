@@ -1,0 +1,28 @@
+.wrap-modal ::ng-deep {
+  .wrap-input {
+    display: grid;
+    grid-template-columns: auto auto;
+    gap: 10px 60px;
+
+    .label {
+      width: 100px;
+    }
+
+    .value-input {
+      flex: 1;
+
+      .input-number,
+      input {
+        width: 100%;
+      }
+    }
+  }
+
+  .actions-wrap {
+    text-align: right;
+
+    button {
+      width: 120px;
+    }
+  }
+}

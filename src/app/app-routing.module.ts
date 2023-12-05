@@ -1,10 +1,25 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-const routes: Routes = [];
+const routes: Routes = [
+  {
+    path: 'facebook',
+    loadChildren: () =>
+      import('./facebook/facebook.module').then((m) => m.FacebookModule),
+  },
+  {
+    path: 'tmdt',
+    loadChildren: () => import('./tmdt/tmdt.module').then((m) => m.TmdtModule),
+  },
+  {
+    path: '',
+    redirectTo: 'facebook',
+    pathMatch: 'full',
+  },
+];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

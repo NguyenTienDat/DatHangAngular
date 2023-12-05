@@ -1,0 +1,11 @@
+::ng-deep app-custom-table {
+  .image-col img {
+    width: 100px;
+  }
+}
+
+.flat-button-add {
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+}

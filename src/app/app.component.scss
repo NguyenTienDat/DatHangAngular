@@ -1,0 +1,32 @@
+.home-section .text {
+  display: inline-block;
+  color: #11101d;
+  font-size: 25px;
+  font-weight: 500;
+  margin: 18px
+}
+
+@media (max-width: 420px) {
+  .sidebar li .tooltip {
+    display: none;
+  }
+}
+
+nb-layout-footer ::ng-deep nav {
+  height: 60px;
+}
+
+.container-wrap {
+  height: 100%;
+
+  .content-outlet {
+    margin-left: 78px;
+    transition: all 0.5s ease;
+    overflow: hidden;
+    width: 100%;
+  }
+}
+
+.container-wrap.menu-open .content-outlet {
+  margin-left: 250px;
+}
