@@ -5,6 +5,7 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
+    "build:local": "ng build  --configuration production --base-href /dist/dat-hang-angular/ --deploy-url /dist/dat-hang-angular/",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
@@ -24,10 +25,11 @@
     "@nebular/theme": "^11.0.1",
     "bootstrap": "4.6.2",
     "eva-icons": "^1.1.3",
+    "firebase": "9.12.1",
     "firebase-tools": "^12.9.1",
     "primeicons": "^6.0.1",
     "primeng": "15.0.0",
-    "rxfire": "^6.0.3",
+    "rxfire": "6.0.3",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.12.0"
