@@ -30,7 +30,7 @@
     "firebase": "9.12.1",
     "firebase-tools": "^12.9.1",
     "primeicons": "^6.0.1",
-    "primeng": "15.0.0",
+    "primeng": "^15.4.1",
     "rxfire": "6.0.3",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",
