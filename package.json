@@ -6,6 +6,8 @@
     "start": "ng serve",
     "build": "ng build",
     "build:local": "ng build  --configuration production --base-href /dist/dat-hang-angular/ --deploy-url /dist/dat-hang-angular/",
+    "build:github": "ng build --output-path docs --base-href /DatHangAngular/",
+    "deploy": "ng deploy --base-href /DatHangAngular/ --no-silent  --name NguyenTienDat --email datnt.it.pro@gmail.com",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
@@ -40,6 +42,7 @@
     "@angular/compiler-cli": "^15.0.0",
     "@schematics/angular": "~15.0.4",
     "@types/jasmine": "~4.3.0",
+    "angular-cli-ghpages": "^1.0.7",
     "jasmine-core": "~4.5.0",
     "karma": "~6.4.0",
     "karma-chrome-launcher": "~3.1.0",
