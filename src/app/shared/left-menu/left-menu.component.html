@@ -1,4 +1,4 @@
-<div class="sidebar" [ngClass]="{ open: isOpen }">
+<div class="sidebar" [ngClass]="{ open: isOpen, 'd-none': !isShowMenu }">
   <div class="logo-details">
     <i class="bx bxl-c-plus-plus icon"></i>
     <div class="logo_name">Damie Kids</div>
@@ -84,7 +84,7 @@
       </a>
       <span class="tooltip">Setting</span>
     </li> -->
-    <li class="profile">
+    <li class="profile" (click)="showMenu(false)">
       <div class="profile-details">
         <img
           src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/User_icon_2.svg/768px-User_icon_2.svg.png"
@@ -99,3 +99,10 @@
     </li>
   </ul>
 </div>
+
+<p-button
+  class="flat-button-menu"
+  icon="pi pi-chevron-right"
+  styleClass="p-button-rounded p-button-text"
+  (onClick)="showMenu(true)"
+></p-button>

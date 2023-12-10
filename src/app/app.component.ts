@@ -8,4 +8,5 @@ import { Component } from '@angular/core';
 export class AppComponent {
   title = 'DatHangAngular';
   menuOpen = false;
+  isShowMenu = false;
 }
