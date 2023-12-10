@@ -68,7 +68,17 @@
       </div>
     </ng-container>
   </div>
-  <div class="actions-wrap mt-4">
+  <div class="d-flex aligin-items-center justify-content-end actions-wrap mt-4">
+    <div class="d-flex align-items-center">
+      <p-checkbox
+        inputId="ck_multi"
+        [binary]="true"
+        [ngModel]="firebaseServiceService.IA_AUTO_CLOSE_AFTER_ADD$ | async"
+        (onChange)="saveSetting($event)"
+      ></p-checkbox>
+      <label class="mb-0 ml-2" for="ck_multi">Don't auto close</label>
+    </div>
+
     <p-button
       label="Cancel"
       styleClass="mx-2 p-button-outlined  p-button-secondary"

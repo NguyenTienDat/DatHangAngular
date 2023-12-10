@@ -17,11 +17,12 @@ export class AddModalComponent implements OnInit {
   output: FacebookProduct | any = {};
 
   IMG_DEFAULT = NO_IMG;
+  isAutoClose = false;
 
   constructor(
     private dialogService: DynamicDialogConfig,
     private ref: DynamicDialogRef,
-    private firebaseServiceService: FirebaseServiceService,
+    public firebaseServiceService: FirebaseServiceService,
     private toastServiceService: ToastServiceService
   ) {
     this.data = this.dialogService.data.data;
@@ -84,5 +85,10 @@ export class AddModalComponent implements OnInit {
     }
 
     this.changeValue(td, event);
+  }
+
+  saveSetting(e: any) {
+    console.log(e);
+    alert('Im develop');
   }
 }

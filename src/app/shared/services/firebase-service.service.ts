@@ -39,6 +39,10 @@ export class FirebaseServiceService {
    */
   INCOME_PER_ORDER$: BehaviorSubject<number> = new BehaviorSubject(35000);
 
+  IA_AUTO_CLOSE_AFTER_ADD$: BehaviorSubject<boolean> = new BehaviorSubject(
+    true
+  );
+
   constructor(private firestore: Firestore) {
     this.productsCol = collection(this.firestore, this.PRODUCTS_COLLECTION);
   }
