@@ -30,3 +30,7 @@ nb-layout-footer ::ng-deep nav {
 .container-wrap.menu-open .content-outlet {
   margin-left: 250px;
 }
+
+.container-wrap.hidden-menu .content-outlet {
+  margin-left: 0;
+}

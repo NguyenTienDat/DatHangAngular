@@ -14,6 +14,7 @@ interface LeftMenu {
 })
 export class LeftMenuComponent {
   @Output() open = new EventEmitter<boolean>();
+  @Output() show = new EventEmitter<boolean>();
   leftMenu: LeftMenu[] = [
     {
       name: 'Facebook',
@@ -35,6 +36,7 @@ export class LeftMenuComponent {
     // },
   ];
 
+  isShowMenu = false;
   isOpen = false;
 
   close() {
@@ -45,5 +47,10 @@ export class LeftMenuComponent {
   btnClick() {
     this.isOpen = !this.isOpen;
     this.open.emit(this.isOpen);
+  }
+
+  showMenu(isShowMenu: boolean) {
+    this.isShowMenu = isShowMenu;
+    this.show.emit(isShowMenu);
   }
 }

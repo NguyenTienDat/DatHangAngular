@@ -1,8 +1,14 @@
 <nb-layout>
   <nb-layout-column class="p-0">
-    <div class="container-wrap d-flex" [ngClass]="{ 'menu-open': menuOpen }">
+    <div
+      class="container-wrap d-flex"
+      [ngClass]="{ 'menu-open': menuOpen, 'hidden-menu': !isShowMenu }"
+    >
       <div>
-        <app-left-menu (open)="menuOpen = $event"></app-left-menu>
+        <app-left-menu
+          (open)="menuOpen = $event"
+          (show)="isShowMenu = $event"
+        ></app-left-menu>
       </div>
       <div class="content-outlet">
         <router-outlet></router-outlet>

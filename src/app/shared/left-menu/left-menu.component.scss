@@ -8,6 +8,13 @@
   font-family: "Poppins", sans-serif;
 }
 
+.flat-button-menu {
+  position: fixed;
+  bottom: 25px;
+  left: 20px;
+  z-index: 1;
+}
+
 .sidebar {
   left: 0;
   top: 0;
