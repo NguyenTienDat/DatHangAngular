@@ -1,3 +1,4 @@
+import { STATUS_DROPDOWN } from '../../shared/models';
 import { FirebaseServiceService } from '../../shared/services/firebase-service.service';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
@@ -27,6 +28,7 @@ export class AddModalComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.output.status = STATUS_DROPDOWN.ORDERED;
     this.output.weight_price =
       this.firebaseServiceService.DEFAULT_WEIGHT_PRICE$.value;
     this.output.exchange = this.firebaseServiceService.DEFAULT_EXCHANGE$.value;
@@ -41,6 +43,10 @@ export class AddModalComponent implements OnInit {
 
   submit() {
     console.log('Submit', this.output);
+    if (!this.output.customer) {
+      this.toastServiceService.showToastWarning('Chưa nhập tên khách hàng!');
+      return;
+    }
     this.dialogService.data.callBackAdded(this.output);
   }
 

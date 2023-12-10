@@ -50,7 +50,7 @@
                 [options]="td.filter.dropdownOptions ?? []"
                 [showClear]="false"
                 [readonly]="false"
-                (onChange)="changeValue(td, $event)"
+                (onChange)="changeValue(td, $event.value)"
               ></p-dropdown>
             </ng-container>
 
