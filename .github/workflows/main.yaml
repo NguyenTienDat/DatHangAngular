@@ -1,12 +1,12 @@
 #Deploy from a branch: gh-pages /(root)
 name: Angular GitHub CI/CD
 on:
-  push:
-    branches:
-      - deploy-github-2
-      - dev
-      - main
-      - github
+  [push]
+  # push:
+  #   branches:
+  #     - deploy-github-2
+  #     - dev
+  #     - main
 permissions:
   contents: write
 jobs:
@@ -50,7 +50,7 @@ jobs:
       - name: Build and Deploy
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-          BASE_BRANCH: github
-          BRANCH: gh-pages
+          # ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+          # BASE_BRANCH: github
+          # BRANCH: gh-pages
           FOLDER: docs
