@@ -182,9 +182,7 @@ export class FacebookComponent implements OnInit, OnDestroy {
   showAddModal() {
     this.ref = this.dialogService.open(AddModalComponent, {
       header: 'Đơn hàng mới',
-      width: '700px',
       contentStyle: { overflow: 'auto' },
-      baseZIndex: 10000,
       maximizable: true,
       data: {
         data: this.headers,
