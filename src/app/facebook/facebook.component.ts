@@ -184,6 +184,7 @@ export class FacebookComponent implements OnInit, OnDestroy {
       header: 'Đơn hàng mới',
       contentStyle: { overflow: 'auto' },
       maximizable: true,
+      baseZIndex: 10000,
       data: {
         data: this.headers,
         callBackAdded: (output: FacebookProduct) => {

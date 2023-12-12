@@ -21,6 +21,7 @@ import { ContextMenuModule } from 'primeng/contextmenu';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
+import { TooltipModule } from 'primeng/tooltip';
 
 const components = [
   LeftMenuComponent,
@@ -42,6 +43,7 @@ const primengModules = [
   ConfirmDialogModule,
   ButtonModule,
   CheckboxModule,
+  TooltipModule,
 ];
 @NgModule({
   declarations: [...components],

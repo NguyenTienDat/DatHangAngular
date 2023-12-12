@@ -12,8 +12,14 @@
       flex: 1;
 
       .input-number,
+      .message,
       input {
         width: 100%;
+      }
+
+      .message {
+        white-space: pre-line;
+        font-size: 0.8rem;
       }
     }
   }
@@ -45,6 +51,7 @@
         textarea,
         p-inputnumber,
         p-inputnumber>span,
+        .message,
         input {
           width: 100%;
         }

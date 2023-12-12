@@ -64,6 +64,10 @@
               </ng-template>
             </ng-container>
           </ng-container>
+
+          <div *ngIf="output['tooltip_' + td.field]" class="message text-info">
+            {{ output["tooltip_" + td.field] }}
+          </div>
         </div>
       </div>
     </ng-container>
