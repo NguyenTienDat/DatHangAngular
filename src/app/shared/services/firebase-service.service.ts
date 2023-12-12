@@ -42,10 +42,6 @@ export class FirebaseServiceService {
   /** Tiền thuế trên đơn hàng: hiện tại 1,5% => x * (1 + 1.5) */
   VAT$: BehaviorSubject<number> = new BehaviorSubject(101.5 / 100);
 
-  IA_AUTO_CLOSE_AFTER_ADD$: BehaviorSubject<boolean> = new BehaviorSubject(
-    true
-  );
-
   constructor(private firestore: Firestore) {
     this.productsCol = collection(this.firestore, this.PRODUCTS_COLLECTION);
   }

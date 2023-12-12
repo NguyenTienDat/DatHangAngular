@@ -100,18 +100,6 @@ export class FacebookComponent implements OnInit, OnDestroy {
     },
     {
       ...this.numberDefaultConfig,
-      name: 'Giá nhập',
-      field: 'price',
-      className: 'text-info',
-    },
-    {
-      ...this.numberDefaultConfig,
-      name: 'Giá bán',
-      field: 'price2',
-      className: 'text-primary',
-    },
-    {
-      ...this.numberDefaultConfig,
       name: 'Tệ',
       field: 'CNY_price',
       className: 'text-danger',
@@ -133,6 +121,18 @@ export class FacebookComponent implements OnInit, OnDestroy {
       name: 'Tỉ giá',
       field: 'exchange',
       className: 'text-danger',
+    },
+    {
+      ...this.numberDefaultConfig,
+      name: 'Giá nhập',
+      field: 'price',
+      className: 'text-info',
+    },
+    {
+      ...this.numberDefaultConfig,
+      name: 'Giá bán',
+      field: 'price2',
+      className: 'text-primary',
     },
   ];
 
@@ -191,13 +191,17 @@ export class FacebookComponent implements OnInit, OnDestroy {
           this.firebaseServiceService.fbAddProducts(output).subscribe((res) => {
             console.log('added', res);
             this.toastServiceService.showToastSuccess(
-              'Added new order successfully!'
+              `Added new order ${output.customer} successfully!`
             );
-            this.ref.close();
-            this.getData();
+            // this.ref.close();
+            // this.getData();
           });
         },
       },
+    });
+
+    this.ref.onClose.subscribe(() => {
+      this.getData();
     });
   }
 

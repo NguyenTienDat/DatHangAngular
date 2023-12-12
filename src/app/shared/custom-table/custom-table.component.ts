@@ -82,9 +82,10 @@ export class CustomTableComponent implements OnInit {
 
   confirmDelete() {
     this.confirmationService.confirm({
-      message: 'Do you want to delete this record?',
+      message: `Do you want to delete this record: ${this.selectedProduct.customer}?`,
       header: 'Delete Confirmation',
       icon: 'pi pi-info-circle',
+      rejectButtonStyleClass: 'bg-danger',
       accept: () => {
         this.contextMenuOutput.emit({
           type: CONTEXT_MENU_EVENT.DELETE_ACCEPT,

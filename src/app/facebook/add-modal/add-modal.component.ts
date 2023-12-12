@@ -102,9 +102,4 @@ export class AddModalComponent implements OnInit {
     }
     this.changeValue(td, event);
   }
-
-  saveSetting(e: any) {
-    console.log(e);
-    alert('Im develop');
-  }
 }
