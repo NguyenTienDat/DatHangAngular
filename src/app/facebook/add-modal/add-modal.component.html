@@ -65,7 +65,10 @@
             </ng-container>
           </ng-container>
 
-          <div *ngIf="output['tooltip_' + td.field]" class="message text-info">
+          <div
+            *ngIf="output['tooltip_' + td.field]"
+            class="mt-2 message text-info"
+          >
             {{ output["tooltip_" + td.field] }}
           </div>
         </div>

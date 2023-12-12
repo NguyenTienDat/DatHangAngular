@@ -19,10 +19,16 @@
   [(contextMenuSelection)]="selectedProduct"
   [contextMenu]="cm"
   dataKey="_id"
+  [rowHover]="true"
+  [(selection)]="selectedItems"
   [tableStyle]="{ flex: 1, width: '100%' }"
+  (selectionChange)="openMultiHandlerModal()"
 >
   <ng-template pTemplate="header">
     <tr>
+      <th style="width: 4rem">
+        <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+      </th>
       <ng-container *ngFor="let td of headers">
         <th
           class="table-header"
@@ -68,7 +74,10 @@
   </ng-template>
   <ng-template pTemplate="body" let-product>
     <ng-container>
-      <tr [pContextMenuRow]="product">
+      <tr class="p-selectable-row" [pContextMenuRow]="product">
+        <td>
+          <p-tableCheckbox [value]="product"></p-tableCheckbox>
+        </td>
         <td
           *ngFor="let td of headers"
           [ngClass]="td.className"

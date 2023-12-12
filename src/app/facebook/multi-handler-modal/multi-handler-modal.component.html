@@ -1,0 +1,169 @@
+<div class="wrap-modal">
+  <div class="table-preview">
+    <p-accordion>
+      <p-accordionTab [header]="items.length + ' đơn hàng sẽ được update!'">
+        <table>
+          <tr>
+            <ng-container *ngFor="let td of previewHeader">
+              <th
+                class="table-header"
+                [ngClass]="td.headerClassName"
+                [ngStyle]="td.styles"
+              >
+                <div class="flex align-items-center">
+                  {{ td.name }}
+                </div>
+              </th>
+            </ng-container>
+          </tr>
+          <ng-container *ngFor="let product of items">
+            <tr class="p-selectable-row">
+              <td *ngFor="let td of previewHeader" [ngClass]="td.className">
+                <div class="table-cell" [ngStyle]="td.styles">
+                  <ng-container [ngSwitch]="td.type">
+                    <ng-container *ngSwitchCase="'image'">
+                      <img
+                        #image
+                        class="cursor-pointer"
+                        [src]="product[td.field] || IMG_DEFAULT"
+                        width="100"
+                      />
+                    </ng-container>
+
+                    <ng-container *ngSwitchCase="'link'">
+                      <div [innerHTML]="renderLink(product[td.field])"></div>
+                    </ng-container>
+
+                    <ng-container *ngSwitchCase="'string'">
+                      {{ product[td.field] }}
+                    </ng-container>
+
+                    <ng-container *ngSwitchCase="'number'">
+                      {{
+                        +product[td.field] === 0
+                          ? "-"
+                          : (+product[td.field] | number)
+                      }}
+                    </ng-container>
+
+                    <ng-container *ngSwitchCase="'dropdown'">
+                      <p-dropdown
+                        id="value"
+                        optionLabel="name"
+                        optionValue="value"
+                        [options]="td.filter.dropdownOptions ?? []"
+                        [showClear]="false"
+                        [ngModel]="product[td.field]"
+                        [readonly]="true"
+                        [ngStyle]="td.styles"
+                        [styleClass]="'bg-light'"
+                      ></p-dropdown>
+                    </ng-container>
+
+                    <ng-container *ngSwitchDefault>
+                      {{ product[td.field] }}
+                    </ng-container>
+                  </ng-container>
+                </div>
+              </td>
+            </tr>
+          </ng-container>
+        </table>
+      </p-accordionTab>
+    </p-accordion>
+  </div>
+  <div class="wrap-input">
+    <ng-container *ngFor="let td of willChangeHeader; let index = index">
+      <div class="d-flex justify-content-between my-2 align-items-center">
+        <p-checkbox
+          [binary]="true"
+          (onChange)="checkedChange($event.checked, td.field)"
+        ></p-checkbox>
+        <div class="label ml-2">
+          {{ td.name }}
+        </div>
+        <div class="value-input">
+          <ng-container [ngSwitch]="td.type">
+            <ng-container *ngSwitchCase="'image'">
+              <app-image-select
+                (imageOutput)="output[td.field] = $event"
+              ></app-image-select>
+            </ng-container>
+
+            <ng-container *ngSwitchCase="'link'">
+              <textarea
+                cols="25"
+                pInputTextarea
+                [autoResize]="true"
+                [(ngModel)]="output[td.field]"
+                (ngModelChange)="changeValue(td, $event)"
+              ></textarea>
+            </ng-container>
+
+            <ng-container *ngSwitchCase="'string'">
+              <input
+                pInputText
+                [(ngModel)]="output[td.field]"
+                (ngModelChange)="changeValue(td, $event)"
+              />
+            </ng-container>
+
+            <ng-container *ngSwitchCase="'number'">
+              <p-inputNumber
+                mode="decimal"
+                [minFractionDigits]="0"
+                [maxFractionDigits]="5"
+                [inputStyleClass]="td.className ?? '' + 'input-number'"
+                [(ngModel)]="output[td.field]"
+              ></p-inputNumber>
+            </ng-container>
+
+            <ng-container *ngSwitchCase="'dropdown'">
+              <p-dropdown
+                id="value"
+                optionLabel="name"
+                optionValue="value"
+                [options]="td.filter.dropdownOptions ?? []"
+                [showClear]="false"
+                [readonly]="false"
+                (onChange)="changeValue(td, $event.value)"
+              ></p-dropdown>
+            </ng-container>
+
+            <ng-container *ngSwitchDefault>
+              <ng-template pTemplate="input">
+                <textarea
+                  pInputTextarea
+                  [(ngModel)]="output[td.field]"
+                  (ngModelChange)="changeValue(td, $event)"
+                ></textarea>
+              </ng-template>
+            </ng-container>
+          </ng-container>
+
+          <div
+            *ngIf="output['tooltip_' + td.field]"
+            class="mt-2 message text-info"
+          >
+            {{ output["tooltip_" + td.field] }}
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+  <div class="d-flex aligin-items-center justify-content-end actions-wrap mt-4">
+    <p-button
+      label="Cancel"
+      styleClass="mx-2 p-button-outlined  p-button-secondary"
+      icon="pi pi-times"
+      (onClick)="close()"
+    ></p-button>
+
+    <p-button
+      label="Updated"
+      styleClass="p-button-danger"
+      icon="pi pi-pencil"
+      (onClick)="submit()"
+    ></p-button>
+  </div>
+</div>

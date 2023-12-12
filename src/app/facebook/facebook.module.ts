@@ -6,6 +6,7 @@ import { SharedModule } from '../shared/shared.module';
 import { AddModalComponent } from './add-modal/add-modal.component';
 import { DialogService } from 'primeng/dynamicdialog';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MultiHandlerModalComponent } from './multi-handler-modal/multi-handler-modal.component';
 
 const routes: Routes = [
   {
@@ -22,7 +23,11 @@ const routes: Routes = [
     ReactiveFormsModule,
     FormsModule,
   ],
-  declarations: [FacebookComponent, AddModalComponent],
+  declarations: [
+    FacebookComponent,
+    AddModalComponent,
+    MultiHandlerModalComponent,
+  ],
   providers: [DialogService],
   exports: [],
 })

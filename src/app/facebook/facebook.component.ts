@@ -10,6 +10,8 @@ import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { AddModalComponent } from './add-modal/add-modal.component';
 import { FirebaseServiceService } from '../shared/services/firebase-service.service';
 import { ToastServiceService } from '../shared/services/toast-service.service';
+import { MultiHandlerModalComponent } from './multi-handler-modal/multi-handler-modal.component';
+import { ConfirmationService, MenuItem } from 'primeng/api';
 
 @Component({
   selector: 'app-facebook',
@@ -136,22 +138,65 @@ export class FacebookComponent implements OnInit, OnDestroy {
     },
   ];
 
+  actionMenuItems!: MenuItem[];
+
   orders = [];
 
   ref!: DynamicDialogRef;
+  selectedItems: FacebookProduct[] = [];
 
   constructor(
     private customHttpClientService: CustomHttpClientService,
     private toastServiceService: ToastServiceService,
     public dialogService: DialogService,
-    private firebaseServiceService: FirebaseServiceService
+    private firebaseServiceService: FirebaseServiceService,
+    private confirmationService: ConfirmationService
   ) {}
 
   ngOnInit() {
-    // this.customHttpClientService.getFacebookJSON().subscribe((res) => {
-    //   this.orders = res;
-    //   console.log(res);
-    // });
+    this.actionMenuItems = [
+      {
+        icon: 'pi pi-trash',
+        command: () => {
+          if (this.selectedItems.length) {
+            this.confirmationService.confirm({
+              message: `Xóa ${this.selectedItems.length} đơn hàng đang chọn?`,
+              header: 'Delete Confirmation',
+              icon: 'pi pi-info-circle',
+              acceptButtonStyleClass: 'bg-danger',
+              rejectButtonStyleClass: 'bg-success',
+              defaultFocus: 'reject',
+              accept: () => {
+                alert('TOBE dev');
+              },
+              reject: () => {},
+            });
+          } else {
+            this.toastServiceService.showToastWarning(
+              'Hãy chọn ít nhất 1 đơn hàng để xóa!'
+            );
+          }
+        },
+      },
+      {
+        icon: 'pi pi-external-link',
+        command: () => {
+          if (this.selectedItems.length) {
+            this.selectMultiItems(this.selectedItems);
+          } else {
+            this.toastServiceService.showToastWarning(
+              'Hãy chọn ít nhất 1 đơn hàng để update!'
+            );
+          }
+        },
+      },
+      {
+        icon: 'pi pi-plus',
+        command: () => {
+          this.showAddModal();
+        },
+      },
+    ];
 
     this.getData();
   }
@@ -171,6 +216,7 @@ export class FacebookComponent implements OnInit, OnDestroy {
       detail: `${event.header.name} = ${event.value}`,
     });
   }
+
   show() {
     this.toastServiceService.add({
       severity: 'success',
@@ -227,6 +273,44 @@ export class FacebookComponent implements OnInit, OnDestroy {
       default:
         break;
     }
+  }
+
+  selectMultiItems(items: FacebookProduct[]) {
+    this.ref = this.dialogService.open(MultiHandlerModalComponent, {
+      header: 'Cập nhật nhiều đơn hàng cùng lúc!',
+      contentStyle: { overflow: 'auto' },
+      maximizable: true,
+      baseZIndex: 10000,
+      data: {
+        items,
+        data: this.headers,
+        callBackUpdated: (output: FacebookProduct, mess: string) => {
+          this.confirmationService.confirm({
+            message: mess,
+            header: 'Update Confirmation',
+            icon: 'pi pi-info-circle',
+            rejectButtonStyleClass: 'bg-danger',
+            accept: () => {
+              alert('TOBE dev');
+            },
+            reject: () => {},
+          });
+
+          // this.firebaseServiceService.fbAddProducts(output).subscribe((res) => {
+          //   console.log('added', res);
+          //   this.toastServiceService.showToastSuccess(
+          //     `Added new order ${output.customer} successfully!`
+          //   );
+          //   // this.ref.close();
+          //   // this.getData();
+          // });
+        },
+      },
+    });
+
+    this.ref.onClose.subscribe(() => {
+      this.getData();
+    });
   }
 
   ngOnDestroy() {

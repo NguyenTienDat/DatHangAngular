@@ -2,7 +2,7 @@ import { CommonService } from '../../shared/services/common.service';
 import { STATUS_DROPDOWN } from '../../shared/models';
 import { FirebaseServiceService } from '../../shared/services/firebase-service.service';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { HeadersTable } from 'src/app/shared/custom-table/custom-table.component';
 import { NO_IMG } from 'src/app/shared/utils';
 import { FacebookProduct } from 'src/app/shared/models';
@@ -18,7 +18,6 @@ export class AddModalComponent implements OnInit {
   output: FacebookProduct | any = {};
 
   IMG_DEFAULT = NO_IMG;
-  isAutoClose = false;
 
   constructor(
     private dialogService: DynamicDialogConfig,

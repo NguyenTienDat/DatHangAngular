@@ -39,14 +39,16 @@ export interface HeadersTable {
   styleUrls: ['./custom-table.component.scss'],
 })
 export class CustomTableComponent implements OnInit {
-  @Input() dataTable = [];
+  @Input() dataTable: FacebookProduct[] = [];
   @Input() headers!: HeadersTable[];
   @Output() valueChanged = new EventEmitter();
+  @Output() selectMultiItems = new EventEmitter<FacebookProduct[]>();
   @Output() contextMenuOutput = new EventEmitter<{
     type: CONTEXT_MENU_EVENT;
     value: any;
   }>();
 
+  selectedItems: FacebookProduct[] = [];
   selectedProduct!: FacebookProduct;
   contextMenu!: MenuItem[];
   renderLink = renderLink;
@@ -122,5 +124,9 @@ export class CustomTableComponent implements OnInit {
     encodeImageFileAsURL(fileElement, (src: any) => {
       fileElement.data.image.src = src;
     });
+  }
+
+  openMultiHandlerModal() {
+    this.selectMultiItems.emit(this.selectedItems);
   }
 }

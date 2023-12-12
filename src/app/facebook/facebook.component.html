@@ -3,11 +3,9 @@
   [dataTable]="orders"
   (valueChanged)="valueChanged($event)"
   (contextMenuOutput)="contextMenuClick($event)"
+  (selectMultiItems)="selectedItems = $event"
 ></app-custom-table>
 
-<p-button
-  class="flat-button-add"
-  icon="pi pi-plus"
-  styleClass="p-button-rounded"
-  (onClick)="showAddModal()"
-></p-button>
+<div class="flat-button-add">
+  <p-speedDial [model]="actionMenuItems"></p-speedDial>
+</div>

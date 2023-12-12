@@ -22,6 +22,8 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
 import { TooltipModule } from 'primeng/tooltip';
+import { AccordionModule } from 'primeng/accordion';
+import { SpeedDialModule } from 'primeng/speeddial';
 
 const components = [
   LeftMenuComponent,
@@ -44,6 +46,8 @@ const primengModules = [
   ButtonModule,
   CheckboxModule,
   TooltipModule,
+  AccordionModule,
+  SpeedDialModule,
 ];
 @NgModule({
   declarations: [...components],
