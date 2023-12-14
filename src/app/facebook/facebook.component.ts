@@ -144,6 +144,7 @@ export class FacebookComponent implements OnInit, OnDestroy {
 
   ref!: DynamicDialogRef;
   selectedItems: FacebookProduct[] = [];
+  isEditMode = false;
 
   constructor(
     private customHttpClientService: CustomHttpClientService,
@@ -154,22 +155,35 @@ export class FacebookComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
+    this.getActionsMenu();
+    this.getData();
+  }
+
+  private getActionsMenu() {
     this.actionMenuItems = [
       {
-        icon: 'pi pi-pencil',
+        icon: this.isEditMode ? 'pi pi-eye' : 'pi pi-pencil',
         command: () => {
-          this.confirmationService.confirm({
-            message: `Các thay đổi sẽ được áp dụng ngay lập tức, dev không thể khôi phục khi bạn lỡ tay sửa nhầm ;) `,
-            header: 'EDIT MODE',
-            icon: 'pi pi-info-circle',
-            acceptButtonStyleClass: 'bg-danger',
-            rejectButtonStyleClass: 'bg-success',
-            defaultFocus: 'reject',
-            accept: () => {
-              alert('TOBE dev');
-            },
-            reject: () => {},
-          });
+          if (this.isEditMode) {
+            this.isEditMode = false;
+            this.getActionsMenu();
+          } else {
+            this.confirmationService.confirm({
+              message: `Các thay đổi sẽ được áp dụng ngay lập tức, dev không thể khôi phục khi bạn lỡ tay sửa nhầm ;) `,
+              header: 'EDIT MODE',
+              icon: 'pi pi-info-circle',
+              acceptButtonStyleClass: 'bg-danger',
+              rejectButtonStyleClass: 'bg-success',
+              accept: () => {
+                this.isEditMode = true;
+                this.getActionsMenu();
+              },
+              reject: () => {
+                this.isEditMode = false;
+                this.getActionsMenu();
+              },
+            });
+          }
         },
       },
       {
@@ -214,8 +228,6 @@ export class FacebookComponent implements OnInit, OnDestroy {
         },
       },
     ];
-
-    this.getData();
   }
 
   private getData() {

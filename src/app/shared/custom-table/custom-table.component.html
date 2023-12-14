@@ -74,7 +74,11 @@
   </ng-template>
   <ng-template pTemplate="body" let-product>
     <ng-container>
-      <tr class="p-selectable-row" [pContextMenuRow]="product">
+      <tr
+        class="p-selectable-row"
+        [ngClass]="{ 'preview-mode': !isEditMode }"
+        [pContextMenuRow]="product"
+      >
         <td>
           <p-tableCheckbox [value]="product"></p-tableCheckbox>
         </td>

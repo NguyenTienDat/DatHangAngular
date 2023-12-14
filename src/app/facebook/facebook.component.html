@@ -1,11 +1,15 @@
 <app-custom-table
   [headers]="headers"
   [dataTable]="orders"
+  [isEditMode]="isEditMode"
   (valueChanged)="valueChanged($event)"
   (contextMenuOutput)="contextMenuClick($event)"
   (selectMultiItems)="selectedItems = $event"
 ></app-custom-table>
 
 <div class="flat-button-add">
-  <p-speedDial [model]="actionMenuItems"></p-speedDial>
+  <p-speedDial
+    [model]="actionMenuItems"
+    [hideOnClickOutside]="false"
+  ></p-speedDial>
 </div>

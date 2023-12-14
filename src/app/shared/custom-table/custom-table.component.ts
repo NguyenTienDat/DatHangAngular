@@ -39,6 +39,7 @@ export interface HeadersTable {
   styleUrls: ['./custom-table.component.scss'],
 })
 export class CustomTableComponent implements OnInit {
+  @Input() isEditMode = false;
   @Input() dataTable: FacebookProduct[] = [];
   @Input() headers!: HeadersTable[];
   @Output() valueChanged = new EventEmitter();
