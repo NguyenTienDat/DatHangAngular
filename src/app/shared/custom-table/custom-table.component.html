@@ -104,7 +104,10 @@
                       pInputTextarea
                       [autoResize]="true"
                       [(ngModel)]="product[td.field]"
-                      (ngModelChange)="changeValue(product, td, $event)"
+                      (change)="changeValue(product, td, product[td.field])"
+                      (keydown)="
+                        keyHandler($event, product, td, product[td.field])
+                      "
                     ></textarea>
                   </ng-template>
                   <ng-template pTemplate="output">
@@ -120,7 +123,10 @@
                       pInputText
                       [ngStyle]="td.styles"
                       [(ngModel)]="product[td.field]"
-                      (ngModelChange)="changeValue(product, td, $event)"
+                      (change)="changeValue(product, td, product[td.field])"
+                      (keydown)="
+                        keyHandler($event, product, td, product[td.field])
+                      "
                     />
                     <span class="invisible"> {{ product[td.field] }}</span>
                   </ng-template>
@@ -139,7 +145,10 @@
                       [inputStyle]="td.styles"
                       [minFractionDigits]="0"
                       [maxFractionDigits]="5"
-                      (ngModelChange)="changeValue(product, td, $event)"
+                      (focusout)="changeValue(product, td, product[td.field])"
+                      (keydown)="
+                        keyHandler($event, product, td, product[td.field])
+                      "
                     >
                     </p-inputNumber>
                   </ng-template>
@@ -163,7 +172,7 @@
                   [ngModel]="product[td.field]"
                   [readonly]="false"
                   [ngStyle]="td.styles"
-                  (onChange)="changeValue(product, td, $event)"
+                  (onChange)="changeValue(product, td, $event.value)"
                 ></p-dropdown>
               </ng-container>
 
@@ -174,7 +183,10 @@
                       pInputTextarea
                       [ngStyle]="td.styles"
                       [(ngModel)]="product[td.field]"
-                      (ngModelChange)="changeValue(product, td, $event)"
+                      (change)="changeValue(product, td, product[td.field])"
+                      (keydown)="
+                        keyHandler($event, product, td, product[td.field])
+                      "
                     ></textarea>
                   </ng-template>
                   <ng-template pTemplate="output">

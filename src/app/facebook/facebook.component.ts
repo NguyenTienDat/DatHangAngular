@@ -156,6 +156,23 @@ export class FacebookComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.actionMenuItems = [
       {
+        icon: 'pi pi-pencil',
+        command: () => {
+          this.confirmationService.confirm({
+            message: `Các thay đổi sẽ được áp dụng ngay lập tức, dev không thể khôi phục khi bạn lỡ tay sửa nhầm ;) `,
+            header: 'EDIT MODE',
+            icon: 'pi pi-info-circle',
+            acceptButtonStyleClass: 'bg-danger',
+            rejectButtonStyleClass: 'bg-success',
+            defaultFocus: 'reject',
+            accept: () => {
+              alert('TOBE dev');
+            },
+            reject: () => {},
+          });
+        },
+      },
+      {
         icon: 'pi pi-trash',
         command: () => {
           if (this.selectedItems.length) {
@@ -210,11 +227,21 @@ export class FacebookComponent implements OnInit, OnDestroy {
   }
 
   valueChanged(event: any) {
-    this.toastServiceService.add({
-      severity: 'success',
-      summary: `${event.item.customer} success`,
-      detail: `${event.header.name} = ${event.value}`,
-    });
+    this.firebaseServiceService
+      .fbUpdateProducts(
+        {
+          [event.header.field]: event.value,
+        },
+        event.item._id
+      )
+      .subscribe((res) => {
+        this.toastServiceService.add({
+          severity: 'success',
+          summary: `Update [${event.item.customer}]`,
+          detail: `[${event.header.name}] = ${event.value}`,
+        });
+        this.getData();
+      });
   }
 
   show() {

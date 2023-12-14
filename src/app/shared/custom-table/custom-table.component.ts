@@ -123,7 +123,19 @@ export class CustomTableComponent implements OnInit {
     console.log({ fileElement }, event);
     encodeImageFileAsURL(fileElement, (src: any) => {
       fileElement.data.image.src = src;
+      this.valueChanged.emit({
+        item: fileElement.data.item,
+        header: { field: fileElement.data.field },
+        value: src,
+      });
     });
+  }
+
+  keyHandler(event: any, item: any, header: HeadersTable, value: any) {
+    // console.log(event);
+    if (event.code === 'Enter') {
+      this.changeValue(item, header, value);
+    }
   }
 
   openMultiHandlerModal() {

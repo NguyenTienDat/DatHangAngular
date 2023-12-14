@@ -16,6 +16,7 @@ import {
   orderBy,
   addDoc,
   deleteDoc,
+  updateDoc,
 } from '@angular/fire/firestore';
 import { Observable, from, BehaviorSubject, catchError } from 'rxjs';
 import { FacebookProduct, STATUS_DROPDOWN } from '../models';
@@ -73,9 +74,16 @@ export class FirebaseServiceService {
     );
   }
 
-  // export async function fbUpdateProducts(docData, id) {
-  //   await updateDoc(doc(dbFirebase, "products", id), docData);
-  // }
+  fbUpdateProducts(docData: any, id: string) {
+    return from(
+      updateDoc(doc(this.firestore, this.PRODUCTS_COLLECTION, id), docData)
+    ).pipe(
+      catchError((err, caught) => {
+        this.handerErr(err);
+        return caught;
+      })
+    );
+  }
 
   fbDeleteProducts(id: string) {
     return from(

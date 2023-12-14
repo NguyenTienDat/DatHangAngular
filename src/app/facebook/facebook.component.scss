@@ -4,8 +4,12 @@
   }
 }
 
-.flat-button-add {
+:host ::ng-deep .flat-button-add {
   position: fixed;
-  bottom: 250px;
+  bottom: 320px;
   right: 80px;
+
+  .p-speeddial-action {
+    text-decoration: none;
+  }
 }
