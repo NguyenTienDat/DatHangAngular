@@ -198,7 +198,14 @@ export class FacebookComponent implements OnInit, OnDestroy {
               rejectButtonStyleClass: 'bg-success',
               defaultFocus: 'reject',
               accept: () => {
-                alert('TOBE dev');
+                this.firebaseServiceService
+                  .fbDeleteProducts(this.selectedItems)
+                  .subscribe((res) => {
+                    this.toastServiceService.showToastSuccess(
+                      `Xóa ${this.selectedItems.length} đơn hàng thành công!`
+                    );
+                    this.getData();
+                  });
               },
               reject: () => {},
             });
@@ -231,6 +238,8 @@ export class FacebookComponent implements OnInit, OnDestroy {
   }
 
   private getData() {
+    this.selectedItems = [];
+    this.orders = [];
     this.firebaseServiceService.fbQueryProducts().subscribe((res: any) => {
       console.log(res);
       res.sort((a: any, b: any) => (a.created < b.created ? 1 : -1));
@@ -240,7 +249,7 @@ export class FacebookComponent implements OnInit, OnDestroy {
 
   valueChanged(event: any) {
     this.firebaseServiceService
-      .fbUpdateProducts(
+      .fbUpdateProduct(
         {
           [event.header.field]: event.value,
         },
@@ -298,7 +307,7 @@ export class FacebookComponent implements OnInit, OnDestroy {
     switch (event.type) {
       case CONTEXT_MENU_EVENT.DELETE_ACCEPT:
         this.firebaseServiceService
-          .fbDeleteProducts(event.value._id!)
+          .fbDeleteProduct(event.value._id!)
           .subscribe(() => {
             this.toastServiceService.showToastSuccess(
               `Deleted record: ${event.value.customer}`
@@ -324,25 +333,25 @@ export class FacebookComponent implements OnInit, OnDestroy {
         items,
         data: this.headers,
         callBackUpdated: (output: FacebookProduct, mess: string) => {
+          console.log({ output });
           this.confirmationService.confirm({
             message: mess,
             header: 'Update Confirmation',
             icon: 'pi pi-info-circle',
             rejectButtonStyleClass: 'bg-danger',
             accept: () => {
-              alert('TOBE dev');
+              this.firebaseServiceService
+                .fbUpdateProducts(output, items)
+                .subscribe((res) => {
+                  this.toastServiceService.showToastSuccess(
+                    `${mess} successfully!`
+                  );
+                  this.ref.close();
+                  this.getData();
+                });
             },
             reject: () => {},
           });
-
-          // this.firebaseServiceService.fbAddProducts(output).subscribe((res) => {
-          //   console.log('added', res);
-          //   this.toastServiceService.showToastSuccess(
-          //     `Added new order ${output.customer} successfully!`
-          //   );
-          //   // this.ref.close();
-          //   // this.getData();
-          // });
         },
       },
     });

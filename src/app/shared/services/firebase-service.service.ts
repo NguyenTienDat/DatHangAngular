@@ -17,8 +17,11 @@ import {
   addDoc,
   deleteDoc,
   updateDoc,
+  writeBatch,
+  runTransaction,
+  Transaction,
 } from '@angular/fire/firestore';
-import { Observable, from, BehaviorSubject, catchError } from 'rxjs';
+import { Observable, from, BehaviorSubject, catchError, forkJoin } from 'rxjs';
 import { FacebookProduct, STATUS_DROPDOWN } from '../models';
 
 @Injectable({
@@ -74,7 +77,7 @@ export class FirebaseServiceService {
     );
   }
 
-  fbUpdateProducts(docData: any, id: string) {
+  fbUpdateProduct(docData: any, id: string) {
     return from(
       updateDoc(doc(this.firestore, this.PRODUCTS_COLLECTION, id), docData)
     ).pipe(
@@ -85,10 +88,70 @@ export class FirebaseServiceService {
     );
   }
 
-  fbDeleteProducts(id: string) {
+  fbUpdateProducts(docData: any, items: any[]) {
+    const arr: Observable<any>[] = [];
+    items.forEach((item) => {
+      const update = from(
+        runTransaction(this.firestore, (transaction: Transaction) => {
+          const document = doc(
+            this.firestore,
+            this.PRODUCTS_COLLECTION,
+            item._id
+          );
+
+          return transaction.get(document).then((sfDoc) => {
+            if (!sfDoc.exists) {
+              throw 'Document does not exist!';
+            }
+            transaction.update(document, docData);
+          });
+        })
+      );
+      arr.push(update);
+    });
+
+    return forkJoin(arr).pipe(
+      catchError((err, caught) => {
+        this.handerErr(err);
+        return caught;
+      })
+    );
+  }
+
+  fbDeleteProduct(id: string) {
     return from(
       deleteDoc(doc(this.firestore, this.PRODUCTS_COLLECTION, id))
     ).pipe(
+      catchError((err, caught) => {
+        this.handerErr(err);
+        return caught;
+      })
+    );
+  }
+
+  fbDeleteProducts(items: any[]) {
+    const arr: Observable<any>[] = [];
+    items.forEach((item) => {
+      const update = from(
+        runTransaction(this.firestore, (transaction: Transaction) => {
+          const document = doc(
+            this.firestore,
+            this.PRODUCTS_COLLECTION,
+            item._id
+          );
+
+          return transaction.get(document).then((sfDoc) => {
+            if (!sfDoc.exists) {
+              throw 'Document does not exist!';
+            }
+            transaction.delete(document);
+          });
+        })
+      );
+      arr.push(update);
+    });
+
+    return forkJoin(arr).pipe(
       catchError((err, caught) => {
         this.handerErr(err);
         return caught;

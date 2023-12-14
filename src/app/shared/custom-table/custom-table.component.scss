@@ -1,9 +1,9 @@
 :host ::ng-deep {
-  td {
+  td:nth-child(n+2) {
     background-color: #fff0d7;
   }
 
-  .preview-mode td {
+  .preview-mode td:nth-child(n+2) {
     pointer-events: none;
     background-color: initial;
   }

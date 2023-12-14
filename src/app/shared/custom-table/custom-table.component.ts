@@ -49,7 +49,7 @@ export class CustomTableComponent implements OnInit {
     value: any;
   }>();
 
-  selectedItems: FacebookProduct[] = [];
+  @Input() selectedItems: FacebookProduct[] = [];
   selectedProduct!: FacebookProduct;
   contextMenu!: MenuItem[];
   renderLink = renderLink;

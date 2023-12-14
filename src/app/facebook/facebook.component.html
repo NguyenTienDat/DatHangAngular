@@ -5,6 +5,7 @@
   (valueChanged)="valueChanged($event)"
   (contextMenuOutput)="contextMenuClick($event)"
   (selectMultiItems)="selectedItems = $event"
+  [selectedItems]="selectedItems"
 ></app-custom-table>
 
 <div class="flat-button-add">
