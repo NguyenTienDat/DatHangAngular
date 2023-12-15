@@ -27,8 +27,19 @@
   </div>
   <ul class="nav-list">
     <ng-container *ngFor="let item of leftMenu">
-      <li [routerLink]="item.path" routerLinkActive="menu-active">
+      <li
+        *ngIf="item.path"
+        [routerLink]="item.path"
+        routerLinkActive="menu-active"
+      >
         <a href="javascript:void(0)">
+          <i [ngClass]="item.icon"></i>
+          <span class="links_name">{{ item.name }}</span>
+        </a>
+        <span class="tooltip">{{ item.tooltip }}</span>
+      </li>
+      <li *ngIf="item.link">
+        <a target="_blank" [href]="item.link">
           <i [ngClass]="item.icon"></i>
           <span class="links_name">{{ item.name }}</span>
         </a>
