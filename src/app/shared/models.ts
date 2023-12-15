@@ -23,6 +23,12 @@ export const STATUS_LIST = [
     checked: false,
     class: 'tr-done',
   },
+  {
+    name: 'DELETED',
+    value: STATUS_DROPDOWN.DELETED,
+    checked: false,
+    class: 'tr-done',
+  },
 ];
 
 export const enum STATUS_DROPDOWN {
@@ -30,6 +36,7 @@ export const enum STATUS_DROPDOWN {
   RECEIVED = 1,
   DELIVERY = 2,
   DONE = 3,
+  DELETED = 4,
 }
 export interface FacebookProduct {
   CNY_price?: number;

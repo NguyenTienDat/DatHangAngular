@@ -1,3 +1,4 @@
+import { FirebaseServiceService } from './../services/firebase-service.service';
 import { ToastServiceService } from 'src/app/shared/services/toast-service.service';
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { NO_IMG, encodeImageFileAsURL, renderLink } from '../utils';
@@ -57,7 +58,8 @@ export class CustomTableComponent implements OnInit {
 
   constructor(
     private toastServiceService: ToastServiceService,
-    private confirmationService: ConfirmationService
+    private confirmationService: ConfirmationService,
+    private firebaseServiceService: FirebaseServiceService
   ) {}
 
   ngOnInit() {
@@ -141,5 +143,12 @@ export class CustomTableComponent implements OnInit {
 
   openMultiHandlerModal() {
     this.selectMultiItems.emit(this.selectedItems);
+  }
+
+  dropdownChanged(td: HeadersTable, e: any) {
+    console.log({ td, e });
+    if (td.field === 'status') {
+      this.firebaseServiceService.DROPDOWN_STATUS_SELECTED$.next(e);
+    }
   }
 }

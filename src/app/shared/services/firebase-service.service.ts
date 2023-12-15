@@ -46,6 +46,13 @@ export class FirebaseServiceService {
   /** Tiền thuế trên đơn hàng: hiện tại 1,5% => x * (1 + 1.5) */
   VAT$: BehaviorSubject<number> = new BehaviorSubject(101.5 / 100);
 
+  /** Trạng thái selected của status dropdown dùng để binding lên UI và call api */
+  DROPDOWN_STATUS_SELECTED$: BehaviorSubject<number[]> = new BehaviorSubject([
+    STATUS_DROPDOWN.ORDERED,
+    STATUS_DROPDOWN.RECEIVED,
+    STATUS_DROPDOWN.DELIVERY,
+  ]);
+
   constructor(private firestore: Firestore) {
     this.productsCol = collection(this.firestore, this.PRODUCTS_COLLECTION);
   }
@@ -54,11 +61,8 @@ export class FirebaseServiceService {
     return this.getCustomDocs(this.productsCol);
   }
 
-  fbQueryProducts(): Observable<any> {
-    const q = query(
-      this.productsCol,
-      where('status', '!=', STATUS_DROPDOWN.DONE)
-    );
+  fbQueryProducts(status: STATUS_DROPDOWN[]): Observable<any> {
+    const q = query(this.productsCol, where('status', 'in', status));
     return this.getCustomDocs(q).pipe(
       catchError((err, caught) => {
         this.handerErr(err);

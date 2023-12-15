@@ -6,6 +6,16 @@
   .preview-mode td:nth-child(n+2) {
     pointer-events: none;
     background-color: initial;
+
+    p-dropdown {
+      .p-dropdown.p-component {
+        border: none;
+      }
+
+      .p-dropdown-trigger {
+        display: none;
+      }
+    }
   }
 }
 

@@ -47,6 +47,7 @@
               [showMatchModes]="false"
               [showOperator]="false"
               [showAddButton]="false"
+              [showClearButton]="false"
             >
               <ng-template
                 *ngIf="td.type === 'dropdown'"
@@ -59,11 +60,12 @@
                   optionLabel="name"
                   optionValue="value"
                   [options]="td.filter.dropdownOptions ?? []"
-                  [showClear]="false"
+                  [showClear]="true"
                   [filter]="false"
                   [placeholder]="td.name"
                   [(ngModel)]="td.filter.filterValue"
                   (onChange)="filter($event.value)"
+                  (onChange)="dropdownChanged(td, $event.value)"
                 ></p-multiSelect>
               </ng-template>
             </p-columnFilter>
