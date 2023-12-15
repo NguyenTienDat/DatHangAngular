@@ -1,15 +1,15 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { HeadersTable } from '../shared/custom-table/custom-table.component';
+import { HeadersTable } from './custom-table/custom-table.component';
 import {
   CONTEXT_MENU_EVENT,
   FacebookProduct,
   STATUS_DROPDOWN,
   STATUS_LIST,
-} from '../shared/models';
+} from '../../shared/models';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { AddModalComponent } from './add-modal/add-modal.component';
-import { FirebaseService } from '../shared/services/firebase.service';
-import { ToastService } from '../shared/services/toast.service';
+import { FirebaseService } from '../../shared/services/firebase.service';
+import { ToastService } from '../../shared/services/toast.service';
 import { MultiHandlerModalComponent } from './multi-handler-modal/multi-handler-modal.component';
 import { ConfirmationService, MenuItem } from 'primeng/api';
 import { finalize, Subject, takeUntil } from 'rxjs';

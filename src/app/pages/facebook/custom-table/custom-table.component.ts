@@ -1,4 +1,4 @@
-import { FirebaseService } from '../services/firebase.service';
+import { FirebaseService } from '../../../shared/services/firebase.service';
 import { ToastService } from 'src/app/shared/services/toast.service';
 import {
   Component,
@@ -9,10 +9,14 @@ import {
   OnChanges,
   SimpleChanges,
 } from '@angular/core';
-import { NO_IMG, encodeImageFileAsURL, renderLink } from '../utils';
-import { CONTEXT_MENU_EVENT, FacebookProduct } from '../models';
+import {
+  NO_IMG,
+  encodeImageFileAsURL,
+  renderLink,
+} from '../../../shared/utils';
+import { CONTEXT_MENU_EVENT, FacebookProduct } from '../../../shared/models';
 import { ConfirmEventType, ConfirmationService, MenuItem } from 'primeng/api';
-import { CommonService } from '../services/common.service';
+import { CommonService } from '../../../shared/services/common.service';
 
 interface ConfigFilterTable {
   noFilter?: boolean;

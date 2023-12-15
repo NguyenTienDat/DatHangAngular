@@ -1,17 +1,17 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FacebookComponent } from './facebook.component';
 import { RouterModule, Routes } from '@angular/router';
-import { SharedModule } from '../shared/shared.module';
+import { SharedModule } from '../../shared/shared.module';
+import { AddModalComponent } from './add-modal/add-modal.component';
 import { DialogService } from 'primeng/dynamicdialog';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { SettingComponent } from './setting.component';
-import { ToggleButtonModule } from 'primeng/togglebutton';
-import { InputTextModule } from 'primeng/inputtext';
+import { MultiHandlerModalComponent } from './multi-handler-modal/multi-handler-modal.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: SettingComponent,
+    component: FacebookComponent,
   },
 ];
 
@@ -22,11 +22,13 @@ const routes: Routes = [
     SharedModule,
     ReactiveFormsModule,
     FormsModule,
-    ToggleButtonModule,
-    InputTextModule,
   ],
-  declarations: [SettingComponent],
+  declarations: [
+    FacebookComponent,
+    AddModalComponent,
+    MultiHandlerModalComponent,
+  ],
   providers: [DialogService],
   exports: [],
 })
-export class SettingModule {}
+export class FacebookModule {}

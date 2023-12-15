@@ -5,7 +5,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { NbIconModule } from '@nebular/theme';
-import { CustomTableComponent } from './custom-table/custom-table.component';
+import { CustomTableComponent } from '../pages/facebook/custom-table/custom-table.component';
 import { TableModule } from 'primeng/table';
 import { DropdownModule } from 'primeng/dropdown';
 import { MultiSelectModule } from 'primeng/multiselect';

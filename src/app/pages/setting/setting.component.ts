@@ -1,8 +1,8 @@
-import { ENVIRONMENT_LIST, STATUS_LIST } from './../shared/models';
+import { ENVIRONMENT_LIST, STATUS_LIST } from '../../shared/models';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { FirebaseService as FirebaseService } from '../shared/services/firebase.service';
+import { FirebaseService as FirebaseService } from '../../shared/services/firebase.service';
 import { Component, OnInit } from '@angular/core';
-import { ToastService } from '../shared/services/toast.service';
+import { ToastService } from '../../shared/services/toast.service';
 @Component({
   selector: 'app-setting',
   templateUrl: './setting.component.html',

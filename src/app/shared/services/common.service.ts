@@ -1,6 +1,6 @@
 import { DecimalPipe } from '@angular/common';
 import { Injectable } from '@angular/core';
-import { HeadersTable } from '../custom-table/custom-table.component';
+import { HeadersTable } from '../../pages/facebook/custom-table/custom-table.component';
 import { FirebaseService } from './firebase.service';
 
 @Injectable({
