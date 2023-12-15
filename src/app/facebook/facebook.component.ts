@@ -12,6 +12,7 @@ import { FirebaseServiceService } from '../shared/services/firebase-service.serv
 import { ToastServiceService } from '../shared/services/toast-service.service';
 import { MultiHandlerModalComponent } from './multi-handler-modal/multi-handler-modal.component';
 import { ConfirmationService, MenuItem } from 'primeng/api';
+import { finalize, Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-facebook',
@@ -39,6 +40,8 @@ export class FacebookComponent implements OnInit, OnDestroy {
   ref!: DynamicDialogRef;
   selectedItems: FacebookProduct[] = [];
   isEditMode = false;
+  isLoading = true;
+  $destroy = new Subject<void>();
 
   constructor(
     private toastServiceService: ToastServiceService,
@@ -50,12 +53,11 @@ export class FacebookComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.getTableHeader();
     this.getActionsMenu();
-    this.getData();
-    this.firebaseServiceService.DROPDOWN_STATUS_SELECTED$.asObservable().subscribe(
-      (status) => {
+    this.firebaseServiceService.DROPDOWN_STATUS_SELECTED$.asObservable()
+      .pipe(takeUntil(this.$destroy))
+      .subscribe((status) => {
         this.getData(status);
-      }
-    );
+      });
   }
 
   valueChanged(event: any) {
@@ -66,6 +68,7 @@ export class FacebookComponent implements OnInit, OnDestroy {
         },
         event.item._id
       )
+      .pipe(takeUntil(this.$destroy))
       .subscribe(() => {
         this.toastServiceService.add({
           severity: 'success',
@@ -344,10 +347,15 @@ export class FacebookComponent implements OnInit, OnDestroy {
     status: STATUS_DROPDOWN[] = this.firebaseServiceService
       .DROPDOWN_STATUS_SELECTED$.value
   ) {
+    this.isLoading = true;
     this.selectedItems = [];
     this.orders = [];
     this.firebaseServiceService
       .fbQueryProducts(status)
+      .pipe(
+        takeUntil(this.$destroy),
+        finalize(() => (this.isLoading = false))
+      )
       .subscribe((res: any) => {
         console.log(res);
         res.sort((a: any, b: any) => (a.created < b.created ? 1 : -1));
@@ -356,14 +364,17 @@ export class FacebookComponent implements OnInit, OnDestroy {
   }
 
   private addItem(output: FacebookProduct) {
-    this.firebaseServiceService.fbAddProducts(output).subscribe((res) => {
-      console.log('added', res);
-      this.toastServiceService.showToastSuccess(
-        `Added new order ${output.customer} successfully!`
-      );
-      // this.ref.close();
-      // this.getData();
-    });
+    this.firebaseServiceService
+      .fbAddProducts(output)
+      .pipe(takeUntil(this.$destroy))
+      .subscribe((res) => {
+        console.log('added', res);
+        this.toastServiceService.showToastSuccess(
+          `Added new order ${output.customer} successfully!`
+        );
+        // this.ref.close();
+        // this.getData();
+      });
   }
 
   private updateItem(
@@ -371,8 +382,13 @@ export class FacebookComponent implements OnInit, OnDestroy {
     items: FacebookProduct[],
     mess: string
   ) {
+    this.isLoading = true;
     this.firebaseServiceService
       .fbUpdateProducts(output, items)
+      .pipe(
+        takeUntil(this.$destroy),
+        finalize(() => (this.isLoading = false))
+      )
       .subscribe((res) => {
         this.toastServiceService.showToastSuccess(`${mess} successfully!`);
         this.ref.close();
@@ -381,6 +397,8 @@ export class FacebookComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.$destroy.next();
+    this.$destroy.complete();
     if (this.ref) {
       this.ref.close();
     }

@@ -51,6 +51,7 @@ export class CustomTableComponent implements OnInit {
   }>();
 
   @Input() selectedItems: FacebookProduct[] = [];
+  @Input() isLoading!: boolean;
   selectedProduct!: FacebookProduct;
   contextMenu!: MenuItem[];
   renderLink = renderLink;

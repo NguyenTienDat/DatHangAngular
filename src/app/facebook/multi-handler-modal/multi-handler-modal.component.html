@@ -77,12 +77,13 @@
       <div class="d-flex justify-content-between my-2 align-items-center">
         <p-checkbox
           [binary]="true"
+          [ngModel]="this.updateFields.get(td.field)"
           (onChange)="checkedChange($event.checked, td.field)"
         ></p-checkbox>
         <div class="label ml-2">
           {{ td.name }}
         </div>
-        <div class="value-input">
+        <div class="value-input" (click)="checkedChange(true, td.field)">
           <ng-container [ngSwitch]="td.type">
             <ng-container *ngSwitchCase="'image'">
               <app-image-select
