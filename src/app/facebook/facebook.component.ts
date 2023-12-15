@@ -8,8 +8,8 @@ import {
 } from '../shared/models';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { AddModalComponent } from './add-modal/add-modal.component';
-import { FirebaseServiceService } from '../shared/services/firebase-service.service';
-import { ToastServiceService } from '../shared/services/toast-service.service';
+import { FirebaseService } from '../shared/services/firebase.service';
+import { ToastService } from '../shared/services/toast.service';
 import { MultiHandlerModalComponent } from './multi-handler-modal/multi-handler-modal.component';
 import { ConfirmationService, MenuItem } from 'primeng/api';
 import { finalize, Subject, takeUntil } from 'rxjs';
@@ -44,16 +44,16 @@ export class FacebookComponent implements OnInit, OnDestroy {
   $destroy = new Subject<void>();
 
   constructor(
-    private toastServiceService: ToastServiceService,
+    private toastService: ToastService,
     public dialogService: DialogService,
-    private firebaseServiceService: FirebaseServiceService,
+    private firebaseService: FirebaseService,
     private confirmationService: ConfirmationService
   ) {}
 
   ngOnInit() {
     this.getTableHeader();
     this.getActionsMenu();
-    this.firebaseServiceService.DROPDOWN_STATUS_SELECTED$.asObservable()
+    this.firebaseService.DROPDOWN_STATUS_SELECTED$.asObservable()
       .pipe(takeUntil(this.$destroy))
       .subscribe((status) => {
         this.getData(status);
@@ -61,7 +61,7 @@ export class FacebookComponent implements OnInit, OnDestroy {
   }
 
   valueChanged(event: any) {
-    this.firebaseServiceService
+    this.firebaseService
       .fbUpdateProduct(
         {
           [event.header.field]: event.value,
@@ -70,7 +70,7 @@ export class FacebookComponent implements OnInit, OnDestroy {
       )
       .pipe(takeUntil(this.$destroy))
       .subscribe(() => {
-        this.toastServiceService.add({
+        this.toastService.add({
           severity: 'success',
           summary: `Updated [${event.item.customer}]`,
           detail: `[${event.header.name}] = ${event.value}`,
@@ -104,14 +104,12 @@ export class FacebookComponent implements OnInit, OnDestroy {
     console.log(event);
     switch (event.type) {
       case CONTEXT_MENU_EVENT.DELETE_ACCEPT:
-        this.firebaseServiceService
-          .fbDeleteProduct(event.value._id!)
-          .subscribe(() => {
-            this.toastServiceService.showToastSuccess(
-              `Deleted record: ${event.value.customer}`
-            );
-            this.getData();
-          });
+        this.firebaseService.fbDeleteProduct(event.value._id!).subscribe(() => {
+          this.toastService.showToastSuccess(
+            `Deleted record: ${event.value.customer}`
+          );
+          this.getData();
+        });
         break;
       case CONTEXT_MENU_EVENT.DELETE_REJECT_CANCEL:
         break;
@@ -201,8 +199,7 @@ export class FacebookComponent implements OnInit, OnDestroy {
         type: 'dropdown',
         filter: {
           dropdownOptions: STATUS_LIST,
-          filterValue:
-            this.firebaseServiceService.DROPDOWN_STATUS_SELECTED$.value,
+          filterValue: this.firebaseService.DROPDOWN_STATUS_SELECTED$.value,
           matchMode: 'in',
         },
         styles: {
@@ -303,10 +300,10 @@ export class FacebookComponent implements OnInit, OnDestroy {
               rejectButtonStyleClass: 'bg-success',
               defaultFocus: 'reject',
               accept: () => {
-                this.firebaseServiceService
+                this.firebaseService
                   .fbDeleteProducts(this.selectedItems)
                   .subscribe((res) => {
-                    this.toastServiceService.showToastSuccess(
+                    this.toastService.showToastSuccess(
                       `Xóa ${this.selectedItems.length} đơn hàng thành công!`
                     );
                     this.getData();
@@ -315,7 +312,7 @@ export class FacebookComponent implements OnInit, OnDestroy {
               reject: () => {},
             });
           } else {
-            this.toastServiceService.showToastWarning(
+            this.toastService.showToastWarning(
               'Hãy chọn ít nhất 1 đơn hàng để xóa!'
             );
           }
@@ -327,7 +324,7 @@ export class FacebookComponent implements OnInit, OnDestroy {
           if (this.selectedItems.length) {
             this.selectMultiItems(this.selectedItems);
           } else {
-            this.toastServiceService.showToastWarning(
+            this.toastService.showToastWarning(
               'Hãy chọn ít nhất 1 đơn hàng để update!'
             );
           }
@@ -343,13 +340,13 @@ export class FacebookComponent implements OnInit, OnDestroy {
   }
 
   private getData(
-    status: STATUS_DROPDOWN[] = this.firebaseServiceService
-      .DROPDOWN_STATUS_SELECTED$.value
+    status: STATUS_DROPDOWN[] = this.firebaseService.DROPDOWN_STATUS_SELECTED$
+      .value
   ) {
     this.isLoading = true;
     this.selectedItems = [];
     this.orders = [];
-    this.firebaseServiceService
+    this.firebaseService
       .fbQueryProducts(status)
       .pipe(
         takeUntil(this.$destroy),
@@ -363,12 +360,12 @@ export class FacebookComponent implements OnInit, OnDestroy {
   }
 
   private addItem(output: FacebookProduct) {
-    this.firebaseServiceService
+    this.firebaseService
       .fbAddProducts(output)
       .pipe(takeUntil(this.$destroy))
       .subscribe((res) => {
         console.log('added', res);
-        this.toastServiceService.showToastSuccess(
+        this.toastService.showToastSuccess(
           `Added new order ${output.customer} successfully!`
         );
         // this.ref.close();
@@ -382,14 +379,14 @@ export class FacebookComponent implements OnInit, OnDestroy {
     mess: string
   ) {
     this.isLoading = true;
-    this.firebaseServiceService
+    this.firebaseService
       .fbUpdateProducts(output, items)
       .pipe(
         takeUntil(this.$destroy),
         finalize(() => (this.isLoading = false))
       )
       .subscribe((res) => {
-        this.toastServiceService.showToastSuccess(`${mess} successfully!`);
+        this.toastService.showToastSuccess(`${mess} successfully!`);
         this.ref.close();
         this.getData();
       });

@@ -27,7 +27,7 @@ import { FacebookProduct, STATUS_DROPDOWN } from '../models';
 @Injectable({
   providedIn: 'root',
 })
-export class FirebaseServiceService {
+export class FirebaseService {
   private readonly PRODUCTS_COLLECTION = 'products';
   private productsCol: CollectionReference;
   /**

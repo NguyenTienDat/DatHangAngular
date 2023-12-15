@@ -1,5 +1,5 @@
-import { FirebaseServiceService } from './../services/firebase-service.service';
-import { ToastServiceService } from 'src/app/shared/services/toast-service.service';
+import { FirebaseService } from '../services/firebase.service';
+import { ToastService } from 'src/app/shared/services/toast.service';
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { NO_IMG, encodeImageFileAsURL, renderLink } from '../utils';
 import { CONTEXT_MENU_EVENT, FacebookProduct } from '../models';
@@ -58,9 +58,9 @@ export class CustomTableComponent implements OnInit {
   IMG_DEFAULT = NO_IMG;
 
   constructor(
-    private toastServiceService: ToastServiceService,
+    private toastService: ToastService,
     private confirmationService: ConfirmationService,
-    private firebaseServiceService: FirebaseServiceService
+    private firebaseService: FirebaseService
   ) {}
 
   ngOnInit() {
@@ -79,7 +79,7 @@ export class CustomTableComponent implements OnInit {
   }
 
   viewProduct(product: FacebookProduct) {
-    this.toastServiceService.add({
+    this.toastService.add({
       severity: 'info',
       summary: 'Product Selected',
       detail: product.customer,
@@ -149,7 +149,7 @@ export class CustomTableComponent implements OnInit {
   dropdownChanged(td: HeadersTable, e: any) {
     console.log({ td, e });
     if (td.field === 'status') {
-      this.firebaseServiceService.DROPDOWN_STATUS_SELECTED$.next(e);
+      this.firebaseService.DROPDOWN_STATUS_SELECTED$.next(e);
     }
   }
 }

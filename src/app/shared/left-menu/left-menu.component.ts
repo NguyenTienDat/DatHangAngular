@@ -28,6 +28,12 @@ export class LeftMenuComponent {
       tooltip: 'Quản lý các đơn hàng bán các sàn như Shopee, Lazada',
       icon: 'shopping-cart-outline',
     },
+    {
+      name: 'SETTING',
+      path: 'setting',
+      tooltip: 'Tùy biến cấu hình',
+      icon: 'settings-2-outline',
+    },
     // {
     //   name: 'Search',
     //   tooltip: 'Search',

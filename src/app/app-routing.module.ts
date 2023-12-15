@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { SettingComponent } from './setting/setting.component';
 
 const routes: Routes = [
   {
@@ -10,6 +11,11 @@ const routes: Routes = [
   {
     path: 'tmdt',
     loadChildren: () => import('./tmdt/tmdt.module').then((m) => m.TmdtModule),
+  },
+  {
+    path: 'setting',
+    loadChildren: () =>
+      import('./setting/setting.module').then((m) => m.SettingModule),
   },
   {
     path: '',
