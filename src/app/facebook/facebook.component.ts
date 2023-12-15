@@ -53,11 +53,13 @@ export class FacebookComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.getTableHeader();
     this.getActionsMenu();
-    this.firebaseService.DROPDOWN_STATUS_SELECTED$.asObservable()
-      .pipe(takeUntil(this.$destroy))
-      .subscribe((status) => {
-        this.getData(status);
-      });
+    this.firebaseService.loadSetting(() => {
+      this.firebaseService.DROPDOWN_STATUS_SELECTED$.asObservable()
+        .pipe(takeUntil(this.$destroy))
+        .subscribe((status) => {
+          this.getData(status);
+        });
+    });
   }
 
   valueChanged(event: any) {

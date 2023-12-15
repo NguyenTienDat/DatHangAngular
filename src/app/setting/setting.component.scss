@@ -1,0 +1,24 @@
+:host ::ng-deep {
+
+  .card {
+    margin-top: 20px;
+  }
+
+  .item {
+    display: flex;
+    align-items: center;
+    margin: 15px;
+
+    .label {
+      width: 200px;
+    }
+
+    .value.number input {
+      text-align: right;
+    }
+
+    .value {
+      flex: 1;
+    }
+  }
+}

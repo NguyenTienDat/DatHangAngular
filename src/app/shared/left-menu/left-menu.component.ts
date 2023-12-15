@@ -1,4 +1,5 @@
-import { Component, Output, EventEmitter } from '@angular/core';
+import { FirebaseService } from './../services/firebase.service';
+import { Component } from '@angular/core';
 
 interface LeftMenu {
   name: string;
@@ -13,8 +14,6 @@ interface LeftMenu {
   styleUrls: ['./left-menu.component.scss'],
 })
 export class LeftMenuComponent {
-  @Output() open = new EventEmitter<boolean>();
-  @Output() show = new EventEmitter<boolean>();
   leftMenu: LeftMenu[] = [
     {
       name: 'Facebook',
@@ -29,28 +28,26 @@ export class LeftMenuComponent {
       icon: 'shopping-cart-outline',
     },
     {
-      name: 'SETTING',
+      name: 'Setting',
       path: 'setting',
       tooltip: 'Tùy biến cấu hình',
       icon: 'settings-2-outline',
     },
   ];
 
-  isShowMenu = false;
-  isOpen = false;
+  constructor(public firebaseService: FirebaseService) {}
 
   close() {
-    this.isOpen = false;
-    this.open.emit(this.isOpen);
+    this.firebaseService.IS_OPEN_MENU$.next(false);
   }
 
   btnClick() {
-    this.isOpen = !this.isOpen;
-    this.open.emit(this.isOpen);
+    this.firebaseService.IS_OPEN_MENU$.next(
+      !this.firebaseService.IS_OPEN_MENU$.value
+    );
   }
 
   showMenu(isShowMenu: boolean) {
-    this.isShowMenu = isShowMenu;
-    this.show.emit(isShowMenu);
+    this.firebaseService.IS_SHOW_MENU$.next(isShowMenu);
   }
 }

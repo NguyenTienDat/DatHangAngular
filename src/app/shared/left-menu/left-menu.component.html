@@ -1,10 +1,25 @@
-<div class="sidebar" [ngClass]="{ open: isOpen, 'd-none': !isShowMenu }">
+<div
+  class="sidebar"
+  [ngClass]="{
+    open: firebaseService.IS_OPEN_MENU$ | async,
+    'd-none': !(firebaseService.IS_SHOW_MENU$ | async)
+  }"
+>
   <div class="logo-details">
     <i class="pi pi-globe icon"></i>
-    <div class="logo_name" [ngClass]="{ 'd-none': !isOpen }">Damie Kids</div>
+    <div
+      class="logo_name"
+      [ngClass]="{ 'd-none': !(firebaseService.IS_OPEN_MENU$ | async) }"
+    >
+      Damie Kids
+    </div>
     <i
       class="pi"
-      [ngClass]="isOpen ? 'pi-align-right' : 'pi-align-justify'"
+      [ngClass]="
+        (firebaseService.IS_OPEN_MENU$ | async)
+          ? 'pi-align-right'
+          : 'pi-align-justify'
+      "
       id="btn"
       (click)="btnClick()"
     >
@@ -22,7 +37,7 @@
         <span class="tooltip">{{ item.tooltip }}</span>
       </li>
     </ng-container>
-    <li class="profile" (click)="showMenu(false)">
+    <li class="profile cursor-pointer" (click)="showMenu(false)">
       <div class="profile-details">
         <img
           src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/User_icon_2.svg/768px-User_icon_2.svg.png"

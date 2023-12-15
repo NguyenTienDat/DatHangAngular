@@ -2,13 +2,13 @@
   <nb-layout-column class="p-0">
     <div
       class="container-wrap d-flex"
-      [ngClass]="{ 'menu-open': menuOpen, 'hidden-menu': !isShowMenu }"
+      [ngClass]="{
+        'menu-open': (firebaseService.IS_OPEN_MENU$ | async),
+        'hidden-menu': !(firebaseService.IS_SHOW_MENU$ | async)
+      }"
     >
       <div>
-        <app-left-menu
-          (open)="menuOpen = $event"
-          (show)="isShowMenu = $event"
-        ></app-left-menu>
+        <app-left-menu></app-left-menu>
       </div>
       <div class="content-outlet">
         <router-outlet></router-outlet>

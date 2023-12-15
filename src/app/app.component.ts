@@ -1,3 +1,4 @@
+import { FirebaseService } from './shared/services/firebase.service';
 import { Component } from '@angular/core';
 
 @Component({
@@ -6,7 +7,7 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  title = 'DatHangAngular';
-  menuOpen = false;
-  isShowMenu = false;
+  constructor(public firebaseService: FirebaseService) {
+    this.firebaseService.loadSetting();
+  }
 }
