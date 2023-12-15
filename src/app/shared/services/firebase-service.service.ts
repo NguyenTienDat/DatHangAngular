@@ -81,9 +81,12 @@ export class FirebaseServiceService {
     );
   }
 
-  fbUpdateProduct(docData: any, id: string) {
+  fbUpdateProduct(docData: FacebookProduct, id: string) {
     return from(
-      updateDoc(doc(this.firestore, this.PRODUCTS_COLLECTION, id), docData)
+      updateDoc(
+        doc(this.firestore, this.PRODUCTS_COLLECTION, id),
+        docData as any
+      )
     ).pipe(
       catchError((err, caught) => {
         this.handerErr(err);
@@ -92,7 +95,7 @@ export class FirebaseServiceService {
     );
   }
 
-  fbUpdateProducts(docData: any, items: any[]) {
+  fbUpdateProducts(docData: FacebookProduct, items: any[]) {
     const arr: Observable<any>[] = [];
     items.forEach((item) => {
       const update = from(
@@ -107,7 +110,7 @@ export class FirebaseServiceService {
             if (!sfDoc.exists) {
               throw 'Document does not exist!';
             }
-            transaction.update(document, docData);
+            transaction.update(document, docData as any);
           });
         })
       );
@@ -122,7 +125,17 @@ export class FirebaseServiceService {
     );
   }
 
+  // Just update to status deleted
   fbDeleteProduct(id: string) {
+    return this.fbUpdateProduct({ status: STATUS_DROPDOWN.DELETED }, id);
+  }
+
+  fbDeleteProducts(items: any[]) {
+    return this.fbUpdateProducts({ status: STATUS_DROPDOWN.DELETED }, items);
+  }
+
+  // Not recommend real delete => Just update to status deleted
+  private fbDeleteRealProduct(id: string) {
     return from(
       deleteDoc(doc(this.firestore, this.PRODUCTS_COLLECTION, id))
     ).pipe(
@@ -133,7 +146,8 @@ export class FirebaseServiceService {
     );
   }
 
-  fbDeleteProducts(items: any[]) {
+  // Not recommend real delete => Just update to status deleted
+  private fbDeleteRealProducts(items: any[]) {
     const arr: Observable<any>[] = [];
     items.forEach((item) => {
       const update = from(
