@@ -34,12 +34,6 @@ export class LeftMenuComponent {
       tooltip: 'Tùy biến cấu hình',
       icon: 'settings-2-outline',
     },
-    // {
-    //   name: 'Search',
-    //   tooltip: 'Search',
-    //   path: '#',
-    //   icon: 'bx bx-search',
-    // },
   ];
 
   isShowMenu = false;
