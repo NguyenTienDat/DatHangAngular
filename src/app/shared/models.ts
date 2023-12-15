@@ -59,6 +59,7 @@ export interface FacebookProduct {
 export enum CONTEXT_MENU_EVENT {
   'DELETE_ACCEPT',
   'DELETE_REJECT_CANCEL',
+  'CLONE_A_COPY',
 }
 
 export interface EnvironmentDB {

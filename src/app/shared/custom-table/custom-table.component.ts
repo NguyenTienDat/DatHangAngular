@@ -1,6 +1,14 @@
 import { FirebaseService } from '../services/firebase.service';
 import { ToastService } from 'src/app/shared/services/toast.service';
-import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnInit,
+  Output,
+  EventEmitter,
+  OnChanges,
+  SimpleChanges,
+} from '@angular/core';
 import { NO_IMG, encodeImageFileAsURL, renderLink } from '../utils';
 import { CONTEXT_MENU_EVENT, FacebookProduct } from '../models';
 import { ConfirmEventType, ConfirmationService, MenuItem } from 'primeng/api';
@@ -39,7 +47,7 @@ export interface HeadersTable {
   templateUrl: './custom-table.component.html',
   styleUrls: ['./custom-table.component.scss'],
 })
-export class CustomTableComponent implements OnInit {
+export class CustomTableComponent implements OnInit, OnChanges {
   @Input() isEditMode = false;
   @Input() dataTable: FacebookProduct[] = [];
   @Input() headers!: HeadersTable[];
@@ -56,6 +64,7 @@ export class CustomTableComponent implements OnInit {
   contextMenu!: MenuItem[];
   renderLink = renderLink;
   IMG_DEFAULT = NO_IMG;
+  currentTime = Date.now();
 
   constructor(
     private toastService: ToastService,
@@ -66,9 +75,9 @@ export class CustomTableComponent implements OnInit {
   ngOnInit() {
     this.contextMenu = [
       {
-        label: 'View',
-        icon: 'pi pi-fw pi-search',
-        command: () => this.viewProduct(this.selectedProduct),
+        label: 'Clone a copy',
+        icon: 'pi pi-fw pi-copy',
+        command: () => this.cloneACopy(),
       },
       {
         label: 'Delete',
@@ -78,12 +87,17 @@ export class CustomTableComponent implements OnInit {
     ];
   }
 
-  viewProduct(product: FacebookProduct) {
-    this.toastService.add({
-      severity: 'info',
-      summary: 'Product Selected',
-      detail: product.customer,
+  ngOnChanges(changes: SimpleChanges): void {
+    this.currentTime = Date.now();
+  }
+
+  cloneACopy() {
+    console.log('Copy a row', this.selectedItems);
+    this.contextMenuOutput.emit({
+      type: CONTEXT_MENU_EVENT.CLONE_A_COPY,
+      value: this.selectedProduct,
     });
+    this.selectedProduct = {};
   }
 
   confirmDelete() {

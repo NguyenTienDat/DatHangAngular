@@ -80,7 +80,10 @@
     <ng-container>
       <tr
         class="p-selectable-row"
-        [ngClass]="{ 'preview-mode': !isEditMode }"
+        [ngClass]="{
+          'preview-mode': !isEditMode,
+          newly: currentTime - product.created < 3000
+        }"
         [pContextMenuRow]="product"
       >
         <td>

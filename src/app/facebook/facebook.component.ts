@@ -115,6 +115,9 @@ export class FacebookComponent implements OnInit, OnDestroy {
         break;
       case CONTEXT_MENU_EVENT.DELETE_REJECT_CANCEL:
         break;
+      case CONTEXT_MENU_EVENT.CLONE_A_COPY:
+        this.addItem(event.value);
+        break;
       default:
         break;
     }
