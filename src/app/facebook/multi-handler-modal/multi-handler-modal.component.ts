@@ -30,7 +30,7 @@ export class MultiHandlerModalComponent implements OnInit {
     private ref: DynamicDialogRef,
     public firebaseService: FirebaseService,
     private toastService: ToastService,
-    private commonService: CommonService
+    public commonService: CommonService
   ) {
     this.header = this.dialogService.data.data;
     this.items = this.dialogService.data.items;

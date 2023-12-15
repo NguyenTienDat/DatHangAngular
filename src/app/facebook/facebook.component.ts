@@ -62,14 +62,21 @@ export class FacebookComponent implements OnInit, OnDestroy {
     });
   }
 
-  valueChanged(event: any) {
+  valueChanged(event: {
+    item: FacebookProduct;
+    header: HeadersTable;
+    value: any;
+  }) {
+    console.log(event);
+    const update: FacebookProduct = {
+      [event.header.field]: event.value,
+    };
+    if (event.header.type === 'number') {
+      update.price = event.item.price;
+      update.price2 = event.item.price2;
+    }
     this.firebaseService
-      .fbUpdateProduct(
-        {
-          [event.header.field]: event.value,
-        },
-        event.item._id
-      )
+      .fbUpdateProduct(update, event.item._id!)
       .pipe(takeUntil(this.$destroy))
       .subscribe(() => {
         this.toastService.add({

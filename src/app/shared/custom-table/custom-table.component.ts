@@ -12,6 +12,7 @@ import {
 import { NO_IMG, encodeImageFileAsURL, renderLink } from '../utils';
 import { CONTEXT_MENU_EVENT, FacebookProduct } from '../models';
 import { ConfirmEventType, ConfirmationService, MenuItem } from 'primeng/api';
+import { CommonService } from '../services/common.service';
 
 interface ConfigFilterTable {
   noFilter?: boolean;
@@ -69,7 +70,8 @@ export class CustomTableComponent implements OnInit, OnChanges {
   constructor(
     private toastService: ToastService,
     private confirmationService: ConfirmationService,
-    private firebaseService: FirebaseService
+    private firebaseService: FirebaseService,
+    public commonService: CommonService
   ) {}
 
   ngOnInit() {
@@ -132,7 +134,7 @@ export class CustomTableComponent implements OnInit, OnChanges {
     inputImg.click();
   }
 
-  changeValue(item: any, header: HeadersTable, value: any) {
+  changeValue(item: FacebookProduct, header: HeadersTable, value: any) {
     console.log({ item }, header, value);
     this.valueChanged.emit({ item, header, value });
   }
@@ -149,9 +151,15 @@ export class CustomTableComponent implements OnInit, OnChanges {
     });
   }
 
-  keyHandler(event: any, item: any, header: HeadersTable, value: any) {
-    // console.log(event);
-    if (event.code === 'Enter') {
+  keyHandler(
+    event: any,
+    item: FacebookProduct,
+    header: HeadersTable,
+    value: any
+  ) {
+    // console.log('keyHandler', item, event);
+    if (event.key === 'Enter' || event.keyCode === 13) {
+      console.log('Enter', item);
       this.changeValue(item, header, value);
     }
   }
@@ -165,5 +173,9 @@ export class CustomTableComponent implements OnInit, OnChanges {
     if (td.field === 'status') {
       this.firebaseService.DROPDOWN_STATUS_SELECTED$.next(e);
     }
+  }
+
+  checkNewlyUpdate(updated: number) {
+    return Date.now() - updated < 3000;
   }
 }

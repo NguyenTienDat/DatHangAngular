@@ -82,7 +82,7 @@
         class="p-selectable-row"
         [ngClass]="{
           'preview-mode': !isEditMode,
-          newly: currentTime - product.created < 3000
+          newly: checkNewlyUpdate(product.updated)
         }"
         [pContextMenuRow]="product"
       >
@@ -96,7 +96,11 @@
           [pEditableColumnField]="td.field"
         >
           <span class="p-column-title">{{ td.name }}</span>
-          <div class="table-cell" [ngStyle]="td.styles">
+          <div
+            class="table-cell"
+            [ngStyle]="td.styles"
+            [pTooltip]="product['tooltip_' + td.field]"
+          >
             <ng-container [ngSwitch]="td.type">
               <ng-container *ngSwitchCase="'image'">
                 <img
@@ -157,6 +161,9 @@
                       [minFractionDigits]="0"
                       [maxFractionDigits]="5"
                       (focusout)="changeValue(product, td, product[td.field])"
+                      (ngModelChange)="
+                        commonService.autoCalculatePrices(product, td, $event)
+                      "
                       (keydown)="
                         keyHandler($event, product, td, product[td.field])
                       "

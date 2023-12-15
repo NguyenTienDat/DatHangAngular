@@ -94,6 +94,7 @@ export class FirebaseService {
 
   fbAddProducts(docData: FacebookProduct): Observable<any> {
     docData.created = Date.now();
+    docData.updated = Date.now();
     return from(addDoc(this.productsCol, docData)).pipe(
       catchError((err, caught) => {
         this.handerErr(err);
@@ -103,6 +104,7 @@ export class FirebaseService {
   }
 
   fbUpdateProduct(docData: FacebookProduct, id: string) {
+    docData.updated = Date.now();
     return from(
       updateDoc(
         doc(this.firestore, this.PRODUCTS_COLLECTION, id),
@@ -117,6 +119,7 @@ export class FirebaseService {
   }
 
   fbUpdateProducts(docData: FacebookProduct, items: any[]) {
+    docData.updated = Date.now();
     const arr: Observable<any>[] = [];
     items.forEach((item) => {
       const update = from(
@@ -148,11 +151,17 @@ export class FirebaseService {
 
   // Just update to status deleted
   fbDeleteProduct(id: string) {
-    return this.fbUpdateProduct({ status: STATUS_DROPDOWN.DELETED }, id);
+    return this.fbUpdateProduct(
+      { status: STATUS_DROPDOWN.DELETED, updated: Date.now() },
+      id
+    );
   }
 
   fbDeleteProducts(items: any[]) {
-    return this.fbUpdateProducts({ status: STATUS_DROPDOWN.DELETED }, items);
+    return this.fbUpdateProducts(
+      { status: STATUS_DROPDOWN.DELETED, updated: Date.now() },
+      items
+    );
   }
 
   // Not recommend real delete => Just update to status deleted
@@ -234,6 +243,7 @@ export class FirebaseService {
   }
 
   settingUpdate(docData: any, id: string) {
+    docData.updated = Date.now();
     return from(
       updateDoc(doc(this.firestore, this.SETTING_COLLECTION, id), docData)
     ).pipe(

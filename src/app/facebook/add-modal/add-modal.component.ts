@@ -24,7 +24,7 @@ export class AddModalComponent implements OnInit {
     private ref: DynamicDialogRef,
     public firebaseService: FirebaseService,
     private toastService: ToastService,
-    private commonService: CommonService
+    public commonService: CommonService
   ) {
     this.data = this.dialogService.data.data;
   }
@@ -35,9 +35,9 @@ export class AddModalComponent implements OnInit {
     this.output.exchange = this.firebaseService.DEFAULT_EXCHANGE$.value;
   }
 
-  changeValue(td: any, event: any) {
-    this.output[td.field] = event;
-    console.log(td, event);
+  changeValue(td: HeadersTable, value: any) {
+    this.output[td.field] = value;
+    console.log(td, value);
     console.log('output', this.output);
     this.output = JSON.parse(JSON.stringify(this.output));
   }
@@ -53,51 +53,5 @@ export class AddModalComponent implements OnInit {
 
   close() {
     this.ref.close();
-  }
-
-  autoCalculatePrices(td: any, event: any) {
-    this.output[td.field] = event;
-    if (td !== 'price' && td !== 'price2') {
-      // gia nhap = tệ * tỉ giá + cân * giá cân
-      // gia ban = gia nhap + 35k
-      const product_cny = this.output.CNY_price ?? 0;
-      const product_weight = this.output.weight ?? 0;
-      const product_weight_price = this.output.weight_price ?? 0;
-      const product_exchange = this.output.exchange ?? 0;
-      // console.log('product_cny', product_cny);
-      // console.log('product_weight', product_weight);
-      // console.log('product_weight_price', product_weight_price);
-      // console.log('product_exchange', product_exchange);
-
-      const giaNhap =
-        product_cny * product_exchange + product_weight * product_weight_price;
-
-      // if (!this.output.price) {
-      this.output.price = giaNhap;
-      this.output.tooltip_price = `= (Tệ x Tỉ giá) + (Cân x Giá Cân) \n= (${this.commonService.transformDecimal(
-        product_cny
-      )} x ${this.commonService.transformDecimal(
-        product_exchange
-      )}) + (${this.commonService.transformDecimal(
-        product_weight
-      )} x ${this.commonService.transformDecimal(product_weight_price)})`;
-      // }
-
-      // if (!this.output.price2) {
-      this.output.tooltip_price2 = `= (Giá nhập + Tiền công) x VAT \n= (${this.commonService.transformDecimal(
-        giaNhap
-      )} + ${this.commonService.transformDecimal(
-        this.firebaseService.INCOME_PER_ORDER$.value
-      )}) x ${this.commonService.transformDecimal(
-        this.firebaseService.VAT$.value
-      )}`;
-      this.output.price2 =
-        (giaNhap + this.firebaseService.INCOME_PER_ORDER$.value) *
-        this.firebaseService.VAT$.value;
-      // }
-
-      this.output = JSON.parse(JSON.stringify(this.output));
-    }
-    this.changeValue(td, event);
   }
 }
