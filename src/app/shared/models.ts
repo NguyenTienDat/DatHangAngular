@@ -59,4 +59,27 @@ export interface FacebookProduct {
 export enum CONTEXT_MENU_EVENT {
   'DELETE_ACCEPT',
   'DELETE_REJECT_CANCEL',
+  'CLONE_A_COPY',
 }
+
+export interface EnvironmentDB {
+  name: string;
+  products: string;
+  tmdt: string;
+  index: number;
+}
+
+export const ENVIRONMENT_LIST: EnvironmentDB[] = [
+  {
+    name: 'Production',
+    products: 'products',
+    tmdt: 'tmdt',
+    index: 0,
+  },
+  {
+    name: 'Develop',
+    products: 'products_dev',
+    tmdt: 'tmdt_dev',
+    index: 1,
+  },
+];

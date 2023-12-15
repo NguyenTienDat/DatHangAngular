@@ -116,6 +116,9 @@
                 [maxFractionDigits]="5"
                 [inputStyleClass]="td.className ?? '' + 'input-number'"
                 [(ngModel)]="output[td.field]"
+                (ngModelChange)="
+                  commonService.autoCalculatePrices(output, td, $event)
+                "
               ></p-inputNumber>
             </ng-container>
 

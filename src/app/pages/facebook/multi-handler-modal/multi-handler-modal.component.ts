@@ -1,12 +1,12 @@
-import { CommonService } from '../../shared/services/common.service';
-import { STATUS_DROPDOWN } from '../../shared/models';
-import { FirebaseServiceService } from '../../shared/services/firebase-service.service';
+import { CommonService } from '../../../shared/services/common.service';
+import { STATUS_DROPDOWN } from '../../../shared/models';
+import { FirebaseService } from '../../../shared/services/firebase.service';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { HeadersTable } from 'src/app/shared/custom-table/custom-table.component';
+import { HeadersTable } from 'src/app/pages/facebook/facebook-table/facebook-table.component';
 import { NO_IMG, encodeImageFileAsURL, renderLink } from 'src/app/shared/utils';
 import { FacebookProduct } from 'src/app/shared/models';
-import { ToastServiceService } from 'src/app/shared/services/toast-service.service';
+import { ToastService } from 'src/app/shared/services/toast.service';
 
 @Component({
   selector: 'app-multi-handler-modal',
@@ -28,9 +28,9 @@ export class MultiHandlerModalComponent implements OnInit {
   constructor(
     private dialogService: DynamicDialogConfig,
     private ref: DynamicDialogRef,
-    public firebaseServiceService: FirebaseServiceService,
-    private toastServiceService: ToastServiceService,
-    private commonService: CommonService
+    public firebaseService: FirebaseService,
+    private toastService: ToastService,
+    public commonService: CommonService
   ) {
     this.header = this.dialogService.data.data;
     this.items = this.dialogService.data.items;
@@ -47,6 +47,10 @@ export class MultiHandlerModalComponent implements OnInit {
       'exchange',
       'weight_price',
       'orderID',
+      'customer',
+      'price',
+      'price2',
+      'weight',
     ];
     willChangeCol.forEach((item) => {
       this.updateFields.set(item, false);
@@ -58,9 +62,8 @@ export class MultiHandlerModalComponent implements OnInit {
 
   ngOnInit() {
     this.output.status = STATUS_DROPDOWN.ORDERED;
-    this.output.weight_price =
-      this.firebaseServiceService.DEFAULT_WEIGHT_PRICE$.value;
-    this.output.exchange = this.firebaseServiceService.DEFAULT_EXCHANGE$.value;
+    this.output.weight_price = this.firebaseService.DEFAULT_WEIGHT_PRICE$.value;
+    this.output.exchange = this.firebaseService.DEFAULT_EXCHANGE$.value;
   }
 
   changeValue(td: any, event: any) {
@@ -84,22 +87,47 @@ export class MultiHandlerModalComponent implements OnInit {
       }
     }
     if (!this.output.imageLink && this.updateFields.get('imageLink')) {
-      this.toastServiceService.showToastWarning('Chưa chọn ảnh');
+      this.toastService.showToastWarning('Chưa chọn ảnh');
       return;
     }
     if (!this.output.orderID && this.updateFields.get('orderID')) {
-      this.toastServiceService.showToastWarning('Mã vận đơn đang trống');
+      this.toastService.showToastWarning('Mã vận đơn đang trống');
+      return;
+    }
+    if (!this.output.customer && this.updateFields.get('customer')) {
+      this.toastService.showToastWarning('Tên khách hàng đang trống');
       return;
     }
     if (
       (isNaN(this.output.CNY_price) || !this.output.CNY_price) &&
       this.updateFields.get('CNY_price')
     ) {
-      this.toastServiceService.showToastWarning('Tệ đang bị bỏ trống');
+      this.toastService.showToastWarning('Tệ đang bị bỏ trống');
+      return;
+    }
+    if (
+      (isNaN(this.output.price) || !this.output.price) &&
+      this.updateFields.get('price')
+    ) {
+      this.toastService.showToastWarning('Giá nhập đang bị bỏ trống');
+      return;
+    }
+    if (
+      (isNaN(this.output.price2) || !this.output.price2) &&
+      this.updateFields.get('price2')
+    ) {
+      this.toastService.showToastWarning('Giá bán đang bị bỏ trống');
+      return;
+    }
+    if (
+      (isNaN(this.output.weight) || !this.output.weight) &&
+      this.updateFields.get('weight')
+    ) {
+      this.toastService.showToastWarning('Cân đang bị bỏ trống');
       return;
     }
     if (JSON.stringify(updateInfo) === '{}') {
-      this.toastServiceService.showToastWarning(
+      this.toastService.showToastWarning(
         'Bạn không chọn trường nào để cập nhật!'
       );
       return;

@@ -1,9 +1,12 @@
 # DatHangAngular
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 15.0.4.
-Node version v16.13.0
-Deploy: https://damiekids.000webhostapp.com/pages/admin-tmdt/admin-tmdt.html
-https://github.com/NguyenTienDat/DatHangAngular
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version `15.0.4`.
+Node version `v16.13.0`
+Deploy: `https://damiekids.000webhostapp.com/pages/admin-tmdt/admin-tmdt.html`
+
+# Icon
+
+`https://www.primefaces.org/roma/icons.xhtml`
 
 ## Development server
 

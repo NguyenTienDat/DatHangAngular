@@ -3,6 +3,10 @@
     background-color: #fff0d7;
   }
 
+  .newly td:nth-child(n+2) {
+    background-color: #d7ffe6;
+  }
+
   .preview-mode td:nth-child(n+2) {
     pointer-events: none;
     background-color: initial;

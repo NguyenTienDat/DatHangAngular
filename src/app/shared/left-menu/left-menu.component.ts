@@ -1,8 +1,10 @@
-import { Component, Output, EventEmitter } from '@angular/core';
+import { FirebaseService } from './../services/firebase.service';
+import { Component } from '@angular/core';
 
 interface LeftMenu {
   name: string;
-  path: string;
+  path?: string;
+  link?: string;
   icon: string;
   tooltip: string;
 }
@@ -13,44 +15,47 @@ interface LeftMenu {
   styleUrls: ['./left-menu.component.scss'],
 })
 export class LeftMenuComponent {
-  @Output() open = new EventEmitter<boolean>();
-  @Output() show = new EventEmitter<boolean>();
   leftMenu: LeftMenu[] = [
     {
       name: 'Facebook',
       tooltip: 'Quản lý các đơn hàng bán trên Facebook',
       path: 'facebook',
-      icon: 'facebook-outline',
+      icon: 'pi pi-facebook',
     },
     {
       name: 'TMĐT',
-      path: 'tmdt',
+      // path: 'tmdt',
+      link: 'https://damiekids.000webhostapp.com/pages/admin-tmdt/admin-tmdt.html',
       tooltip: 'Quản lý các đơn hàng bán các sàn như Shopee, Lazada',
-      icon: 'shopping-cart-outline',
+      icon: 'pi pi-shopping-cart',
     },
-    // {
-    //   name: 'Search',
-    //   tooltip: 'Search',
-    //   path: '#',
-    //   icon: 'bx bx-search',
-    // },
+    {
+      name: 'Customer',
+      path: 'customer',
+      tooltip: 'Quản lý khách hàng',
+      icon: 'pi pi-user-edit',
+    },
+    {
+      name: 'Setting',
+      path: 'setting',
+      tooltip: 'Tùy biến cấu hình',
+      icon: 'pi pi-cog',
+    },
   ];
 
-  isShowMenu = false;
-  isOpen = false;
+  constructor(public firebaseService: FirebaseService) {}
 
   close() {
-    this.isOpen = false;
-    this.open.emit(this.isOpen);
+    this.firebaseService.IS_OPEN_MENU$.next(false);
   }
 
   btnClick() {
-    this.isOpen = !this.isOpen;
-    this.open.emit(this.isOpen);
+    this.firebaseService.IS_OPEN_MENU$.next(
+      !this.firebaseService.IS_OPEN_MENU$.value
+    );
   }
 
   showMenu(isShowMenu: boolean) {
-    this.isShowMenu = isShowMenu;
-    this.show.emit(isShowMenu);
+    this.firebaseService.IS_SHOW_MENU$.next(isShowMenu);
   }
 }

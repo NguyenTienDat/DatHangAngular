@@ -1,9 +1,22 @@
-import { FirebaseServiceService } from './../services/firebase-service.service';
-import { ToastServiceService } from 'src/app/shared/services/toast-service.service';
-import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
-import { NO_IMG, encodeImageFileAsURL, renderLink } from '../utils';
-import { CONTEXT_MENU_EVENT, FacebookProduct } from '../models';
+import { FirebaseService } from '../../../shared/services/firebase.service';
+import { ToastService } from 'src/app/shared/services/toast.service';
+import {
+  Component,
+  Input,
+  OnInit,
+  Output,
+  EventEmitter,
+  OnChanges,
+  SimpleChanges,
+} from '@angular/core';
+import {
+  NO_IMG,
+  encodeImageFileAsURL,
+  renderLink,
+} from '../../../shared/utils';
+import { CONTEXT_MENU_EVENT, FacebookProduct } from '../../../shared/models';
 import { ConfirmEventType, ConfirmationService, MenuItem } from 'primeng/api';
+import { CommonService } from '../../../shared/services/common.service';
 
 interface ConfigFilterTable {
   noFilter?: boolean;
@@ -35,11 +48,11 @@ export interface HeadersTable {
 }
 
 @Component({
-  selector: 'app-custom-table',
-  templateUrl: './custom-table.component.html',
-  styleUrls: ['./custom-table.component.scss'],
+  selector: 'customer-table',
+  templateUrl: './customer-table.component.html',
+  styleUrls: ['./customer-table.component.scss'],
 })
-export class CustomTableComponent implements OnInit {
+export class CustomTableComponent implements OnInit, OnChanges {
   @Input() isEditMode = false;
   @Input() dataTable: FacebookProduct[] = [];
   @Input() headers!: HeadersTable[];
@@ -56,19 +69,21 @@ export class CustomTableComponent implements OnInit {
   contextMenu!: MenuItem[];
   renderLink = renderLink;
   IMG_DEFAULT = NO_IMG;
+  currentTime = Date.now();
 
   constructor(
-    private toastServiceService: ToastServiceService,
+    private toastService: ToastService,
     private confirmationService: ConfirmationService,
-    private firebaseServiceService: FirebaseServiceService
+    private firebaseService: FirebaseService,
+    public commonService: CommonService
   ) {}
 
   ngOnInit() {
     this.contextMenu = [
       {
-        label: 'View',
-        icon: 'pi pi-fw pi-search',
-        command: () => this.viewProduct(this.selectedProduct),
+        label: 'Clone a copy',
+        icon: 'pi pi-fw pi-copy',
+        command: () => this.cloneACopy(),
       },
       {
         label: 'Delete',
@@ -78,12 +93,17 @@ export class CustomTableComponent implements OnInit {
     ];
   }
 
-  viewProduct(product: FacebookProduct) {
-    this.toastServiceService.add({
-      severity: 'info',
-      summary: 'Product Selected',
-      detail: product.customer,
+  ngOnChanges(changes: SimpleChanges): void {
+    this.currentTime = Date.now();
+  }
+
+  cloneACopy() {
+    console.log('Copy a row', this.selectedItems);
+    this.contextMenuOutput.emit({
+      type: CONTEXT_MENU_EVENT.CLONE_A_COPY,
+      value: this.selectedProduct,
     });
+    this.selectedProduct = {};
   }
 
   confirmDelete() {
@@ -118,7 +138,7 @@ export class CustomTableComponent implements OnInit {
     inputImg.click();
   }
 
-  changeValue(item: any, header: HeadersTable, value: any) {
+  changeValue(item: FacebookProduct, header: HeadersTable, value: any) {
     console.log({ item }, header, value);
     this.valueChanged.emit({ item, header, value });
   }
@@ -135,9 +155,15 @@ export class CustomTableComponent implements OnInit {
     });
   }
 
-  keyHandler(event: any, item: any, header: HeadersTable, value: any) {
-    // console.log(event);
-    if (event.code === 'Enter') {
+  keyHandler(
+    event: any,
+    item: FacebookProduct,
+    header: HeadersTable,
+    value: any
+  ) {
+    // console.log('keyHandler', item, event);
+    if (event.key === 'Enter' || event.keyCode === 13) {
+      console.log('Enter', item);
       this.changeValue(item, header, value);
     }
   }
@@ -149,7 +175,11 @@ export class CustomTableComponent implements OnInit {
   dropdownChanged(td: HeadersTable, e: any) {
     console.log({ td, e });
     if (td.field === 'status') {
-      this.firebaseServiceService.DROPDOWN_STATUS_SELECTED$.next(e);
+      this.firebaseService.DROPDOWN_STATUS_SELECTED$.next(e);
     }
+  }
+
+  checkNewlyUpdate(updated: number) {
+    return Date.now() - updated < 3000;
   }
 }

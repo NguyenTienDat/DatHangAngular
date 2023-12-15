@@ -5,11 +5,22 @@ const routes: Routes = [
   {
     path: 'facebook',
     loadChildren: () =>
-      import('./facebook/facebook.module').then((m) => m.FacebookModule),
+      import('./pages/facebook/facebook.module').then((m) => m.FacebookModule),
   },
   {
     path: 'tmdt',
-    loadChildren: () => import('./tmdt/tmdt.module').then((m) => m.TmdtModule),
+    loadChildren: () =>
+      import('./pages/tmdt/tmdt.module').then((m) => m.TmdtModule),
+  },
+  {
+    path: 'setting',
+    loadChildren: () =>
+      import('./pages/setting/setting.module').then((m) => m.SettingModule),
+  },
+  {
+    path: 'customer',
+    loadChildren: () =>
+      import('./pages/customer/customer.module').then((m) => m.CustomerModule),
   },
   {
     path: '',

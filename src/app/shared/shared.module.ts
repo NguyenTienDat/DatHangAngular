@@ -4,8 +4,7 @@ import { LeftMenuComponent } from './left-menu/left-menu.component';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { NbIconModule } from '@nebular/theme';
-import { CustomTableComponent } from './custom-table/custom-table.component';
+import { CustomTableComponent } from '../pages/facebook/facebook-table/facebook-table.component';
 import { TableModule } from 'primeng/table';
 import { DropdownModule } from 'primeng/dropdown';
 import { MultiSelectModule } from 'primeng/multiselect';
@@ -24,6 +23,7 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { TooltipModule } from 'primeng/tooltip';
 import { AccordionModule } from 'primeng/accordion';
 import { SpeedDialModule } from 'primeng/speeddial';
+import { ToggleButtonModule } from 'primeng/togglebutton';
 
 const components = [
   LeftMenuComponent,
@@ -48,16 +48,11 @@ const primengModules = [
   TooltipModule,
   AccordionModule,
   SpeedDialModule,
+  ToggleButtonModule,
 ];
 @NgModule({
   declarations: [...components],
-  imports: [
-    CommonModule,
-    FormsModule,
-    RouterModule,
-    NbIconModule,
-    ...primengModules,
-  ],
+  imports: [CommonModule, FormsModule, RouterModule, ...primengModules],
   providers: [MessageService, DialogService],
   exports: [...components, ...primengModules],
 })

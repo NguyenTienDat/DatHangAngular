@@ -22,14 +22,17 @@ import {
   Transaction,
 } from '@angular/fire/firestore';
 import { Observable, from, BehaviorSubject, catchError, forkJoin } from 'rxjs';
-import { FacebookProduct, STATUS_DROPDOWN } from '../models';
+import { ENVIRONMENT_LIST, FacebookProduct, STATUS_DROPDOWN } from '../models';
 
 @Injectable({
   providedIn: 'root',
 })
-export class FirebaseServiceService {
-  private readonly PRODUCTS_COLLECTION = 'products';
-  private productsCol: CollectionReference;
+export class FirebaseService {
+  private PRODUCTS_COLLECTION = 'products';
+  private SETTING_COLLECTION = 'setting';
+
+  private productsCol!: CollectionReference;
+  private settingCol: CollectionReference;
   /**
    * Tiền vận chuyển / 1kg hiện tại
    */
@@ -53,8 +56,26 @@ export class FirebaseServiceService {
     STATUS_DROPDOWN.DELIVERY,
   ]);
 
+  /** Menu ẩn/hiện */
+  IS_SHOW_MENU$: BehaviorSubject<boolean> = new BehaviorSubject(false);
+
+  /** Menu mở rộng hoặc thu nhỏ */
+  IS_OPEN_MENU$: BehaviorSubject<boolean> = new BehaviorSubject(false);
+
+  /** Trạng thái selected của status dropdown dùng để binding lên UI và call api */
+  DATABASE_FIREBASE$: BehaviorSubject<number> = new BehaviorSubject(0);
+
+  SETTING_ID$: BehaviorSubject<string> = new BehaviorSubject(
+    'ebFogSAiYBRJAVe9vm09'
+  );
+
   constructor(private firestore: Firestore) {
-    this.productsCol = collection(this.firestore, this.PRODUCTS_COLLECTION);
+    this.DATABASE_FIREBASE$.subscribe((index) => {
+      this.PRODUCTS_COLLECTION = ENVIRONMENT_LIST[index].products;
+      this.productsCol = collection(this.firestore, this.PRODUCTS_COLLECTION);
+      console.log('Sử dụng DB', this.PRODUCTS_COLLECTION);
+    });
+    this.settingCol = collection(this.firestore, this.SETTING_COLLECTION);
   }
 
   fbGetProducts() {
@@ -73,6 +94,7 @@ export class FirebaseServiceService {
 
   fbAddProducts(docData: FacebookProduct): Observable<any> {
     docData.created = Date.now();
+    docData.updated = Date.now();
     return from(addDoc(this.productsCol, docData)).pipe(
       catchError((err, caught) => {
         this.handerErr(err);
@@ -82,6 +104,7 @@ export class FirebaseServiceService {
   }
 
   fbUpdateProduct(docData: FacebookProduct, id: string) {
+    docData.updated = Date.now();
     return from(
       updateDoc(
         doc(this.firestore, this.PRODUCTS_COLLECTION, id),
@@ -96,6 +119,7 @@ export class FirebaseServiceService {
   }
 
   fbUpdateProducts(docData: FacebookProduct, items: any[]) {
+    docData.updated = Date.now();
     const arr: Observable<any>[] = [];
     items.forEach((item) => {
       const update = from(
@@ -127,11 +151,17 @@ export class FirebaseServiceService {
 
   // Just update to status deleted
   fbDeleteProduct(id: string) {
-    return this.fbUpdateProduct({ status: STATUS_DROPDOWN.DELETED }, id);
+    return this.fbUpdateProduct(
+      { status: STATUS_DROPDOWN.DELETED, updated: Date.now() },
+      id
+    );
   }
 
   fbDeleteProducts(items: any[]) {
-    return this.fbUpdateProducts({ status: STATUS_DROPDOWN.DELETED }, items);
+    return this.fbUpdateProducts(
+      { status: STATUS_DROPDOWN.DELETED, updated: Date.now() },
+      items
+    );
   }
 
   // Not recommend real delete => Just update to status deleted
@@ -177,6 +207,52 @@ export class FirebaseServiceService {
     );
   }
 
+  //SETTING ===================================================
+  loadSetting(bindingSetting?: any) {
+    this.settingGet().subscribe((res) => {
+      if (res?.length > 0) {
+        const setting = res[0];
+        this.DATABASE_FIREBASE$.next(setting.databaseSource);
+        this.SETTING_ID$.next(setting.settingID);
+        this.DEFAULT_WEIGHT_PRICE$.next(setting.defaultWeightPrice);
+        this.DEFAULT_EXCHANGE$.next(setting.defaultExchange);
+        this.INCOME_PER_ORDER$.next(setting.incomePerOrder);
+        this.VAT$.next(setting.vat);
+        this.DROPDOWN_STATUS_SELECTED$.next(setting.statusSelected);
+        this.IS_SHOW_MENU$.next(setting.showMenu);
+        this.IS_OPEN_MENU$.next(setting.isOpen);
+        if (bindingSetting) {
+          bindingSetting();
+        }
+      }
+    });
+  }
+
+  settingGet() {
+    return this.getCustomDocs(this.settingCol);
+  }
+
+  settingAdd(docData: any): Observable<any> {
+    docData.created = Date.now();
+    return from(addDoc(this.settingCol, docData)).pipe(
+      catchError((err, caught) => {
+        this.handerErr(err);
+        return caught;
+      })
+    );
+  }
+
+  settingUpdate(docData: any, id: string) {
+    docData.updated = Date.now();
+    return from(
+      updateDoc(doc(this.firestore, this.SETTING_COLLECTION, id), docData)
+    ).pipe(
+      catchError((err, caught) => {
+        this.handerErr(err);
+        return caught;
+      })
+    );
+  }
   // SUPPORT ========================================
   private getCustomDocs(q: Query<DocumentData>): Observable<any> {
     return from(

@@ -1,0 +1,131 @@
+<div class="container" [formGroup]="settingForm">
+  <div class="card">
+    <div class="item">
+      <div class="label">Setting ID</div>
+      <div class="value number">
+        <input pInputText formControlName="settingID" />
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="label">Giá cân</div>
+      <div class="value number">
+        <p-inputNumber
+          mode="decimal"
+          [minFractionDigits]="0"
+          [maxFractionDigits]="5"
+          formControlName="defaultWeightPrice"
+        ></p-inputNumber>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="label">Tỉ giá</div>
+      <div class="value number">
+        <p-inputNumber
+          mode="decimal"
+          [minFractionDigits]="0"
+          [maxFractionDigits]="5"
+          formControlName="defaultExchange"
+        ></p-inputNumber>
+      </div>
+    </div>
+    <div class="item">
+      <div class="label" title="Tiền công cho mỗi đơn hàng">Lãi / đơn hàng</div>
+      <div class="value number">
+        <p-inputNumber
+          mode="decimal"
+          [minFractionDigits]="0"
+          [maxFractionDigits]="5"
+          formControlName="incomePerOrder"
+        ></p-inputNumber>
+      </div>
+    </div>
+    <div class="item">
+      <div class="label">Thuế</div>
+      <div class="value number">
+        <p-inputNumber
+          mode="decimal"
+          [minFractionDigits]="0"
+          [maxFractionDigits]="5"
+          formControlName="vat"
+        ></p-inputNumber>
+      </div>
+    </div>
+
+    <div class="item">
+      <div
+        class="label"
+        title="Lọc mặc định các đơn hàng có trạng thái được chọn"
+      >
+        Lọc trạng thái đơn hàng
+      </div>
+      <div class="value">
+        <p-multiSelect
+          id="value"
+          optionLabel="name"
+          optionValue="value"
+          [options]="STATUS_LIST"
+          [showClear]="true"
+          [filter]="false"
+          formControlName="statusSelected"
+        ></p-multiSelect>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="label" title="Môi trường dev / production">CSDL</div>
+      <div class="value">
+        <p-dropdown
+          id="value"
+          optionLabel="name"
+          optionValue="index"
+          [options]="dropdownOptionsStatus"
+          [showClear]="false"
+          [readonly]="false"
+          formControlName="databaseSource"
+        ></p-dropdown>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="label" title="Menu sẽ được hiển thị">Hiển thị menu</div>
+      <div class="value number">
+        <p-toggleButton
+          formControlName="showMenu"
+          onLabel="Yes"
+          offLabel="No"
+          (onChange)="this.firebaseService.IS_SHOW_MENU$.next($event.checked)"
+        ></p-toggleButton>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="label" title="Menu mở rộng">Menu mở rộng</div>
+      <div class="value number">
+        <p-toggleButton
+          formControlName="isOpen"
+          onLabel="Yes"
+          offLabel="No"
+          (onChange)="this.firebaseService.IS_OPEN_MENU$.next($event.checked)"
+        ></p-toggleButton>
+      </div>
+    </div>
+    <div class="item d-flex aligin-items-center mt-4">
+      <p-button
+        label="Cancel"
+        styleClass="mx-2 p-button-outlined  p-button-secondary"
+        icon="pi pi-undo"
+        (onClick)="loadSetting()"
+      ></p-button>
+
+      <p-button
+        label="Update"
+        styleClass="p-button-success"
+        icon="pi pi-check"
+        [disabled]="settingForm.invalid"
+        (onClick)="updateSetting()"
+      ></p-button>
+    </div>
+  </div>
+</div>
