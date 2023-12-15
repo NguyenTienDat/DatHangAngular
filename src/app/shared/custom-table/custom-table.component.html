@@ -19,10 +19,18 @@
   [(contextMenuSelection)]="selectedProduct"
   [contextMenu]="cm"
   dataKey="_id"
+  [rowHover]="true"
+  [(selection)]="selectedItems"
   [tableStyle]="{ flex: 1, width: '100%' }"
+  [loading]="isLoading"
+  currentPageReportTemplate="{first} - {last} / {totalRecords}"
+  (selectionChange)="openMultiHandlerModal()"
 >
   <ng-template pTemplate="header">
     <tr>
+      <th style="width: 4rem">
+        <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+      </th>
       <ng-container *ngFor="let td of headers">
         <th
           class="table-header"
@@ -41,6 +49,7 @@
               [showMatchModes]="false"
               [showOperator]="false"
               [showAddButton]="false"
+              [showClearButton]="false"
             >
               <ng-template
                 *ngIf="td.type === 'dropdown'"
@@ -53,11 +62,12 @@
                   optionLabel="name"
                   optionValue="value"
                   [options]="td.filter.dropdownOptions ?? []"
-                  [showClear]="false"
+                  [showClear]="true"
                   [filter]="false"
                   [placeholder]="td.name"
                   [(ngModel)]="td.filter.filterValue"
                   (onChange)="filter($event.value)"
+                  (onChange)="dropdownChanged(td, $event.value)"
                 ></p-multiSelect>
               </ng-template>
             </p-columnFilter>
@@ -68,7 +78,14 @@
   </ng-template>
   <ng-template pTemplate="body" let-product>
     <ng-container>
-      <tr [pContextMenuRow]="product">
+      <tr
+        class="p-selectable-row"
+        [ngClass]="{ 'preview-mode': !isEditMode }"
+        [pContextMenuRow]="product"
+      >
+        <td>
+          <p-tableCheckbox [value]="product"></p-tableCheckbox>
+        </td>
         <td
           *ngFor="let td of headers"
           [ngClass]="td.className"
@@ -95,7 +112,10 @@
                       pInputTextarea
                       [autoResize]="true"
                       [(ngModel)]="product[td.field]"
-                      (ngModelChange)="changeValue(product, td, $event)"
+                      (change)="changeValue(product, td, product[td.field])"
+                      (keydown)="
+                        keyHandler($event, product, td, product[td.field])
+                      "
                     ></textarea>
                   </ng-template>
                   <ng-template pTemplate="output">
@@ -111,7 +131,10 @@
                       pInputText
                       [ngStyle]="td.styles"
                       [(ngModel)]="product[td.field]"
-                      (ngModelChange)="changeValue(product, td, $event)"
+                      (change)="changeValue(product, td, product[td.field])"
+                      (keydown)="
+                        keyHandler($event, product, td, product[td.field])
+                      "
                     />
                     <span class="invisible"> {{ product[td.field] }}</span>
                   </ng-template>
@@ -130,7 +153,10 @@
                       [inputStyle]="td.styles"
                       [minFractionDigits]="0"
                       [maxFractionDigits]="5"
-                      (ngModelChange)="changeValue(product, td, $event)"
+                      (focusout)="changeValue(product, td, product[td.field])"
+                      (keydown)="
+                        keyHandler($event, product, td, product[td.field])
+                      "
                     >
                     </p-inputNumber>
                   </ng-template>
@@ -154,7 +180,7 @@
                   [ngModel]="product[td.field]"
                   [readonly]="false"
                   [ngStyle]="td.styles"
-                  (onChange)="changeValue(product, td, $event)"
+                  (onChange)="changeValue(product, td, $event.value)"
                 ></p-dropdown>
               </ng-container>
 
@@ -165,7 +191,10 @@
                       pInputTextarea
                       [ngStyle]="td.styles"
                       [(ngModel)]="product[td.field]"
-                      (ngModelChange)="changeValue(product, td, $event)"
+                      (change)="changeValue(product, td, product[td.field])"
+                      (keydown)="
+                        keyHandler($event, product, td, product[td.field])
+                      "
                     ></textarea>
                   </ng-template>
                   <ng-template pTemplate="output">

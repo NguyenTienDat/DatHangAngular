@@ -1,4 +1,8 @@
 .wrap-modal ::ng-deep {
+  .table-preview {
+    max-width: 700px;
+  }
+
   .wrap-input {
     display: grid;
     grid-template-columns: auto auto;
@@ -35,6 +39,10 @@
 
 @media (max-width: 700px) {
   .wrap-modal ::ng-deep {
+    .table-preview {
+      display: none;
+    }
+
     .wrap-input {
       display: grid;
       grid-template-columns: auto;

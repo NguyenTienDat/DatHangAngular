@@ -12,6 +12,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { ConfirmationService } from 'primeng/api';
+import { DecimalPipe } from '@angular/common';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyAmWtEdw-4PjzdDXkYFKEyxz1S2L38vZ1o',
@@ -21,6 +22,16 @@ const firebaseConfig = {
   messagingSenderId: '118350461604',
   appId: '1:118350461604:web:522c2624e4248f51bc0431',
 };
+
+// const firebaseConfig = {
+//   apiKey: 'AIzaSyCLAwZp9yA6nO8T9_zrnVcuLwjfaPNhfLA',
+//   authDomain: 'dathangangular.firebaseapp.com',
+//   projectId: 'dathangangular',
+//   storageBucket: 'dathangangular.appspot.com',
+//   messagingSenderId: '734578423279',
+//   appId: '1:734578423279:web:9b39751e9fef168f6ef21a',
+//   measurementId: 'G-V049MJKQBG',
+// };
 
 @NgModule({
   declarations: [AppComponent],
@@ -38,7 +49,7 @@ const firebaseConfig = {
     provideFirebaseApp(() => initializeApp(firebaseConfig)),
     provideFirestore(() => getFirestore()),
   ],
-  providers: [ConfirmationService],
+  providers: [ConfirmationService, DecimalPipe],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

@@ -15,6 +15,30 @@ export class ToastServiceService {
     });
   }
 
+  showToastWarning(detail: string, summary?: string) {
+    this.messageService.add({
+      severity: 'warn',
+      summary: summary ?? 'Warning!',
+      detail: detail,
+    });
+  }
+
+  showInfo(detail: string, summary?: string) {
+    this.messageService.add({
+      severity: 'info',
+      summary: summary ?? 'Info',
+      detail,
+    });
+  }
+
+  showError(detail: string, summary?: string) {
+    this.messageService.add({
+      severity: 'error',
+      summary: summary ?? 'Error!',
+      detail,
+    });
+  }
+
   add(message: Message) {
     this.messageService.add(message);
   }

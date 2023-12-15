@@ -1,3 +1,4 @@
+import { FirebaseServiceService } from './../services/firebase-service.service';
 import { ToastServiceService } from 'src/app/shared/services/toast-service.service';
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { NO_IMG, encodeImageFileAsURL, renderLink } from '../utils';
@@ -39,14 +40,18 @@ export interface HeadersTable {
   styleUrls: ['./custom-table.component.scss'],
 })
 export class CustomTableComponent implements OnInit {
-  @Input() dataTable = [];
+  @Input() isEditMode = false;
+  @Input() dataTable: FacebookProduct[] = [];
   @Input() headers!: HeadersTable[];
   @Output() valueChanged = new EventEmitter();
+  @Output() selectMultiItems = new EventEmitter<FacebookProduct[]>();
   @Output() contextMenuOutput = new EventEmitter<{
     type: CONTEXT_MENU_EVENT;
     value: any;
   }>();
 
+  @Input() selectedItems: FacebookProduct[] = [];
+  @Input() isLoading!: boolean;
   selectedProduct!: FacebookProduct;
   contextMenu!: MenuItem[];
   renderLink = renderLink;
@@ -54,7 +59,8 @@ export class CustomTableComponent implements OnInit {
 
   constructor(
     private toastServiceService: ToastServiceService,
-    private confirmationService: ConfirmationService
+    private confirmationService: ConfirmationService,
+    private firebaseServiceService: FirebaseServiceService
   ) {}
 
   ngOnInit() {
@@ -82,9 +88,10 @@ export class CustomTableComponent implements OnInit {
 
   confirmDelete() {
     this.confirmationService.confirm({
-      message: 'Do you want to delete this record?',
+      message: `Do you want to delete this record: ${this.selectedProduct.customer}?`,
       header: 'Delete Confirmation',
       icon: 'pi pi-info-circle',
+      rejectButtonStyleClass: 'bg-danger',
       accept: () => {
         this.contextMenuOutput.emit({
           type: CONTEXT_MENU_EVENT.DELETE_ACCEPT,
@@ -120,6 +127,29 @@ export class CustomTableComponent implements OnInit {
     console.log({ fileElement }, event);
     encodeImageFileAsURL(fileElement, (src: any) => {
       fileElement.data.image.src = src;
+      this.valueChanged.emit({
+        item: fileElement.data.item,
+        header: { field: fileElement.data.field },
+        value: src,
+      });
     });
+  }
+
+  keyHandler(event: any, item: any, header: HeadersTable, value: any) {
+    // console.log(event);
+    if (event.code === 'Enter') {
+      this.changeValue(item, header, value);
+    }
+  }
+
+  openMultiHandlerModal() {
+    this.selectMultiItems.emit(this.selectedItems);
+  }
+
+  dropdownChanged(td: HeadersTable, e: any) {
+    console.log({ td, e });
+    if (td.field === 'status') {
+      this.firebaseServiceService.DROPDOWN_STATUS_SELECTED$.next(e);
+    }
   }
 }

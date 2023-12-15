@@ -1,6 +1,8 @@
+import { CommonService } from '../../shared/services/common.service';
+import { STATUS_DROPDOWN } from '../../shared/models';
 import { FirebaseServiceService } from '../../shared/services/firebase-service.service';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { HeadersTable } from 'src/app/shared/custom-table/custom-table.component';
 import { NO_IMG } from 'src/app/shared/utils';
 import { FacebookProduct } from 'src/app/shared/models';
@@ -20,13 +22,15 @@ export class AddModalComponent implements OnInit {
   constructor(
     private dialogService: DynamicDialogConfig,
     private ref: DynamicDialogRef,
-    private firebaseServiceService: FirebaseServiceService,
-    private toastServiceService: ToastServiceService
+    public firebaseServiceService: FirebaseServiceService,
+    private toastServiceService: ToastServiceService,
+    private commonService: CommonService
   ) {
     this.data = this.dialogService.data.data;
   }
 
   ngOnInit() {
+    this.output.status = STATUS_DROPDOWN.ORDERED;
     this.output.weight_price =
       this.firebaseServiceService.DEFAULT_WEIGHT_PRICE$.value;
     this.output.exchange = this.firebaseServiceService.DEFAULT_EXCHANGE$.value;
@@ -41,6 +45,10 @@ export class AddModalComponent implements OnInit {
 
   submit() {
     console.log('Submit', this.output);
+    if (!this.output.customer) {
+      this.toastServiceService.showToastWarning('Chưa nhập tên khách hàng!');
+      return;
+    }
     this.dialogService.data.callBackAdded(this.output);
   }
 
@@ -65,18 +73,32 @@ export class AddModalComponent implements OnInit {
       const giaNhap =
         product_cny * product_exchange + product_weight * product_weight_price;
 
-      if (!this.output.price) {
-        this.output.price = giaNhap;
-      }
+      // if (!this.output.price) {
+      this.output.price = giaNhap;
+      this.output.tooltip_price = `= (Tệ x Tỉ giá) + (Cân x Giá Cân) \n= (${this.commonService.transformDecimal(
+        product_cny
+      )} x ${this.commonService.transformDecimal(
+        product_exchange
+      )}) + (${this.commonService.transformDecimal(
+        product_weight
+      )} x ${this.commonService.transformDecimal(product_weight_price)})`;
+      // }
 
-      if (!this.output.price2) {
-        this.output.price2 =
-          giaNhap + this.firebaseServiceService.INCOME_PER_ORDER$.value;
-      }
+      // if (!this.output.price2) {
+      this.output.tooltip_price2 = `= (Giá nhập + Tiền công) x VAT \n= (${this.commonService.transformDecimal(
+        giaNhap
+      )} + ${this.commonService.transformDecimal(
+        this.firebaseServiceService.INCOME_PER_ORDER$.value
+      )}) x ${this.commonService.transformDecimal(
+        this.firebaseServiceService.VAT$.value
+      )}`;
+      this.output.price2 =
+        (giaNhap + this.firebaseServiceService.INCOME_PER_ORDER$.value) *
+        this.firebaseServiceService.VAT$.value;
+      // }
 
       this.output = JSON.parse(JSON.stringify(this.output));
     }
-
     this.changeValue(td, event);
   }
 }

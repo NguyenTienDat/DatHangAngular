@@ -16,8 +16,12 @@ import {
   orderBy,
   addDoc,
   deleteDoc,
+  updateDoc,
+  writeBatch,
+  runTransaction,
+  Transaction,
 } from '@angular/fire/firestore';
-import { Observable, from, BehaviorSubject, catchError } from 'rxjs';
+import { Observable, from, BehaviorSubject, catchError, forkJoin } from 'rxjs';
 import { FacebookProduct, STATUS_DROPDOWN } from '../models';
 
 @Injectable({
@@ -39,6 +43,16 @@ export class FirebaseServiceService {
    */
   INCOME_PER_ORDER$: BehaviorSubject<number> = new BehaviorSubject(35000);
 
+  /** Tiền thuế trên đơn hàng: hiện tại 1,5% => x * (1 + 1.5) */
+  VAT$: BehaviorSubject<number> = new BehaviorSubject(101.5 / 100);
+
+  /** Trạng thái selected của status dropdown dùng để binding lên UI và call api */
+  DROPDOWN_STATUS_SELECTED$: BehaviorSubject<number[]> = new BehaviorSubject([
+    STATUS_DROPDOWN.ORDERED,
+    STATUS_DROPDOWN.RECEIVED,
+    STATUS_DROPDOWN.DELIVERY,
+  ]);
+
   constructor(private firestore: Firestore) {
     this.productsCol = collection(this.firestore, this.PRODUCTS_COLLECTION);
   }
@@ -47,11 +61,8 @@ export class FirebaseServiceService {
     return this.getCustomDocs(this.productsCol);
   }
 
-  fbQueryProducts(): Observable<any> {
-    const q = query(
-      this.productsCol,
-      where('status', '!=', STATUS_DROPDOWN.DONE)
-    );
+  fbQueryProducts(status: STATUS_DROPDOWN[]): Observable<any> {
+    const q = query(this.productsCol, where('status', 'in', status));
     return this.getCustomDocs(q).pipe(
       catchError((err, caught) => {
         this.handerErr(err);
@@ -70,14 +81,95 @@ export class FirebaseServiceService {
     );
   }
 
-  // export async function fbUpdateProducts(docData, id) {
-  //   await updateDoc(doc(dbFirebase, "products", id), docData);
-  // }
+  fbUpdateProduct(docData: FacebookProduct, id: string) {
+    return from(
+      updateDoc(
+        doc(this.firestore, this.PRODUCTS_COLLECTION, id),
+        docData as any
+      )
+    ).pipe(
+      catchError((err, caught) => {
+        this.handerErr(err);
+        return caught;
+      })
+    );
+  }
 
-  fbDeleteProducts(id: string) {
+  fbUpdateProducts(docData: FacebookProduct, items: any[]) {
+    const arr: Observable<any>[] = [];
+    items.forEach((item) => {
+      const update = from(
+        runTransaction(this.firestore, (transaction: Transaction) => {
+          const document = doc(
+            this.firestore,
+            this.PRODUCTS_COLLECTION,
+            item._id
+          );
+
+          return transaction.get(document).then((sfDoc) => {
+            if (!sfDoc.exists) {
+              throw 'Document does not exist!';
+            }
+            transaction.update(document, docData as any);
+          });
+        })
+      );
+      arr.push(update);
+    });
+
+    return forkJoin(arr).pipe(
+      catchError((err, caught) => {
+        this.handerErr(err);
+        return caught;
+      })
+    );
+  }
+
+  // Just update to status deleted
+  fbDeleteProduct(id: string) {
+    return this.fbUpdateProduct({ status: STATUS_DROPDOWN.DELETED }, id);
+  }
+
+  fbDeleteProducts(items: any[]) {
+    return this.fbUpdateProducts({ status: STATUS_DROPDOWN.DELETED }, items);
+  }
+
+  // Not recommend real delete => Just update to status deleted
+  private fbDeleteRealProduct(id: string) {
     return from(
       deleteDoc(doc(this.firestore, this.PRODUCTS_COLLECTION, id))
     ).pipe(
+      catchError((err, caught) => {
+        this.handerErr(err);
+        return caught;
+      })
+    );
+  }
+
+  // Not recommend real delete => Just update to status deleted
+  private fbDeleteRealProducts(items: any[]) {
+    const arr: Observable<any>[] = [];
+    items.forEach((item) => {
+      const update = from(
+        runTransaction(this.firestore, (transaction: Transaction) => {
+          const document = doc(
+            this.firestore,
+            this.PRODUCTS_COLLECTION,
+            item._id
+          );
+
+          return transaction.get(document).then((sfDoc) => {
+            if (!sfDoc.exists) {
+              throw 'Document does not exist!';
+            }
+            transaction.delete(document);
+          });
+        })
+      );
+      arr.push(update);
+    });
+
+    return forkJoin(arr).pipe(
       catchError((err, caught) => {
         this.handerErr(err);
         return caught;

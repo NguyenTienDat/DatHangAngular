@@ -20,6 +20,10 @@ import { ImageSelectComponent } from './image-select/image-select.component';
 import { ContextMenuModule } from 'primeng/contextmenu';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ButtonModule } from 'primeng/button';
+import { CheckboxModule } from 'primeng/checkbox';
+import { TooltipModule } from 'primeng/tooltip';
+import { AccordionModule } from 'primeng/accordion';
+import { SpeedDialModule } from 'primeng/speeddial';
 
 const components = [
   LeftMenuComponent,
@@ -40,6 +44,10 @@ const primengModules = [
   ContextMenuModule,
   ConfirmDialogModule,
   ButtonModule,
+  CheckboxModule,
+  TooltipModule,
+  AccordionModule,
+  SpeedDialModule,
 ];
 @NgModule({
   declarations: [...components],

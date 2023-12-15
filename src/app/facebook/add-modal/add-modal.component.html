@@ -50,7 +50,7 @@
                 [options]="td.filter.dropdownOptions ?? []"
                 [showClear]="false"
                 [readonly]="false"
-                (onChange)="changeValue(td, $event)"
+                (onChange)="changeValue(td, $event.value)"
               ></p-dropdown>
             </ng-container>
 
@@ -64,11 +64,18 @@
               </ng-template>
             </ng-container>
           </ng-container>
+
+          <div
+            *ngIf="output['tooltip_' + td.field]"
+            class="mt-2 message text-info"
+          >
+            {{ output["tooltip_" + td.field] }}
+          </div>
         </div>
       </div>
     </ng-container>
   </div>
-  <div class="actions-wrap mt-4">
+  <div class="d-flex aligin-items-center justify-content-end actions-wrap mt-4">
     <p-button
       label="Cancel"
       styleClass="mx-2 p-button-outlined  p-button-secondary"
