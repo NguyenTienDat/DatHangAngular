@@ -1,0 +1,221 @@
+<input
+  class="d-none"
+  type="file"
+  accept="image/*"
+  #inputImg
+  (change)="changeImg(inputImg, $event)"
+/>
+<p-contextMenu #cm [model]="contextMenu"></p-contextMenu>
+
+<p-table
+  [value]="dataTable"
+  responsiveLayout="stack"
+  [breakpoint]="'960px'"
+  [rows]="25"
+  [rowsPerPageOptions]="[10, 25, 50, 100, 500, 1000]"
+  [paginator]="true"
+  [showCurrentPageReport]="true"
+  class="w-full"
+  [(contextMenuSelection)]="selectedProduct"
+  [contextMenu]="cm"
+  dataKey="_id"
+  [rowHover]="true"
+  [(selection)]="selectedItems"
+  [tableStyle]="{ flex: 1, width: '100%' }"
+  [loading]="isLoading"
+  currentPageReportTemplate="{first} - {last} / {totalRecords}"
+  (selectionChange)="openMultiHandlerModal()"
+>
+  <ng-template pTemplate="header">
+    <tr>
+      <th style="width: 4rem">
+        <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+      </th>
+      <ng-container *ngFor="let td of headers">
+        <th
+          class="table-header"
+          [ngClass]="td.headerClassName"
+          [ngStyle]="td.styles"
+          pSortableColumn="{{ td.field }}"
+        >
+          <div class="flex align-items-center">
+            {{ td.name }}
+            <p-columnFilter
+              *ngIf="!td.filter.noFilter"
+              type="text"
+              [field]="td.field"
+              display="menu"
+              [matchMode]="td.filter.matchMode || 'contains'"
+              [showMatchModes]="false"
+              [showOperator]="false"
+              [showAddButton]="false"
+              [showClearButton]="false"
+            >
+              <ng-template
+                *ngIf="td.type === 'dropdown'"
+                pTemplate="filter"
+                let-value
+                let-filter="filterCallback"
+              >
+                <p-multiSelect
+                  id="value"
+                  optionLabel="name"
+                  optionValue="value"
+                  [options]="td.filter.dropdownOptions ?? []"
+                  [showClear]="true"
+                  [filter]="false"
+                  [placeholder]="td.name"
+                  [(ngModel)]="td.filter.filterValue"
+                  (onChange)="filter($event.value)"
+                  (onChange)="dropdownChanged(td, $event.value)"
+                ></p-multiSelect>
+              </ng-template>
+            </p-columnFilter>
+          </div>
+        </th>
+      </ng-container>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-product>
+    <ng-container>
+      <tr
+        class="p-selectable-row"
+        [ngClass]="{
+          'preview-mode': !isEditMode,
+          newly: checkNewlyUpdate(product.updated)
+        }"
+        [pContextMenuRow]="product"
+      >
+        <td>
+          <p-tableCheckbox [value]="product"></p-tableCheckbox>
+        </td>
+        <td
+          *ngFor="let td of headers"
+          [ngClass]="td.className"
+          [pEditableColumn]="product[td.field]"
+          [pEditableColumnField]="td.field"
+        >
+          <span class="p-column-title">{{ td.name }}</span>
+          <div
+            class="table-cell"
+            [ngStyle]="td.styles"
+            [pTooltip]="product['tooltip_' + td.field]"
+          >
+            <ng-container [ngSwitch]="td.type">
+              <ng-container *ngSwitchCase="'image'">
+                <img
+                  #image
+                  class="cursor-pointer"
+                  [src]="product[td.field] ?? IMG_DEFAULT"
+                  (click)="openSelectFile(product, td.field, inputImg, image)"
+                />
+              </ng-container>
+
+              <ng-container *ngSwitchCase="'link'">
+                <p-cellEditor>
+                  <ng-template pTemplate="input">
+                    <textarea
+                      [ngStyle]="td.styles"
+                      pInputTextarea
+                      [autoResize]="true"
+                      [(ngModel)]="product[td.field]"
+                      (change)="changeValue(product, td, product[td.field])"
+                      (keydown)="
+                        keyHandler($event, product, td, product[td.field])
+                      "
+                    ></textarea>
+                  </ng-template>
+                  <ng-template pTemplate="output">
+                    <div [innerHTML]="renderLink(product[td.field])"></div>
+                  </ng-template>
+                </p-cellEditor>
+              </ng-container>
+
+              <ng-container *ngSwitchCase="'string'">
+                <p-cellEditor>
+                  <ng-template pTemplate="input">
+                    <input
+                      pInputText
+                      [ngStyle]="td.styles"
+                      [(ngModel)]="product[td.field]"
+                      (change)="changeValue(product, td, product[td.field])"
+                      (keydown)="
+                        keyHandler($event, product, td, product[td.field])
+                      "
+                    />
+                    <span class="invisible"> {{ product[td.field] }}</span>
+                  </ng-template>
+                  <ng-template pTemplate="output">
+                    {{ product[td.field] }}
+                  </ng-template>
+                </p-cellEditor>
+              </ng-container>
+
+              <ng-container *ngSwitchCase="'number'">
+                <p-cellEditor>
+                  <ng-template pTemplate="input">
+                    <p-inputNumber
+                      [(ngModel)]="product[td.field]"
+                      mode="decimal"
+                      [inputStyle]="td.styles"
+                      [minFractionDigits]="0"
+                      [maxFractionDigits]="5"
+                      (focusout)="changeValue(product, td, product[td.field])"
+                      (ngModelChange)="
+                        commonService.autoCalculatePrices(product, td, $event)
+                      "
+                      (keydown)="
+                        keyHandler($event, product, td, product[td.field])
+                      "
+                    >
+                    </p-inputNumber>
+                  </ng-template>
+                  <ng-template pTemplate="output">
+                    {{
+                      +product[td.field] === 0
+                        ? "-"
+                        : (+product[td.field] | number)
+                    }}
+                  </ng-template>
+                </p-cellEditor>
+              </ng-container>
+
+              <ng-container *ngSwitchCase="'dropdown'">
+                <p-dropdown
+                  id="value"
+                  optionLabel="name"
+                  optionValue="value"
+                  [options]="td.filter.dropdownOptions ?? []"
+                  [showClear]="false"
+                  [ngModel]="product[td.field]"
+                  [readonly]="false"
+                  [ngStyle]="td.styles"
+                  (onChange)="changeValue(product, td, $event.value)"
+                ></p-dropdown>
+              </ng-container>
+
+              <ng-container *ngSwitchDefault>
+                <p-cellEditor>
+                  <ng-template pTemplate="input">
+                    <textarea
+                      pInputTextarea
+                      [ngStyle]="td.styles"
+                      [(ngModel)]="product[td.field]"
+                      (change)="changeValue(product, td, product[td.field])"
+                      (keydown)="
+                        keyHandler($event, product, td, product[td.field])
+                      "
+                    ></textarea>
+                  </ng-template>
+                  <ng-template pTemplate="output">
+                    {{ product[td.field] }}
+                  </ng-template>
+                </p-cellEditor>
+              </ng-container>
+            </ng-container>
+          </div>
+        </td>
+      </tr>
+    </ng-container>
+  </ng-template>
+</p-table>

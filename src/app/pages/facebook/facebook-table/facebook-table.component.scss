@@ -1,0 +1,41 @@
+:host ::ng-deep {
+  td:nth-child(n+2) {
+    background-color: #fff0d7;
+  }
+
+  .newly td:nth-child(n+2) {
+    background-color: #d7ffe6;
+  }
+
+  .preview-mode td:nth-child(n+2) {
+    pointer-events: none;
+    background-color: initial;
+
+    p-dropdown {
+      .p-dropdown.p-component {
+        border: none;
+      }
+
+      .p-dropdown-trigger {
+        display: none;
+      }
+    }
+  }
+}
+
+@media only screen and (min-width: 800px) {
+  :host ::ng-deep .p-datatable .p-datatable-thead>tr>th {
+    color: #ffffff;
+    background: #11101d;
+  }
+
+  :host ::ng-deep .p-datatable-wrapper {
+    height: calc(100vh - 130px);
+
+    .p-datatable-thead {
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+  }
+}

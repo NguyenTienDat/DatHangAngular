@@ -3,7 +3,7 @@ import { STATUS_DROPDOWN } from '../../../shared/models';
 import { FirebaseService } from '../../../shared/services/firebase.service';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { HeadersTable } from 'src/app/pages/facebook/custom-table/custom-table.component';
+import { HeadersTable } from 'src/app/pages/facebook/facebook-table/facebook-table.component';
 import { NO_IMG, encodeImageFileAsURL, renderLink } from 'src/app/shared/utils';
 import { FacebookProduct } from 'src/app/shared/models';
 import { ToastService } from 'src/app/shared/services/toast.service';

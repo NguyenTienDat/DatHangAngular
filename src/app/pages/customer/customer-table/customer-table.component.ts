@@ -48,9 +48,9 @@ export interface HeadersTable {
 }
 
 @Component({
-  selector: 'app-custom-table',
-  templateUrl: './custom-table.component.html',
-  styleUrls: ['./custom-table.component.scss'],
+  selector: 'customer-table',
+  templateUrl: './customer-table.component.html',
+  styleUrls: ['./customer-table.component.scss'],
 })
 export class CustomTableComponent implements OnInit, OnChanges {
   @Input() isEditMode = false;

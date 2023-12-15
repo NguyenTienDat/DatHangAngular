@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { HeadersTable } from './custom-table/custom-table.component';
+import { HeadersTable } from './facebook-table/facebook-table.component';
 import {
   CONTEXT_MENU_EVENT,
   FacebookProduct,
