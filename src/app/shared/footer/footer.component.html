@@ -1,42 +1,13 @@
 <div class="container my-auto">
   <div class="copyright text-center my-auto">
-    <span>Copyright &copy; TienDatPC 2023 </span>
-    <span>
-      <a target="_blank" href="https://www.facebook.com/groups/381897359755516"
-        >FB Group</a
-      ></span
-    >
-    <span
-      >-<a target="_blank" href="https://nguyentiendat.github.io/DatHangAngular"
-        >PAGE</a
-      ></span
-    >
-    <span
-      >-<a
-        target="_blank"
-        href="https://github.com/NguyenTienDat/DatHangAngular"
-        >GITHUB</a
-      ></span
-    >
-
-    <!-- <span
-      >-
-      <a target="_blank" href="https://demodb-4307.restdb.io/home/">BE</a></span
-    > -->
-    <span
-      >-
-      <a target="_blank" href="https://console.firebase.google.com/"
-        >FIREBASE</a
-      ></span
-    >
-    <span
-      >-
-      <a
-        target="_blank"
-        href="https://damiekids.000webhostapp.com/pages/admin-tmdt/admin-tmdt.html"
-        >ONLINE</a
-      ></span
-    >
-    <span>- <a target="_blank" href="#">v3.3</a></span>
+    <!-- <span>Copyright &copy; TienDatPC 2023 </span> -->
+    <ng-container *ngFor="let item of footerItems">
+      <span>
+        <a target="_blank" [href]="item.link" [title]="item.tooltip"
+          ><i [ngClass]="item.icon"></i></a
+        >-</span
+      >
+    </ng-container>
+    <span> <a target="_blank" href="#">v4.0</a></span>
   </div>
 </div>

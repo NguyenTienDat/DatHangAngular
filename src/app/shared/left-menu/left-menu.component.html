@@ -29,9 +29,7 @@
     <ng-container *ngFor="let item of leftMenu">
       <li [routerLink]="item.path" routerLinkActive="menu-active">
         <a href="javascript:void(0)">
-          <i>
-            <nb-icon [icon]="item.icon"> </nb-icon>
-          </i>
+          <i [ngClass]="item.icon"></i>
           <span class="links_name">{{ item.name }}</span>
         </a>
         <span class="tooltip">{{ item.tooltip }}</span>

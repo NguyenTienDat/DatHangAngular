@@ -18,6 +18,11 @@ const routes: Routes = [
       import('./pages/setting/setting.module').then((m) => m.SettingModule),
   },
   {
+    path: 'customer',
+    loadChildren: () =>
+      import('./pages/customer/customer.module').then((m) => m.CustomerModule),
+  },
+  {
     path: '',
     redirectTo: 'facebook',
     pathMatch: 'full',

@@ -19,19 +19,25 @@ export class LeftMenuComponent {
       name: 'Facebook',
       tooltip: 'Quản lý các đơn hàng bán trên Facebook',
       path: 'facebook',
-      icon: 'facebook-outline',
+      icon: 'pi pi-facebook',
     },
     {
       name: 'TMĐT',
       path: 'tmdt',
       tooltip: 'Quản lý các đơn hàng bán các sàn như Shopee, Lazada',
-      icon: 'shopping-cart-outline',
+      icon: 'pi pi-shopping-cart',
+    },
+    {
+      name: 'Customer',
+      path: 'customer',
+      tooltip: 'Quản lý khách hàng',
+      icon: 'pi pi-user-edit',
     },
     {
       name: 'Setting',
       path: 'setting',
       tooltip: 'Tùy biến cấu hình',
-      icon: 'settings-2-outline',
+      icon: 'pi pi-cog',
     },
   ];
 

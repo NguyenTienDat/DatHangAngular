@@ -4,7 +4,6 @@ import { LeftMenuComponent } from './left-menu/left-menu.component';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { NbIconModule } from '@nebular/theme';
 import { CustomTableComponent } from '../pages/facebook/custom-table/custom-table.component';
 import { TableModule } from 'primeng/table';
 import { DropdownModule } from 'primeng/dropdown';
@@ -51,13 +50,7 @@ const primengModules = [
 ];
 @NgModule({
   declarations: [...components],
-  imports: [
-    CommonModule,
-    FormsModule,
-    RouterModule,
-    NbIconModule,
-    ...primengModules,
-  ],
+  imports: [CommonModule, FormsModule, RouterModule, ...primengModules],
   providers: [MessageService, DialogService],
   exports: [...components, ...primengModules],
 })
