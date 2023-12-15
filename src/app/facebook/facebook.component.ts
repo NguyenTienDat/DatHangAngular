@@ -92,10 +92,9 @@ export class FacebookComponent implements OnInit, OnDestroy {
         },
       },
     });
-
-    this.ref.onClose.subscribe(() => {
-      this.getData();
-    });
+    // this.ref.onClose.subscribe(() => {
+    //   this.getData();
+    // });
   }
 
   contextMenuClick(event: {
@@ -146,9 +145,9 @@ export class FacebookComponent implements OnInit, OnDestroy {
       },
     });
 
-    this.ref.onClose.subscribe(() => {
-      this.getData();
-    });
+    // this.ref.onClose.subscribe(() => {
+    //   this.getData();
+    // });
   }
 
   private getTableHeader() {
@@ -373,7 +372,7 @@ export class FacebookComponent implements OnInit, OnDestroy {
           `Added new order ${output.customer} successfully!`
         );
         // this.ref.close();
-        // this.getData();
+        this.getData();
       });
   }
 

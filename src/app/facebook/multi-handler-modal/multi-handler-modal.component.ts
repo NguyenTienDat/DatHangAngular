@@ -47,6 +47,10 @@ export class MultiHandlerModalComponent implements OnInit {
       'exchange',
       'weight_price',
       'orderID',
+      'customer',
+      'price',
+      'price2',
+      'weight',
     ];
     willChangeCol.forEach((item) => {
       this.updateFields.set(item, false);
@@ -91,11 +95,36 @@ export class MultiHandlerModalComponent implements OnInit {
       this.toastServiceService.showToastWarning('Mã vận đơn đang trống');
       return;
     }
+    if (!this.output.customer && this.updateFields.get('customer')) {
+      this.toastServiceService.showToastWarning('Tên khách hàng đang trống');
+      return;
+    }
     if (
       (isNaN(this.output.CNY_price) || !this.output.CNY_price) &&
       this.updateFields.get('CNY_price')
     ) {
       this.toastServiceService.showToastWarning('Tệ đang bị bỏ trống');
+      return;
+    }
+    if (
+      (isNaN(this.output.price) || !this.output.price) &&
+      this.updateFields.get('price')
+    ) {
+      this.toastServiceService.showToastWarning('Giá nhập đang bị bỏ trống');
+      return;
+    }
+    if (
+      (isNaN(this.output.price2) || !this.output.price2) &&
+      this.updateFields.get('price2')
+    ) {
+      this.toastServiceService.showToastWarning('Giá bán đang bị bỏ trống');
+      return;
+    }
+    if (
+      (isNaN(this.output.weight) || !this.output.weight) &&
+      this.updateFields.get('weight')
+    ) {
+      this.toastServiceService.showToastWarning('Cân đang bị bỏ trống');
       return;
     }
     if (JSON.stringify(updateInfo) === '{}') {
