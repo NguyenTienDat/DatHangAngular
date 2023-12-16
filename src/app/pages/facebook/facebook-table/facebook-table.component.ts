@@ -19,7 +19,8 @@ import { ConfirmEventType, ConfirmationService, MenuItem } from 'primeng/api';
 import { CommonService } from '../../../shared/services/common.service';
 
 interface ConfigFilterTable {
-  noFilter?: boolean;
+  noFilter?: boolean; // on header
+  noFilterOnRow?: boolean;
   /** Model to show dropdown - Need config dropdownOptions */
   dropdownOptions?: any[];
   /** Cần để binding lưu trữ giá trị đang filter trên UI */

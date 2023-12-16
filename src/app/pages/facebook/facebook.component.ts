@@ -3,6 +3,7 @@ import { HeadersTable } from './facebook-table/facebook-table.component';
 import {
   CONTEXT_MENU_EVENT,
   FacebookProduct,
+  ICustomer,
   STATUS_DROPDOWN,
   STATUS_LIST,
 } from '../../shared/models';
@@ -42,6 +43,7 @@ export class FacebookComponent implements OnInit, OnDestroy {
   isEditMode = false;
   isLoading = true;
   $destroy = new Subject<void>();
+  customersList: ICustomer[] = [];
 
   constructor(
     private toastService: ToastService,
@@ -51,9 +53,13 @@ export class FacebookComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.getTableHeader();
     this.getActionsMenu();
     this.firebaseService.loadSetting(() => {
+      this.firebaseService.getCustomers().subscribe((ls) => {
+        this.customersList = ls;
+        this.getTableHeader();
+      });
+
       this.firebaseService.DROPDOWN_STATUS_SELECTED$.asObservable()
         .pipe(takeUntil(this.$destroy))
         .subscribe((status) => {
@@ -186,12 +192,16 @@ export class FacebookComponent implements OnInit, OnDestroy {
       {
         name: 'Khách hàng',
         field: 'customer',
-        type: 'link',
-        className: 'custom-link',
-        filter: {},
+        type: 'dropdown',
+        filter: {
+          dropdownOptions: this.customersList,
+          filterValue: [],
+          matchMode: 'in',
+        },
         styles: {
-          'min-width': '150px',
           width: '150px',
+          'min-width': '150px',
+          'text-align': 'center',
         },
       },
       {
@@ -213,6 +223,7 @@ export class FacebookComponent implements OnInit, OnDestroy {
           dropdownOptions: STATUS_LIST,
           filterValue: this.firebaseService.DROPDOWN_STATUS_SELECTED$.value,
           matchMode: 'in',
+          noFilterOnRow: true,
         },
         styles: {
           width: '150px',

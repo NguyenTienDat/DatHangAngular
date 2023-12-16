@@ -21,7 +21,14 @@ import {
   runTransaction,
   Transaction,
 } from '@angular/fire/firestore';
-import { Observable, from, BehaviorSubject, catchError, forkJoin } from 'rxjs';
+import {
+  Observable,
+  from,
+  BehaviorSubject,
+  catchError,
+  forkJoin,
+  tap,
+} from 'rxjs';
 import {
   ENVIRONMENT_LIST,
   FacebookProduct,
@@ -34,8 +41,8 @@ import {
   providedIn: 'root',
 })
 export class FirebaseService {
-  private PRODUCTS_COLLECTION = 'products';
-  private CUSTOMERS_COLLECTION = 'customers';
+  private PRODUCTS_COLLECTION = ENVIRONMENT_LIST[0].products;
+  private CUSTOMERS_COLLECTION = ENVIRONMENT_LIST[0].customers;
   private SETTING_COLLECTION = 'setting';
 
   private productsCol!: CollectionReference;
@@ -78,6 +85,11 @@ export class FirebaseService {
     'ebFogSAiYBRJAVe9vm09'
   );
 
+  /** Danh sách khách hàng get từ api */
+  CUSTOMER_LIST$: BehaviorSubject<ICustomer[]> = new BehaviorSubject(
+    [] as ICustomer[]
+  );
+
   constructor(private firestore: Firestore) {
     this.DATABASE_FIREBASE$.subscribe((index) => {
       this.PRODUCTS_COLLECTION = ENVIRONMENT_LIST[index].products;
@@ -94,7 +106,7 @@ export class FirebaseService {
     return this.getCustomDocs(this.productsCol);
   }
 
-  fbQueryProducts(status: STATUS_DROPDOWN[]): Observable<any> {
+  fbQueryProducts(status: STATUS_DROPDOWN[]): Observable<FacebookProduct[]> {
     const q = query(this.productsCol, where('status', 'in', status));
     return this.getCustomDocs(q).pipe(
       catchError((err, caught) => {
@@ -222,7 +234,6 @@ export class FirebaseService {
   // =====================================================================================================================
   // CUSTOMER ============================================================================================================
   // =====================================================================================================================
-
   getCustomers() {
     return this.getCustomDocs(this.customersCol);
   }
@@ -354,6 +365,7 @@ export class FirebaseService {
           return {
             ...doc.data(),
             _id: doc.id,
+            value: doc.id,
           };
         });
       })
