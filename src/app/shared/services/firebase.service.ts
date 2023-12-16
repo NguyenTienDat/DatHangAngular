@@ -22,16 +22,25 @@ import {
   Transaction,
 } from '@angular/fire/firestore';
 import { Observable, from, BehaviorSubject, catchError, forkJoin } from 'rxjs';
-import { ENVIRONMENT_LIST, FacebookProduct, STATUS_DROPDOWN } from '../models';
+import {
+  ENVIRONMENT_LIST,
+  FacebookProduct,
+  ICustomer,
+  STATUS_CUSTOMER_ENUM,
+  STATUS_DROPDOWN,
+} from '../models';
 
 @Injectable({
   providedIn: 'root',
 })
 export class FirebaseService {
   private PRODUCTS_COLLECTION = 'products';
+  private CUSTOMERS_COLLECTION = 'customers';
   private SETTING_COLLECTION = 'setting';
 
   private productsCol!: CollectionReference;
+  private customersCol!: CollectionReference;
+
   private settingCol: CollectionReference;
   /**
    * Tiền vận chuyển / 1kg hiện tại
@@ -72,7 +81,10 @@ export class FirebaseService {
   constructor(private firestore: Firestore) {
     this.DATABASE_FIREBASE$.subscribe((index) => {
       this.PRODUCTS_COLLECTION = ENVIRONMENT_LIST[index].products;
+      this.CUSTOMERS_COLLECTION = ENVIRONMENT_LIST[index].customers;
+
       this.productsCol = collection(this.firestore, this.PRODUCTS_COLLECTION);
+      this.customersCol = collection(this.firestore, this.CUSTOMERS_COLLECTION);
       console.log('Sử dụng DB', this.PRODUCTS_COLLECTION);
     });
     this.settingCol = collection(this.firestore, this.SETTING_COLLECTION);
@@ -207,6 +219,86 @@ export class FirebaseService {
     );
   }
 
+  // =====================================================================================================================
+  // CUSTOMER ============================================================================================================
+  // =====================================================================================================================
+
+  getCustomers() {
+    return this.getCustomDocs(this.customersCol);
+  }
+
+  addCustomer(docData: ICustomer): Observable<any> {
+    docData.created = Date.now();
+    docData.updated = Date.now();
+    return from(addDoc(this.customersCol, docData)).pipe(
+      catchError((err, caught) => {
+        this.handerErr(err);
+        return caught;
+      })
+    );
+  }
+
+  updateCustomer(docData: ICustomer, id: string) {
+    docData.updated = Date.now();
+    return from(
+      updateDoc(
+        doc(this.firestore, this.CUSTOMERS_COLLECTION, id),
+        docData as any
+      )
+    ).pipe(
+      catchError((err, caught) => {
+        this.handerErr(err);
+        return caught;
+      })
+    );
+  }
+
+  updateCustomers(docData: ICustomer, items: any[]) {
+    docData.updated = Date.now();
+    const arr: Observable<any>[] = [];
+    items.forEach((item) => {
+      const update = from(
+        runTransaction(this.firestore, (transaction: Transaction) => {
+          const document = doc(
+            this.firestore,
+            this.CUSTOMERS_COLLECTION,
+            item._id
+          );
+
+          return transaction.get(document).then((sfDoc) => {
+            if (!sfDoc.exists) {
+              throw 'Document does not exist!';
+            }
+            transaction.update(document, docData as any);
+          });
+        })
+      );
+      arr.push(update);
+    });
+
+    return forkJoin(arr).pipe(
+      catchError((err, caught) => {
+        this.handerErr(err);
+        return caught;
+      })
+    );
+  }
+
+  // Just update to status deleted
+  deleteCustomer(id: string) {
+    return this.updateCustomer(
+      { status: STATUS_CUSTOMER_ENUM.DELETED, updated: Date.now() },
+      id
+    );
+  }
+
+  deleteCustomers(items: any[]) {
+    return this.updateCustomers(
+      { status: STATUS_CUSTOMER_ENUM.DELETED, updated: Date.now() },
+      items
+    );
+  }
+
   //SETTING ===================================================
   loadSetting(bindingSetting?: any) {
     this.settingGet().subscribe((res) => {
@@ -253,6 +345,7 @@ export class FirebaseService {
       })
     );
   }
+
   // SUPPORT ========================================
   private getCustomDocs(q: Query<DocumentData>): Observable<any> {
     return from(

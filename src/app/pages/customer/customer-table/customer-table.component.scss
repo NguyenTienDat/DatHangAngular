@@ -1,6 +1,11 @@
 :host ::ng-deep {
+  td:nth-last-child(1) {
+    pointer-events: none;
+    cursor: not-allowed;
+  }
+
   td:nth-child(n+2) {
-    background-color: #fff0d7;
+    //background-color: #fff0d7;
   }
 
   .newly td:nth-child(n+2) {

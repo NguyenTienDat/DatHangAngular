@@ -1,0 +1,77 @@
+.wrap-modal ::ng-deep {
+  .table-preview {
+    max-width: 700px;
+  }
+
+  .wrap-input {
+    display: grid;
+    grid-template-columns: auto auto;
+    gap: 10px 60px;
+
+    .label {
+      width: 100px;
+    }
+
+    .value-input {
+      flex: 1;
+
+      .input-number,
+      .message,
+      input {
+        width: 100%;
+      }
+
+      .message {
+        white-space: pre-line;
+        font-size: 0.8rem;
+      }
+    }
+  }
+
+  .actions-wrap {
+    text-align: right;
+
+    button {
+      width: 120px;
+    }
+  }
+}
+
+@media (max-width: 700px) {
+  .wrap-modal ::ng-deep {
+    .table-preview {
+      display: none;
+    }
+
+    .wrap-input {
+      display: grid;
+      grid-template-columns: auto;
+      gap: 10px 60px;
+
+      .label {
+        width: 100px;
+      }
+
+      .value-input {
+        flex: 1;
+
+        .input-number,
+        textarea,
+        p-inputnumber,
+        p-inputnumber>span,
+        .message,
+        input {
+          width: 100%;
+        }
+      }
+    }
+
+    .actions-wrap {
+      text-align: right;
+
+      button {
+        width: 120px;
+      }
+    }
+  }
+}

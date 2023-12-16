@@ -1,11 +1,13 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule, Routes } from '@angular/router';
 import { CustomerComponent } from './customer.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { SharedModule } from 'src/app/shared/shared.module';
+import { RouterModule, Routes } from '@angular/router';
+import { SharedModule } from '../../shared/shared.module';
+import { AddModalComponent } from './add-modal/add-modal.component';
 import { DialogService } from 'primeng/dynamicdialog';
-import { CustomTableComponent } from './customer-table/customer-table.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MultiHandlerModalComponent } from './multi-handler-modal/multi-handler-modal.component';
+import { CustomerTableComponent } from './customer-table/customer-table.component';
 
 const routes: Routes = [
   {
@@ -15,7 +17,6 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [CustomerComponent, CustomTableComponent],
   imports: [
     CommonModule,
     RouterModule.forChild(routes),
@@ -23,6 +24,13 @@ const routes: Routes = [
     ReactiveFormsModule,
     FormsModule,
   ],
+  declarations: [
+    CustomerComponent,
+    AddModalComponent,
+    MultiHandlerModalComponent,
+    CustomerTableComponent,
+  ],
   providers: [DialogService],
+  exports: [],
 })
 export class CustomerModule {}

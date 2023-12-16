@@ -1,0 +1,58 @@
+<div class="wrap-modal">
+  <div class="wrap-input">
+    <ng-container *ngFor="let td of data">
+      <div
+        class="d-flex justify-content-between my-2"
+        *ngIf="td.field !== '_id'"
+      >
+        <div class="label">
+          {{ td.name }}
+        </div>
+        <div class="value-input">
+          <ng-container [ngSwitch]="td.type">
+            <ng-container *ngSwitchCase="'link'">
+              <textarea
+                cols="25"
+                pInputTextarea
+                [autoResize]="true"
+                [(ngModel)]="output[td.field]"
+                (ngModelChange)="changeValue(td, $event)"
+              ></textarea>
+            </ng-container>
+
+            <ng-container *ngSwitchCase="'string'">
+              <input
+                pInputText
+                [(ngModel)]="output[td.field]"
+                (ngModelChange)="changeValue(td, $event)"
+              />
+            </ng-container>
+
+            <ng-container *ngSwitchDefault>
+              <textarea
+                pInputTextarea
+                [(ngModel)]="output[td.field]"
+                (ngModelChange)="changeValue(td, $event)"
+              ></textarea>
+            </ng-container>
+          </ng-container>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+  <div class="d-flex aligin-items-center justify-content-end actions-wrap mt-4">
+    <p-button
+      label="Cancel"
+      styleClass="mx-2 p-button-outlined  p-button-secondary"
+      icon="pi pi-times"
+      (onClick)="close()"
+    ></p-button>
+
+    <p-button
+      label="Add"
+      styleClass="p-button-success"
+      icon="pi pi-plus"
+      (onClick)="submit()"
+    ></p-button>
+  </div>
+</div>

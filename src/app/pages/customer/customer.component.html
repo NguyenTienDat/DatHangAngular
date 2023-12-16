@@ -1,1 +1,17 @@
-<div class="container"></div>
+<customer-table
+  [headers]="headers"
+  [dataTable]="customersList"
+  [isEditMode]="isEditMode"
+  (valueChanged)="valueChanged($event)"
+  (contextMenuOutput)="contextMenuClick($event)"
+  (selectMultiItems)="selectedItems = $event"
+  [selectedItems]="selectedItems"
+  [isLoading]="isLoading"
+></customer-table>
+
+<div class="flat-button-add">
+  <p-speedDial
+    [model]="actionMenuItems"
+    [hideOnClickOutside]="false"
+  ></p-speedDial>
+</div>
