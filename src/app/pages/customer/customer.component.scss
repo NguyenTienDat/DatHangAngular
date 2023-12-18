@@ -1,24 +1,17 @@
-:host ::ng-deep {
-
-  .card {
-    margin-top: 20px;
+::ng-deep customer-table {
+  .image-col img {
+    width: 100px;
   }
+}
 
-  .item {
-    display: flex;
-    align-items: center;
-    margin: 15px;
+:host ::ng-deep {
+  .flat-button-add {
+    position: fixed;
+    bottom: 320px;
+    right: 80px;
 
-    .label {
-      width: 200px;
-    }
-
-    .value.number input {
-      text-align: right;
-    }
-
-    .value {
-      flex: 1;
+    .p-speeddial-action {
+      text-decoration: none;
     }
   }
 }

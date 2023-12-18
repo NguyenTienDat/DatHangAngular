@@ -2,32 +2,22 @@ export const STATUS_LIST = [
   {
     name: 'ĐÃ ĐẶT',
     value: STATUS_DROPDOWN.ORDERED,
-    checked: true,
-    class: 'tr-0',
   },
   {
     name: 'ĐÃ NHẬN',
     value: STATUS_DROPDOWN.RECEIVED,
-    checked: true,
-    class: 'tr-1',
   },
   {
     name: 'ĐÃ TRẢ',
     value: STATUS_DROPDOWN.DELIVERY,
-    checked: true,
-    class: 'tr-2',
   },
   {
     name: 'DONE',
     value: STATUS_DROPDOWN.DONE,
-    checked: false,
-    class: 'tr-done',
   },
   {
     name: 'DELETED',
     value: STATUS_DROPDOWN.DELETED,
-    checked: false,
-    class: 'tr-done',
   },
 ];
 
@@ -67,6 +57,7 @@ export interface EnvironmentDB {
   products: string;
   tmdt: string;
   index: number;
+  customers: string;
 }
 
 export const ENVIRONMENT_LIST: EnvironmentDB[] = [
@@ -75,11 +66,40 @@ export const ENVIRONMENT_LIST: EnvironmentDB[] = [
     products: 'products',
     tmdt: 'tmdt',
     index: 0,
+    customers: 'customers',
   },
   {
     name: 'Develop',
     products: 'products_dev',
     tmdt: 'tmdt_dev',
     index: 1,
+    customers: 'customers_dev',
+  },
+];
+
+export interface ICustomer {
+  name?: string;
+  phone?: string;
+  description?: string;
+  link?: string;
+  address?: string;
+  _id?: string;
+  status?: STATUS_CUSTOMER_ENUM;
+  updated?: number;
+  created?: number;
+}
+
+export const enum STATUS_CUSTOMER_ENUM {
+  ACTIVE = 0,
+  DELETED = 1,
+}
+export const STATUS_CUSTOMER_LIST = [
+  {
+    name: 'ACTIVE',
+    value: STATUS_CUSTOMER_ENUM.ACTIVE,
+  },
+  {
+    name: 'DELETED',
+    value: STATUS_DROPDOWN.DELETED,
   },
 ];

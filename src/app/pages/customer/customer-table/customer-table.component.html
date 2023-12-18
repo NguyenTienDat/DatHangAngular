@@ -1,10 +1,3 @@
-<input
-  class="d-none"
-  type="file"
-  accept="image/*"
-  #inputImg
-  (change)="changeImg(inputImg, $event)"
-/>
 <p-contextMenu #cm [model]="contextMenu"></p-contextMenu>
 
 <p-table
@@ -51,25 +44,6 @@
               [showAddButton]="false"
               [showClearButton]="false"
             >
-              <ng-template
-                *ngIf="td.type === 'dropdown'"
-                pTemplate="filter"
-                let-value
-                let-filter="filterCallback"
-              >
-                <p-multiSelect
-                  id="value"
-                  optionLabel="name"
-                  optionValue="value"
-                  [options]="td.filter.dropdownOptions ?? []"
-                  [showClear]="true"
-                  [filter]="false"
-                  [placeholder]="td.name"
-                  [(ngModel)]="td.filter.filterValue"
-                  (onChange)="filter($event.value)"
-                  (onChange)="dropdownChanged(td, $event.value)"
-                ></p-multiSelect>
-              </ng-template>
             </p-columnFilter>
           </div>
         </th>
@@ -102,15 +76,6 @@
             [pTooltip]="product['tooltip_' + td.field]"
           >
             <ng-container [ngSwitch]="td.type">
-              <ng-container *ngSwitchCase="'image'">
-                <img
-                  #image
-                  class="cursor-pointer"
-                  [src]="product[td.field] ?? IMG_DEFAULT"
-                  (click)="openSelectFile(product, td.field, inputImg, image)"
-                />
-              </ng-container>
-
               <ng-container *ngSwitchCase="'link'">
                 <p-cellEditor>
                   <ng-template pTemplate="input">
@@ -149,49 +114,6 @@
                     {{ product[td.field] }}
                   </ng-template>
                 </p-cellEditor>
-              </ng-container>
-
-              <ng-container *ngSwitchCase="'number'">
-                <p-cellEditor>
-                  <ng-template pTemplate="input">
-                    <p-inputNumber
-                      [(ngModel)]="product[td.field]"
-                      mode="decimal"
-                      [inputStyle]="td.styles"
-                      [minFractionDigits]="0"
-                      [maxFractionDigits]="5"
-                      (focusout)="changeValue(product, td, product[td.field])"
-                      (ngModelChange)="
-                        commonService.autoCalculatePrices(product, td, $event)
-                      "
-                      (keydown)="
-                        keyHandler($event, product, td, product[td.field])
-                      "
-                    >
-                    </p-inputNumber>
-                  </ng-template>
-                  <ng-template pTemplate="output">
-                    {{
-                      +product[td.field] === 0
-                        ? "-"
-                        : (+product[td.field] | number)
-                    }}
-                  </ng-template>
-                </p-cellEditor>
-              </ng-container>
-
-              <ng-container *ngSwitchCase="'dropdown'">
-                <p-dropdown
-                  id="value"
-                  optionLabel="name"
-                  optionValue="value"
-                  [options]="td.filter.dropdownOptions ?? []"
-                  [showClear]="false"
-                  [ngModel]="product[td.field]"
-                  [readonly]="false"
-                  [ngStyle]="td.styles"
-                  (onChange)="changeValue(product, td, $event.value)"
-                ></p-dropdown>
               </ng-container>
 
               <ng-container *ngSwitchDefault>

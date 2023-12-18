@@ -1,22 +1,10 @@
 import { FirebaseService } from '../../../shared/services/firebase.service';
 import { ToastService } from 'src/app/shared/services/toast.service';
-import {
-  Component,
-  Input,
-  OnInit,
-  Output,
-  EventEmitter,
-  OnChanges,
-  SimpleChanges,
-} from '@angular/core';
-import {
-  NO_IMG,
-  encodeImageFileAsURL,
-  renderLink,
-} from '../../../shared/utils';
-import { CONTEXT_MENU_EVENT, FacebookProduct } from '../../../shared/models';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
+import { CONTEXT_MENU_EVENT, ICustomer } from '../../../shared/models';
 import { ConfirmEventType, ConfirmationService, MenuItem } from 'primeng/api';
 import { CommonService } from '../../../shared/services/common.service';
+import { renderLink } from 'src/app/shared/utils';
 
 interface ConfigFilterTable {
   noFilter?: boolean;
@@ -39,7 +27,7 @@ interface ConfigFilterTable {
 export interface HeadersTable {
   name: string;
   field: string;
-  type: 'string' | 'image' | 'number' | 'link' | 'dropdown';
+  type: 'string' | 'link' | 'area';
   className?: string;
   headerClassName?: string;
   filter: ConfigFilterTable;
@@ -52,24 +40,22 @@ export interface HeadersTable {
   templateUrl: './customer-table.component.html',
   styleUrls: ['./customer-table.component.scss'],
 })
-export class CustomTableComponent implements OnInit, OnChanges {
+export class CustomerTableComponent implements OnInit {
   @Input() isEditMode = false;
-  @Input() dataTable: FacebookProduct[] = [];
+  @Input() dataTable: ICustomer[] = [];
   @Input() headers!: HeadersTable[];
   @Output() valueChanged = new EventEmitter();
-  @Output() selectMultiItems = new EventEmitter<FacebookProduct[]>();
+  @Output() selectMultiItems = new EventEmitter<ICustomer[]>();
   @Output() contextMenuOutput = new EventEmitter<{
     type: CONTEXT_MENU_EVENT;
     value: any;
   }>();
 
-  @Input() selectedItems: FacebookProduct[] = [];
+  @Input() selectedItems: ICustomer[] = [];
   @Input() isLoading!: boolean;
-  selectedProduct!: FacebookProduct;
+  selectedProduct!: ICustomer;
   contextMenu!: MenuItem[];
   renderLink = renderLink;
-  IMG_DEFAULT = NO_IMG;
-  currentTime = Date.now();
 
   constructor(
     private toastService: ToastService,
@@ -93,10 +79,6 @@ export class CustomTableComponent implements OnInit, OnChanges {
     ];
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    this.currentTime = Date.now();
-  }
-
   cloneACopy() {
     console.log('Copy a row', this.selectedItems);
     this.contextMenuOutput.emit({
@@ -108,7 +90,7 @@ export class CustomTableComponent implements OnInit, OnChanges {
 
   confirmDelete() {
     this.confirmationService.confirm({
-      message: `Do you want to delete this record: ${this.selectedProduct.customer}?`,
+      message: `Do you want to delete this record: ${this.selectedProduct.name}?`,
       header: 'Delete Confirmation',
       icon: 'pi pi-info-circle',
       rejectButtonStyleClass: 'bg-danger',
@@ -129,38 +111,12 @@ export class CustomTableComponent implements OnInit, OnChanges {
     });
   }
 
-  openSelectFile(item: any, field: string, inputImg: any, image: any) {
-    inputImg.data = {
-      item,
-      field,
-      image,
-    };
-    inputImg.click();
-  }
-
-  changeValue(item: FacebookProduct, header: HeadersTable, value: any) {
+  changeValue(item: ICustomer, header: HeadersTable, value: any) {
     console.log({ item }, header, value);
     this.valueChanged.emit({ item, header, value });
   }
 
-  changeImg(fileElement: any, event: any) {
-    console.log({ fileElement }, event);
-    encodeImageFileAsURL(fileElement, (src: any) => {
-      fileElement.data.image.src = src;
-      this.valueChanged.emit({
-        item: fileElement.data.item,
-        header: { field: fileElement.data.field },
-        value: src,
-      });
-    });
-  }
-
-  keyHandler(
-    event: any,
-    item: FacebookProduct,
-    header: HeadersTable,
-    value: any
-  ) {
+  keyHandler(event: any, item: ICustomer, header: HeadersTable, value: any) {
     // console.log('keyHandler', item, event);
     if (event.key === 'Enter' || event.keyCode === 13) {
       console.log('Enter', item);
@@ -170,13 +126,6 @@ export class CustomTableComponent implements OnInit, OnChanges {
 
   openMultiHandlerModal() {
     this.selectMultiItems.emit(this.selectedItems);
-  }
-
-  dropdownChanged(td: HeadersTable, e: any) {
-    console.log({ td, e });
-    if (td.field === 'status') {
-      this.firebaseService.DROPDOWN_STATUS_SELECTED$.next(e);
-    }
   }
 
   checkNewlyUpdate(updated: number) {
