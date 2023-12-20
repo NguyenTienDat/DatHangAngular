@@ -1,2 +1,7 @@
-<p>tmdt works!</p>
-cd
+<tmdt-table
+  [headers]="headers"
+  [dataTable]="orders"
+  (valueChanged)="valueChanged($event)"
+  (contextMenuOutput)="contextMenuClick($event)"
+  [isLoading]="isLoading"
+></tmdt-table>

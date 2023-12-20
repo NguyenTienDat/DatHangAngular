@@ -4,7 +4,6 @@ import { Component } from '@angular/core';
 interface LeftMenu {
   name: string;
   path?: string;
-  link?: string;
   icon: string;
   tooltip: string;
 }
@@ -24,8 +23,7 @@ export class LeftMenuComponent {
     },
     {
       name: 'TMĐT',
-      // path: 'tmdt',
-      link: 'https://damiekids.000webhostapp.com/pages/admin-tmdt/admin-tmdt.html',
+      path: 'tmdt',
       tooltip: 'Quản lý các đơn hàng bán các sàn như Shopee, Lazada',
       icon: 'pi pi-shopping-cart',
     },

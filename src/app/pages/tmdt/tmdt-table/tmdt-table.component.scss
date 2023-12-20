@@ -1,0 +1,23 @@
+:host ::ng-deep {
+
+  .newly td:nth-child(n+2) {
+    background-color: #d7ffe6;
+  }
+}
+
+@media only screen and (min-width: 800px) {
+  :host ::ng-deep .p-datatable .p-datatable-thead>tr>th {
+    color: #ffffff;
+    background: #11101d;
+  }
+
+  :host ::ng-deep .p-datatable-wrapper {
+    height: calc(100vh - 60px);
+
+    .p-datatable-thead {
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+  }
+}

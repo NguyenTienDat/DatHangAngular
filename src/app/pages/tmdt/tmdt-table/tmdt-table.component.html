@@ -1,0 +1,148 @@
+<input
+  class="d-none"
+  type="file"
+  accept="image/*"
+  #inputImg
+  (change)="changeImg(inputImg, $event)"
+/>
+<p-contextMenu #cm [model]="contextMenu"></p-contextMenu>
+
+<p-table
+  [value]="dataTable"
+  responsiveLayout="stack"
+  [breakpoint]="'960px'"
+  [rows]="25"
+  [rowsPerPageOptions]="[10, 25, 50, 100, 500, 1000]"
+  [paginator]="false"
+  [showCurrentPageReport]="true"
+  class="w-full"
+  [(contextMenuSelection)]="selectedItem"
+  [contextMenu]="cm"
+  dataKey="_id"
+  [rowHover]="false"
+  [tableStyle]="{ flex: 1, width: '100%' }"
+  [loading]="isLoading"
+  currentPageReportTemplate="{first} - {last} / {totalRecords}"
+>
+  <ng-template pTemplate="header">
+    <tr>
+      <ng-container *ngFor="let td of headers">
+        <th
+          class="table-header"
+          [ngClass]="td.headerClassName"
+          [ngStyle]="td.styles"
+          pSortableColumn="{{ td.field }}"
+        >
+          <div class="flex align-items-center">
+            {{ td.name }}
+          </div>
+        </th>
+      </ng-container>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-product>
+    <ng-container>
+      <tr
+        [ngClass]="{
+          newly: checkNewlyUpdate(product.created)
+        }"
+        [pContextMenuRow]="product"
+      >
+        <td
+          *ngFor="let td of headers"
+          [ngClass]="td.className"
+          [attr.rowspan]="product['_rowspan_' + td.field]"
+          [ngStyle]="{
+            display: product['_hide_' + td.field] ? 'none' : 'table-cell'
+          }"
+        >
+          <span class="p-column-title">{{ td.name }}</span>
+          <div
+            class="table-cell"
+            [ngStyle]="td.styles"
+            [pTooltip]="product['tooltip_' + td.field]"
+          >
+            <ng-container [ngSwitch]="td.type">
+              <ng-container *ngSwitchCase="'image'">
+                <img
+                  #image
+                  class="cursor-pointer"
+                  [src]="product[td.field] ?? IMG_DEFAULT"
+                  (click)="openSelectFile(product, td.field, inputImg, image)"
+                />
+              </ng-container>
+
+              <ng-container *ngSwitchCase="'string'">
+                <p-cellEditor>
+                  <ng-template pTemplate="input">
+                    <input
+                      pInputText
+                      [ngStyle]="td.styles"
+                      [(ngModel)]="product[td.field]"
+                      (change)="changeValue(product, td, product[td.field])"
+                      (keydown)="
+                        keyHandler($event, product, td, product[td.field])
+                      "
+                    />
+                    <span class="invisible"> {{ product[td.field] }}</span>
+                  </ng-template>
+                  <ng-template pTemplate="output">
+                    {{ product[td.field] }}
+                  </ng-template>
+                </p-cellEditor>
+              </ng-container>
+
+              <ng-container *ngSwitchCase="'number'">
+                <p-cellEditor>
+                  <ng-template pTemplate="input">
+                    <p-inputNumber
+                      [(ngModel)]="product[td.field]"
+                      mode="decimal"
+                      [inputStyle]="td.styles"
+                      [minFractionDigits]="0"
+                      [maxFractionDigits]="5"
+                      (focusout)="changeValue(product, td, product[td.field])"
+                      (ngModelChange)="
+                        commonService.autoCalculatePrices(product, td, $event)
+                      "
+                      (keydown)="
+                        keyHandler($event, product, td, product[td.field])
+                      "
+                    >
+                    </p-inputNumber>
+                  </ng-template>
+                  <ng-template pTemplate="output">
+                    {{
+                      +product[td.field] === 0
+                        ? "-"
+                        : (+product[td.field] | number)
+                    }}
+                  </ng-template>
+                </p-cellEditor>
+              </ng-container>
+
+              <ng-container *ngSwitchDefault>
+                <p-cellEditor>
+                  <ng-template pTemplate="input">
+                    <textarea
+                      pInputTextarea
+                      [ngStyle]="td.styles"
+                      [(ngModel)]="product[td.field]"
+                      (change)="changeValue(product, td, product[td.field])"
+                      (keydown)="
+                        keyHandler($event, product, td, product[td.field])
+                      "
+                    ></textarea>
+                  </ng-template>
+                  <ng-template pTemplate="output">
+                    {{ product[td.field] }}
+                  </ng-template>
+                </p-cellEditor>
+              </ng-container>
+            </ng-container>
+          </div>
+        </td>
+      </tr>
+    </ng-container>
+  </ng-template>
+</p-table>

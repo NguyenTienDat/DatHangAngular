@@ -103,3 +103,81 @@ export const STATUS_CUSTOMER_LIST = [
     value: STATUS_DROPDOWN.DELETED,
   },
 ];
+
+export interface ITmdtDetail {
+  description?: string;
+  orderID?: string;
+  price?: number;
+  quantity?: number;
+  seller?: string;
+}
+export interface ITmdt {
+  imageLink?: string;
+  price?: number;
+  prop_color?: string;
+  prop_size?: string;
+  quantity?: number;
+  sku?: string;
+  _id?: string;
+  updated?: number;
+  created?: number;
+  details?: ITmdtDetail[];
+  updatedDetails?: number;
+  // UI fields
+  _rowspan?: number;
+}
+
+export const LIST_KENH = [
+  { name: 'SHOPEE', image: 'https://img.icons8.com/fluency/50/shopee.png' },
+  {
+    name: 'LAZADA',
+    image:
+      'https://i.pinimg.com/564x/32/94/98/329498a465defb414b7860fc4e86310c.jpg',
+  },
+  {
+    name: 'FACEBOOK',
+    image:
+      'https://upload.wikimedia.org/wikipedia/commons/1/1b/Facebook_icon.svg',
+  },
+];
+
+export function PROPS(): any[] {
+  return [
+    {
+      id: 'prop_color',
+      name: 'MÀU',
+      list: ['NONE', 'ĐEN', 'NÂU', 'BE', 'TRẮNG'],
+      order: 1,
+    },
+    {
+      id: 'prop_size',
+      name: 'SIZE',
+      list: [
+        'NONE',
+        66,
+        73,
+        80,
+        90,
+        100,
+        110,
+        120,
+        130,
+        140,
+        150,
+        1,
+        3,
+        5,
+        7,
+        9,
+        11,
+        13,
+        15,
+        17,
+        19,
+      ],
+      order: 2,
+    },
+  ].sort(function (a, b) {
+    return (a.order || 0) < (b.order || 0) ? -1 : 1;
+  });
+}

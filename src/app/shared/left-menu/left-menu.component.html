@@ -38,13 +38,6 @@
         </a>
         <span class="tooltip">{{ item.tooltip }}</span>
       </li>
-      <li *ngIf="item.link">
-        <a target="_blank" [href]="item.link">
-          <i [ngClass]="item.icon"></i>
-          <span class="links_name">{{ item.name }}</span>
-        </a>
-        <span class="tooltip">{{ item.tooltip }}</span>
-      </li>
     </ng-container>
     <li class="profile cursor-pointer" (click)="showMenu(false)">
       <div class="profile-details">
