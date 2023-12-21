@@ -28,6 +28,7 @@ import {
   catchError,
   forkJoin,
   tap,
+  map,
 } from 'rxjs';
 import {
   ENVIRONMENT_LIST,
@@ -37,6 +38,7 @@ import {
   STATUS_CUSTOMER_ENUM,
   STATUS_DROPDOWN,
 } from '../models';
+import { xoa_dauTV } from '../utils';
 
 @Injectable({
   providedIn: 'root',
@@ -257,12 +259,18 @@ export class FirebaseService {
   // =====================================================================================================================
   // CUSTOMER ============================================================================================================
   // =====================================================================================================================
-  getCustomers() {
+  getCustomers(): Observable<ICustomer[]> {
     const q = query(
       this.customersCol,
       where('status', '!=', STATUS_CUSTOMER_ENUM.DELETED)
     );
-    return this.getCustomDocs(q);
+    return this.getCustomDocs(q).pipe(
+      map((items: ICustomer[]) =>
+        items.sort((a: ICustomer, b: ICustomer) =>
+          xoa_dauTV(a.name ?? '') > xoa_dauTV(b.name ?? '') ? 1 : -1
+        )
+      )
+    );
   }
 
   addCustomer(docData: ICustomer): Observable<any> {

@@ -14,7 +14,6 @@ import { ToastService } from '../../shared/services/toast.service';
 import { MultiHandlerModalComponent } from './multi-handler-modal/multi-handler-modal.component';
 import { ConfirmationService, MenuItem } from 'primeng/api';
 import { finalize, Subject, takeUntil } from 'rxjs';
-import { xoa_dauTV } from 'src/app/shared/utils';
 
 @Component({
   selector: 'app-facebook',
@@ -57,9 +56,7 @@ export class FacebookComponent implements OnInit, OnDestroy {
     this.getActionsMenu();
     this.firebaseService.loadSetting(() => {
       this.firebaseService.getCustomers().subscribe((ls) => {
-        this.customersList = ls.sort((a: ICustomer, b: ICustomer) =>
-          xoa_dauTV(a.name ?? '') > xoa_dauTV(b.name ?? '') ? 1 : -1
-        );
+        this.customersList = ls;
         this.getTableHeader();
       });
 
