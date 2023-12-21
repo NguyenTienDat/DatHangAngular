@@ -1,5 +1,9 @@
 export const STATUS_LIST = [
   {
+    name: 'CHƯA ĐẶT',
+    value: STATUS_DROPDOWN.NOT_ORDER_YET,
+  },
+  {
     name: 'ĐÃ ĐẶT',
     value: STATUS_DROPDOWN.ORDERED,
   },
@@ -27,6 +31,7 @@ export const enum STATUS_DROPDOWN {
   DELIVERY = 2,
   DONE = 3,
   DELETED = 4,
+  NOT_ORDER_YET = 5,
 }
 export interface FacebookProduct {
   CNY_price?: number;
