@@ -18,24 +18,24 @@ export class LeftMenuComponent {
     {
       name: 'Facebook',
       tooltip: 'Quản lý các đơn hàng bán trên Facebook',
-      path: 'facebook',
+      path: 'pages/facebook',
       icon: 'pi pi-facebook',
     },
     {
       name: 'TMĐT',
-      path: 'tmdt',
+      path: 'pages/tmdt',
       tooltip: 'Quản lý các đơn hàng bán các sàn như Shopee, Lazada',
       icon: 'pi pi-shopping-cart',
     },
     {
       name: 'Customer',
-      path: 'customer',
+      path: 'pages/customer',
       tooltip: 'Quản lý khách hàng',
       icon: 'pi pi-user-edit',
     },
     {
       name: 'Setting',
-      path: 'setting',
+      path: 'pages/setting',
       tooltip: 'Tùy biến cấu hình',
       icon: 'pi pi-cog',
     },

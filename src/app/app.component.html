@@ -1,23 +1,29 @@
-<nb-layout>
-  <nb-layout-column class="p-0">
-    <div
-      class="container-wrap d-flex"
-      [ngClass]="{
-        'menu-open': (firebaseService.IS_OPEN_MENU$ | async),
-        'hidden-menu': !(firebaseService.IS_SHOW_MENU$ | async)
-      }"
-    >
-      <div>
-        <app-left-menu></app-left-menu>
+<ng-container *ngIf="isLoginPage; else pageTemplate">
+  <router-outlet></router-outlet>
+</ng-container>
+
+<ng-template #pageTemplate>
+  <nb-layout>
+    <nb-layout-column class="p-0">
+      <div
+        class="container-wrap d-flex"
+        [ngClass]="{
+          'menu-open': (firebaseService.IS_OPEN_MENU$ | async),
+          'hidden-menu': !(firebaseService.IS_SHOW_MENU$ | async)
+        }"
+      >
+        <div>
+          <app-left-menu></app-left-menu>
+        </div>
+        <div class="content-outlet">
+          <router-outlet></router-outlet>
+        </div>
       </div>
-      <div class="content-outlet">
-        <router-outlet></router-outlet>
-      </div>
-    </div>
-  </nb-layout-column>
-  <nb-layout-footer fixed class="d-none d-md-block boder-0"
-    ><app-footer></app-footer>
-  </nb-layout-footer>
-</nb-layout>
+    </nb-layout-column>
+    <nb-layout-footer fixed class="d-none d-md-block boder-0"
+      ><app-footer></app-footer>
+    </nb-layout-footer>
+  </nb-layout>
+</ng-template>
 <p-toast></p-toast>
 <p-confirmDialog [style]="{ width: '50vw' }"></p-confirmDialog>

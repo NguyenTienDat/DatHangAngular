@@ -1,0 +1,67 @@
+<div class="limiter">
+  <div
+    class="container-login100"
+    style="background-image: url('assets/images/bg-login.jpg')"
+  >
+    <div class="wrap-login100 p-4">
+      <form
+        class="login100-form validate-form"
+        [formGroup]="loginForm"
+        (submit)="login()"
+      >
+        <span class="login100-form-title pb-4"> Login </span>
+
+        <div
+          class="wrap-input100 validate-input mb-2"
+          data-validate="Username is required"
+        >
+          <span class="label-input100">Username</span>
+          <input
+            id="username"
+            class="input100"
+            type="text"
+            name="username"
+            formControlName="username"
+            placeholder="Type your username"
+          />
+
+          <i class="focus-input100 pi pi-user"></i>
+        </div>
+
+        <div
+          class="wrap-input100 validate-input"
+          data-validate="Password is required"
+        >
+          <span class="label-input100">Password</span>
+          <input
+            id="password"
+            class="input100"
+            type="password"
+            formControlName="password"
+            name="pass"
+            placeholder="Type your password"
+          />
+          <i class="focus-input100 pi pi-lock"></i>
+        </div>
+
+        <!-- <div class="text-right py-4">
+          <a href="#"> Forgot password? </a>
+        </div> -->
+
+        <div class="container-login100-form-btn pt-4">
+          <div class="wrap-login100-form-btn">
+            <div class="login100-form-bgbtn"></div>
+            <button
+              class="login100-form-btn"
+              [disabled]="loginForm.invalid"
+              (click)="login()"
+            >
+              Login
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<div id="dropDownSelect1"></div>

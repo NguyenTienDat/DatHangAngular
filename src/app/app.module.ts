@@ -4,14 +4,13 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NbThemeModule, NbLayoutModule } from '@nebular/theme';
-import { SharedModule } from './shared/shared.module';
-import { FacebookModule } from './pages/facebook/facebook.module';
+import { NbLayoutModule, NbThemeModule } from '@nebular/theme';
 import { HttpClientModule } from '@angular/common/http';
 import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { ConfirmationService } from 'primeng/api';
 import { DecimalPipe } from '@angular/common';
+import { SharedModule } from './shared/shared.module';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyAmWtEdw-4PjzdDXkYFKEyxz1S2L38vZ1o',
@@ -41,7 +40,6 @@ const firebaseConfig = {
     NbThemeModule.forRoot({ name: 'default' }),
     NbLayoutModule,
     SharedModule,
-    FacebookModule,
     HttpClientModule,
     // https://github.com/angular/angularfire/blob/master/docs/version-7-upgrade.md
     provideFirebaseApp(() => initializeApp(firebaseConfig)),
