@@ -1,23 +1,24 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { getAuth, EmailAuthProvider } from 'firebase/auth';
+import * as firebaseui from 'firebaseui';
 
 @Component({
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
 })
-export class LoginComponent implements OnInit {
-  loginForm!: FormGroup;
-
-  constructor(private formBuilder: FormBuilder) {}
+export class LoginComponent implements OnInit, AfterViewInit {
+  ui!: firebaseui.auth.AuthUI;
+  constructor() {}
 
   ngOnInit() {
-    this.loginForm = this.formBuilder.group({
-      username: [null, Validators.required],
-      password: [null, Validators.required],
-    });
+    this.ui = new firebaseui.auth.AuthUI(getAuth());
   }
 
-  login() {
-    console.log('login');
+  ngAfterViewInit(): void {
+    this.ui.start('#firebaseui-auth-container', {
+      signInOptions: [EmailAuthProvider.PROVIDER_ID],
+      // Other config options...
+      signInSuccessUrl: '/pages',
+    });
   }
 }
