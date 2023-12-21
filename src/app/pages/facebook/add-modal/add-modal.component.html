@@ -46,6 +46,7 @@
 
             <ng-container *ngSwitchCase="'dropdown'">
               <p-dropdown
+                [filter]="!td.filter.noFilterOnRow"
                 id="value"
                 optionLabel="name"
                 optionValue="value"

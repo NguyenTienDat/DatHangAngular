@@ -14,6 +14,7 @@ import { ToastService } from '../../shared/services/toast.service';
 import { MultiHandlerModalComponent } from './multi-handler-modal/multi-handler-modal.component';
 import { ConfirmationService, MenuItem } from 'primeng/api';
 import { finalize, Subject, takeUntil } from 'rxjs';
+import { xoa_dauTV } from 'src/app/shared/utils';
 
 @Component({
   selector: 'app-facebook',
@@ -56,7 +57,9 @@ export class FacebookComponent implements OnInit, OnDestroy {
     this.getActionsMenu();
     this.firebaseService.loadSetting(() => {
       this.firebaseService.getCustomers().subscribe((ls) => {
-        this.customersList = ls;
+        this.customersList = ls.sort((a: ICustomer, b: ICustomer) =>
+          xoa_dauTV(a.name ?? '') > xoa_dauTV(b.name ?? '') ? 1 : -1
+        );
         this.getTableHeader();
       });
 
@@ -199,9 +202,7 @@ export class FacebookComponent implements OnInit, OnDestroy {
           matchMode: 'in',
         },
         styles: {
-          width: '150px',
-          'min-width': '150px',
-          'text-align': 'center',
+          wordBreak: 'break-all',
         },
       },
       {
@@ -232,13 +233,12 @@ export class FacebookComponent implements OnInit, OnDestroy {
         },
       },
       {
-        name: 'Mã vận đơn',
+        name: 'MVĐ',
         field: 'orderID',
         type: 'string',
         filter: {},
         styles: {
-          width: '160px',
-          'min-width': '160px',
+          'min-width': '50px',
         },
       },
       {
