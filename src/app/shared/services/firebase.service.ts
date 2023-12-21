@@ -258,7 +258,11 @@ export class FirebaseService {
   // CUSTOMER ============================================================================================================
   // =====================================================================================================================
   getCustomers() {
-    return this.getCustomDocs(this.customersCol);
+    const q = query(
+      this.customersCol,
+      where('status', '!=', STATUS_CUSTOMER_ENUM.DELETED)
+    );
+    return this.getCustomDocs(q);
   }
 
   addCustomer(docData: ICustomer): Observable<any> {
