@@ -1,24 +1,16 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
-import { getAuth, EmailAuthProvider } from 'firebase/auth';
-import * as firebaseui from 'firebaseui';
+import { AuthService } from '../shared/services/auth.service';
 
 @Component({
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent implements OnInit, AfterViewInit {
-  ui!: firebaseui.auth.AuthUI;
-  constructor() {}
+  constructor(private authService: AuthService) {}
 
-  ngOnInit() {
-    this.ui = new firebaseui.auth.AuthUI(getAuth());
-  }
+  ngOnInit() {}
 
   ngAfterViewInit(): void {
-    this.ui.start('#firebaseui-auth-container', {
-      signInOptions: [EmailAuthProvider.PROVIDER_ID],
-      // Other config options...
-      signInSuccessUrl: '/pages',
-    });
+    this.authService.showLogin();
   }
 }

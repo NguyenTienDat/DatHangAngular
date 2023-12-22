@@ -39,18 +39,26 @@
         <span class="tooltip">{{ item.tooltip }}</span>
       </li>
     </ng-container>
-    <li class="profile cursor-pointer" (click)="showMenu(false)">
+    <li class="profile">
       <div class="profile-details">
         <img
           src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/User_icon_2.svg/768px-User_icon_2.svg.png"
           alt="profileImg"
         />
         <div class="name_job">
-          <div class="name">Diem My</div>
-          <div class="job">Web designer</div>
+          <div class="name">
+            {{ authService.CURRENT_USER.value?.displayName }}
+          </div>
+          <div class="job text-danger cursor-pointer" (click)="logout()">
+            Logout
+          </div>
         </div>
       </div>
-      <i class="pi pi-chevron-left" id="log_out"></i>
+      <i
+        class="pi pi-chevron-left cursor-pointer"
+        id="log_out"
+        (click)="showMenu(false)"
+      ></i>
     </li>
   </ul>
 </div>

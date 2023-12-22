@@ -1,3 +1,4 @@
+import { AuthService } from './shared/services/auth.service';
 import { NavigationEnd, Router } from '@angular/router';
 import { FirebaseService } from './shared/services/firebase.service';
 import { Component } from '@angular/core';
@@ -10,7 +11,11 @@ import { filter } from 'rxjs';
 export class AppComponent {
   isLoginPage = true;
 
-  constructor(public firebaseService: FirebaseService, private router: Router) {
+  constructor(
+    public firebaseService: FirebaseService,
+    private router: Router,
+    private authService: AuthService
+  ) {
     this.firebaseService.loadSetting();
 
     router.events
@@ -18,5 +23,7 @@ export class AppComponent {
       .subscribe((res: any) => {
         this.isLoginPage = res.urlAfterRedirects === '/login';
       });
+
+    this.authService.getUser();
   }
 }

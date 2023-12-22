@@ -1,3 +1,4 @@
+import { AuthService } from './../services/auth.service';
 import { FirebaseService } from './../services/firebase.service';
 import { Component } from '@angular/core';
 
@@ -41,7 +42,10 @@ export class LeftMenuComponent {
     },
   ];
 
-  constructor(public firebaseService: FirebaseService) {}
+  constructor(
+    public firebaseService: FirebaseService,
+    public authService: AuthService
+  ) {}
 
   close() {
     this.firebaseService.IS_OPEN_MENU$.next(false);
@@ -55,5 +59,9 @@ export class LeftMenuComponent {
 
   showMenu(isShowMenu: boolean) {
     this.firebaseService.IS_SHOW_MENU$.next(isShowMenu);
+  }
+
+  logout() {
+    this.authService.logout();
   }
 }

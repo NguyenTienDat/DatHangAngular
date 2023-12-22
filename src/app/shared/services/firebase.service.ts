@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { Injectable } from '@angular/core';
 import {
   Firestore,
@@ -29,6 +30,7 @@ import {
   forkJoin,
   tap,
   map,
+  throwError,
 } from 'rxjs';
 import {
   ENVIRONMENT_LIST,
@@ -95,7 +97,7 @@ export class FirebaseService {
     [] as ICustomer[]
   );
 
-  constructor(private firestore: Firestore) {
+  constructor(private firestore: Firestore, private router: Router) {
     this.DATABASE_FIREBASE$.subscribe((index) => {
       this.PRODUCTS_COLLECTION = ENVIRONMENT_LIST[index].products;
       this.CUSTOMERS_COLLECTION = ENVIRONMENT_LIST[index].customers;
@@ -404,11 +406,17 @@ export class FirebaseService {
           };
         });
       })
+    ).pipe(
+      catchError((e) => {
+        this.handerErr(e);
+        return throwError(e);
+      })
     );
   }
 
   private handerErr(err: any) {
     console.log({ err });
-    alert('Err' + err.toString());
+    alert(err.message);
+    this.router.navigate(['login']);
   }
 }
