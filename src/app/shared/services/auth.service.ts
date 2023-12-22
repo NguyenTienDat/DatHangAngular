@@ -30,8 +30,14 @@ export class AuthService {
       this.firebaseUI.start('#firebaseui-auth-container', {
         signInOptions: [EmailAuthProvider.PROVIDER_ID],
         // Other config options...
-        signInSuccessUrl: '/pages',
+        // signInSuccessUrl: '/pages',
         signInFlow: 'popup',
+        callbacks: {
+          signInSuccessWithAuthResult: () => {
+            this.router.navigate(['pages']);
+            return true;
+          },
+        },
       });
     }, 500);
   }
