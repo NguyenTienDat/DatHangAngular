@@ -415,8 +415,8 @@ export class FirebaseService {
   }
 
   private handerErr(err: any) {
-    console.log({ err });
-    alert(err.message);
+    console.error({ err });
+    //alert(err.message);
     this.router.navigate(['login']);
   }
 }
