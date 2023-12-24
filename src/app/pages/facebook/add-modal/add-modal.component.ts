@@ -15,7 +15,11 @@ import { ToastService } from 'src/app/shared/services/toast.service';
 })
 export class AddModalComponent implements OnInit {
   data!: HeadersTable[];
-  output: FacebookProduct | any = {};
+  output: FacebookProduct | any = {
+    status: STATUS_DROPDOWN.NOT_ORDER_YET,
+    weight_price: this.firebaseService.DEFAULT_WEIGHT_PRICE$.value,
+    exchange: this.firebaseService.DEFAULT_EXCHANGE$.value,
+  };
 
   IMG_DEFAULT = NO_IMG;
 
@@ -29,11 +33,7 @@ export class AddModalComponent implements OnInit {
     this.data = this.dialogService.data.data;
   }
 
-  ngOnInit() {
-    this.output.status = STATUS_DROPDOWN.ORDERED;
-    this.output.weight_price = this.firebaseService.DEFAULT_WEIGHT_PRICE$.value;
-    this.output.exchange = this.firebaseService.DEFAULT_EXCHANGE$.value;
-  }
+  ngOnInit() {}
 
   changeValue(td: HeadersTable, value: any) {
     this.output[td.field] = value;
