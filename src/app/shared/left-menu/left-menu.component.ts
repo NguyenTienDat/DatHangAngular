@@ -1,10 +1,10 @@
+import { AuthService } from './../services/auth.service';
 import { FirebaseService } from './../services/firebase.service';
 import { Component } from '@angular/core';
 
 interface LeftMenu {
   name: string;
   path?: string;
-  link?: string;
   icon: string;
   tooltip: string;
 }
@@ -19,31 +19,33 @@ export class LeftMenuComponent {
     {
       name: 'Facebook',
       tooltip: 'Quản lý các đơn hàng bán trên Facebook',
-      path: 'facebook',
+      path: 'pages/facebook',
       icon: 'pi pi-facebook',
     },
     {
       name: 'TMĐT',
-      // path: 'tmdt',
-      link: 'https://damiekids.000webhostapp.com/pages/admin-tmdt/admin-tmdt.html',
+      path: 'pages/tmdt',
       tooltip: 'Quản lý các đơn hàng bán các sàn như Shopee, Lazada',
       icon: 'pi pi-shopping-cart',
     },
     {
       name: 'Customer',
-      path: 'customer',
+      path: 'pages/customer',
       tooltip: 'Quản lý khách hàng',
       icon: 'pi pi-user-edit',
     },
     {
       name: 'Setting',
-      path: 'setting',
+      path: 'pages/setting',
       tooltip: 'Tùy biến cấu hình',
       icon: 'pi pi-cog',
     },
   ];
 
-  constructor(public firebaseService: FirebaseService) {}
+  constructor(
+    public firebaseService: FirebaseService,
+    public authService: AuthService
+  ) {}
 
   close() {
     this.firebaseService.IS_OPEN_MENU$.next(false);
@@ -57,5 +59,9 @@ export class LeftMenuComponent {
 
   showMenu(isShowMenu: boolean) {
     this.firebaseService.IS_SHOW_MENU$.next(isShowMenu);
+  }
+
+  logout() {
+    this.authService.logout();
   }
 }

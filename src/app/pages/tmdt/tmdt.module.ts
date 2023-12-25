@@ -2,18 +2,23 @@ import { RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TmdtComponent } from './tmdt.component';
+import { SharedModule } from 'src/app/shared/shared.module';
+import { FormsModule } from '@angular/forms';
+import { TmdtTableComponent } from './tmdt-table/tmdt-table.component';
 const routers: Routes = [
   {
     path: '',
-    component: TmdtComponent
-  }
+    component: TmdtComponent,
+  },
 ];
 
 @NgModule({
   imports: [
     CommonModule,
     RouterModule.forChild(routers),
+    SharedModule,
+    FormsModule,
   ],
-  declarations: [TmdtComponent]
+  declarations: [TmdtComponent, TmdtTableComponent],
 })
-export class TmdtModule { }
+export class TmdtModule {}

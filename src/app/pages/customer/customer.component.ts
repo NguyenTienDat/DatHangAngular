@@ -145,8 +145,8 @@ export class CustomerComponent implements OnInit, OnDestroy {
         type: 'string',
         filter: {},
         styles: {
-          //width: '160px',
-          //'min-width': '160px',
+          width: '160px',
+          'min-width': '140px',
           'text-align': 'center',
         },
       },
@@ -159,6 +159,7 @@ export class CustomerComponent implements OnInit, OnDestroy {
         styles: {
           //'min-width': '150px',
           //width: '150px',
+          'max-width': '300px',
         },
       },
       {
@@ -170,6 +171,7 @@ export class CustomerComponent implements OnInit, OnDestroy {
           wordBreak: 'break-all',
           //width: '350px',
           //'min-width': '300px',
+          'max-width': '400px',
         },
       },
       {
@@ -180,19 +182,18 @@ export class CustomerComponent implements OnInit, OnDestroy {
         styles: {
           wordBreak: 'break-all',
           //width: '100%',
-          //'min-width': '100px',
         },
       },
-      {
-        name: 'ID',
-        field: '_id',
-        type: 'string',
-        filter: {},
-        styles: {
-          //'min-width': '250px',
-          width: '200px',
-        },
-      },
+      // {
+      //   name: 'ID',
+      //   field: '_id',
+      //   type: 'string',
+      //   filter: {},
+      //   styles: {
+      //     //'min-width': '250px',
+      //     width: '200px',
+      //   },
+      // },
     ];
   }
 
@@ -290,9 +291,6 @@ export class CustomerComponent implements OnInit, OnDestroy {
       )
       .subscribe((res: any) => {
         console.log(res);
-        res.sort((a: ICustomer, b: ICustomer) =>
-          (a.updated ?? 0) < (b.updated ?? 0) ? 1 : -1
-        );
         this.customersList = res;
       });
   }

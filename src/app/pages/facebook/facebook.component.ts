@@ -199,9 +199,7 @@ export class FacebookComponent implements OnInit, OnDestroy {
           matchMode: 'in',
         },
         styles: {
-          width: '150px',
-          'min-width': '150px',
-          'text-align': 'center',
+          wordBreak: 'break-all',
         },
       },
       {
@@ -232,13 +230,12 @@ export class FacebookComponent implements OnInit, OnDestroy {
         },
       },
       {
-        name: 'Mã vận đơn',
+        name: 'MVĐ',
         field: 'orderID',
         type: 'string',
         filter: {},
         styles: {
-          width: '160px',
-          'min-width': '160px',
+          'min-width': '50px',
         },
       },
       {

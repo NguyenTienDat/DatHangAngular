@@ -46,12 +46,15 @@
 
             <ng-container *ngSwitchCase="'dropdown'">
               <p-dropdown
+                [filter]="!td.filter.noFilterOnRow"
                 id="value"
                 optionLabel="name"
                 optionValue="value"
                 [options]="td.filter.dropdownOptions ?? []"
                 [showClear]="false"
                 [readonly]="false"
+                [placeholder]="'Chọn ' + td.name"
+                [(ngModel)]="output[td.field]"
                 (onChange)="changeValue(td, $event.value)"
               ></p-dropdown>
             </ng-container>

@@ -3,33 +3,23 @@ import { RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
   {
-    path: 'facebook',
+    path: 'login',
     loadChildren: () =>
-      import('./pages/facebook/facebook.module').then((m) => m.FacebookModule),
+      import('./login/login.module').then((m) => m.LoginModule),
   },
   {
-    path: 'tmdt',
+    path: 'pages',
     loadChildren: () =>
-      import('./pages/tmdt/tmdt.module').then((m) => m.TmdtModule),
-  },
-  {
-    path: 'setting',
-    loadChildren: () =>
-      import('./pages/setting/setting.module').then((m) => m.SettingModule),
-  },
-  {
-    path: 'customer',
-    loadChildren: () =>
-      import('./pages/customer/customer.module').then((m) => m.CustomerModule),
+      import('./pages/pages.module').then((m) => m.PagesModule),
   },
   {
     path: '',
-    redirectTo: 'facebook',
+    redirectTo: 'pages',
     pathMatch: 'full',
   },
   {
     path: '**',
-    redirectTo: 'facebook',
+    redirectTo: 'pages',
   },
 ];
 

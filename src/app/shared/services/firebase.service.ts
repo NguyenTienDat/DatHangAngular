@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { Injectable } from '@angular/core';
 import {
   Firestore,
@@ -28,14 +29,18 @@ import {
   catchError,
   forkJoin,
   tap,
+  map,
+  throwError,
 } from 'rxjs';
 import {
   ENVIRONMENT_LIST,
   FacebookProduct,
   ICustomer,
+  ITmdt,
   STATUS_CUSTOMER_ENUM,
   STATUS_DROPDOWN,
 } from '../models';
+import { xoa_dauTV } from '../utils';
 
 @Injectable({
   providedIn: 'root',
@@ -43,9 +48,11 @@ import {
 export class FirebaseService {
   private PRODUCTS_COLLECTION = ENVIRONMENT_LIST[0].products;
   private CUSTOMERS_COLLECTION = ENVIRONMENT_LIST[0].customers;
+  private TMDT_COLLECTION = ENVIRONMENT_LIST[0].tmdt;
   private SETTING_COLLECTION = 'setting';
 
   private productsCol!: CollectionReference;
+  private tmdtCol!: CollectionReference;
   private customersCol!: CollectionReference;
 
   private settingCol: CollectionReference;
@@ -90,13 +97,15 @@ export class FirebaseService {
     [] as ICustomer[]
   );
 
-  constructor(private firestore: Firestore) {
+  constructor(private firestore: Firestore, private router: Router) {
     this.DATABASE_FIREBASE$.subscribe((index) => {
       this.PRODUCTS_COLLECTION = ENVIRONMENT_LIST[index].products;
       this.CUSTOMERS_COLLECTION = ENVIRONMENT_LIST[index].customers;
+      this.TMDT_COLLECTION = ENVIRONMENT_LIST[index].tmdt;
 
       this.productsCol = collection(this.firestore, this.PRODUCTS_COLLECTION);
       this.customersCol = collection(this.firestore, this.CUSTOMERS_COLLECTION);
+      this.tmdtCol = collection(this.firestore, this.TMDT_COLLECTION);
       console.log('Sử dụng DB', this.PRODUCTS_COLLECTION);
     });
     this.settingCol = collection(this.firestore, this.SETTING_COLLECTION);
@@ -232,10 +241,38 @@ export class FirebaseService {
   }
 
   // =====================================================================================================================
+  // TMDT ============================================================================================================
+  // =====================================================================================================================
+  getTmdt(): Observable<ITmdt[]> {
+    return this.getCustomDocs(this.tmdtCol);
+  }
+
+  addTMDT(docData: ITmdt): Observable<any> {
+    docData.created = Date.now();
+    docData.updated = Date.now();
+    return from(addDoc(this.productsCol, docData)).pipe(
+      catchError((err, caught) => {
+        this.handerErr(err);
+        return caught;
+      })
+    );
+  }
+
+  // =====================================================================================================================
   // CUSTOMER ============================================================================================================
   // =====================================================================================================================
-  getCustomers() {
-    return this.getCustomDocs(this.customersCol);
+  getCustomers(): Observable<ICustomer[]> {
+    const q = query(
+      this.customersCol,
+      where('status', '!=', STATUS_CUSTOMER_ENUM.DELETED)
+    );
+    return this.getCustomDocs(q).pipe(
+      map((items: ICustomer[]) =>
+        items.sort((a: ICustomer, b: ICustomer) =>
+          xoa_dauTV(a.name ?? '') > xoa_dauTV(b.name ?? '') ? 1 : -1
+        )
+      )
+    );
   }
 
   addCustomer(docData: ICustomer): Observable<any> {
@@ -369,11 +406,17 @@ export class FirebaseService {
           };
         });
       })
+    ).pipe(
+      catchError((e) => {
+        this.handerErr(e);
+        return throwError(e);
+      })
     );
   }
 
   private handerErr(err: any) {
-    console.log({ err });
-    alert('Err' + err.toString());
+    console.error({ err });
+    //alert(err.message);
+    this.router.navigate(['login']);
   }
 }
