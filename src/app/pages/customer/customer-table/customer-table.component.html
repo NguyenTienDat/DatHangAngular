@@ -123,6 +123,8 @@
                       pInputTextarea
                       [ngStyle]="td.styles"
                       [(ngModel)]="product[td.field]"
+                      cols="50"
+                      rows="5"
                       (change)="changeValue(product, td, product[td.field])"
                       (keydown)="
                         keyHandler($event, product, td, product[td.field])

@@ -14,6 +14,7 @@ import { ToastService } from '../../shared/services/toast.service';
 import { MultiHandlerModalComponent } from './multi-handler-modal/multi-handler-modal.component';
 import { ConfirmationService, MenuItem } from 'primeng/api';
 import { finalize, Subject, takeUntil } from 'rxjs';
+import { CommonService } from 'src/app/shared/services/common.service';
 
 @Component({
   selector: 'app-facebook',
@@ -49,7 +50,8 @@ export class FacebookComponent implements OnInit, OnDestroy {
     private toastService: ToastService,
     public dialogService: DialogService,
     private firebaseService: FirebaseService,
-    private confirmationService: ConfirmationService
+    private confirmationService: ConfirmationService,
+    private commonService: CommonService
   ) {}
 
   ngOnInit() {
@@ -68,6 +70,14 @@ export class FacebookComponent implements OnInit, OnDestroy {
     });
   }
 
+  private autoCalculatePrices(
+    item: FacebookProduct,
+    header: HeadersTable,
+    value: any
+  ) {
+    console.log({ item }, header, value);
+  }
+
   valueChanged(event: {
     item: FacebookProduct;
     header: HeadersTable;
@@ -77,21 +87,46 @@ export class FacebookComponent implements OnInit, OnDestroy {
     const update: FacebookProduct = {
       [event.header.field]: event.value,
     };
-    if (event.header.type === 'number') {
-      update.price = event.item.price;
-      update.price2 = event.item.price2;
-    }
-    this.firebaseService
-      .fbUpdateProduct(update, event.item._id!)
-      .pipe(takeUntil(this.$destroy))
-      .subscribe(() => {
-        this.toastService.add({
-          severity: 'success',
-          summary: `Updated [${event.item.customer}]`,
-          detail: `[${event.header.name}] = ${event.value}`,
+
+    const updateFunc = () => {
+      this.firebaseService
+        .fbUpdateProduct(update, event.item._id!)
+        .pipe(takeUntil(this.$destroy))
+        .subscribe(() => {
+          this.toastService.add({
+            severity: 'success',
+            summary: `Updated [${event.item.customer}]`,
+            detail: `[${event.header.name}] = ${event.value}`,
+          });
+          this.getData();
         });
-        this.getData();
+    };
+    if (
+      event.header.type === 'number' &&
+      event.header.field !== 'price' &&
+      event.header.field !== 'price2'
+    ) {
+      this.confirmationService.confirm({
+        message: 'Tự động tính giá bán, giá nhập?',
+        header: 'Update confirmation',
+        icon: 'pi pi-info-circle',
+        rejectButtonStyleClass: 'bg-danger',
+        accept: () => {
+          this.commonService.autoCalculatePrices(
+            event.item,
+            event.header,
+            event.value
+          );
+          update.price = event.item.price;
+          update.price2 = event.item.price2;
+
+          updateFunc();
+        },
+        reject: () => {
+          updateFunc();
+        },
       });
+    }
   }
 
   showAddModal() {

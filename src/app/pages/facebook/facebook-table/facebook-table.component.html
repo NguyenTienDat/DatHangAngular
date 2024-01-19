@@ -161,9 +161,6 @@
                       [minFractionDigits]="0"
                       [maxFractionDigits]="5"
                       (focusout)="changeValue(product, td, product[td.field])"
-                      (ngModelChange)="
-                        commonService.autoCalculatePrices(product, td, $event)
-                      "
                       (keydown)="
                         keyHandler($event, product, td, product[td.field])
                       "
