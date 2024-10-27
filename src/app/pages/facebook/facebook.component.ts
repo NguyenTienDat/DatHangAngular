@@ -13,7 +13,7 @@ import { FirebaseService } from '../../shared/services/firebase.service';
 import { ToastService } from '../../shared/services/toast.service';
 import { MultiHandlerModalComponent } from './multi-handler-modal/multi-handler-modal.component';
 import { ConfirmationService, MenuItem } from 'primeng/api';
-import { finalize, Subject, takeUntil } from 'rxjs';
+import { catchError, finalize, of, Subject, takeUntil } from 'rxjs';
 import { CommonService } from 'src/app/shared/services/common.service';
 
 @Component({
@@ -90,8 +90,12 @@ export class FacebookComponent implements OnInit, OnDestroy {
 
     const updateFunc = () => {
       this.firebaseService
-        .fbUpdateProduct(update, event.item._id!)
-        .pipe(takeUntil(this.$destroy))
+        .fbUpdateProduct(update, event?.item?._id || '')
+        .pipe(takeUntil(this.$destroy),
+        catchError((err) => {
+          console.error('updateFunc err', err);
+          return of(null);
+        }))
         .subscribe(() => {
           this.toastService.add({
             severity: 'success',
@@ -126,6 +130,8 @@ export class FacebookComponent implements OnInit, OnDestroy {
           updateFunc();
         },
       });
+    } else {
+      updateFunc();
     }
   }
 
@@ -438,7 +444,11 @@ export class FacebookComponent implements OnInit, OnDestroy {
       .fbUpdateProducts(output, items)
       .pipe(
         takeUntil(this.$destroy),
-        finalize(() => (this.isLoading = false))
+        catchError((err) => {
+          console.error('fbUpdateProducts err', err);
+          return of(null)
+        }),
+        finalize(() => (this.isLoading = false)),
       )
       .subscribe((res) => {
         this.toastService.showToastSuccess(`${mess} successfully!`);
