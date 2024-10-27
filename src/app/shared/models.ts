@@ -186,3 +186,21 @@ export function PROPS(): any[] {
     return (a.order || 0) < (b.order || 0) ? -1 : 1;
   });
 }
+
+export interface I_SETTING {
+  defaultWeightPrice?: number;
+  defaultExchange?: number;
+  incomePerOrder?: number;
+  vat?: number;
+  statusSelected?: number[];
+  databaseSource?: number;
+  showMenu?: boolean;
+  isOpen?: boolean;
+}
+export interface I_USER {
+  customSettings?: I_SETTING;
+  name?: string;
+  _id?: string;
+  updated?: number;
+  created?: number;
+}

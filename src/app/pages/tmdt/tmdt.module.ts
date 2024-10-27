@@ -5,6 +5,7 @@ import { TmdtComponent } from './tmdt.component';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { FormsModule } from '@angular/forms';
 import { TmdtTableComponent } from './tmdt-table/tmdt-table.component';
+import { AddModalComponent } from './add-modal/add-modal.component';
 const routers: Routes = [
   {
     path: '',
@@ -19,6 +20,6 @@ const routers: Routes = [
     SharedModule,
     FormsModule,
   ],
-  declarations: [TmdtComponent, TmdtTableComponent],
+  declarations: [TmdtComponent, TmdtTableComponent, AddModalComponent],
 })
 export class TmdtModule {}

@@ -37,6 +37,7 @@ import {
   FacebookProduct,
   ICustomer,
   ITmdt,
+  I_USER,
   STATUS_CUSTOMER_ENUM,
   STATUS_DROPDOWN,
 } from '../models';
@@ -50,10 +51,12 @@ export class FirebaseService {
   private CUSTOMERS_COLLECTION = ENVIRONMENT_LIST[0].customers;
   private TMDT_COLLECTION = ENVIRONMENT_LIST[0].tmdt;
   private SETTING_COLLECTION = 'setting';
+  private USER_COLLECTION = 'user';
 
   private productsCol!: CollectionReference;
   private tmdtCol!: CollectionReference;
   private customersCol!: CollectionReference;
+  private userCol!: CollectionReference;
 
   private settingCol: CollectionReference;
   /**
@@ -109,6 +112,7 @@ export class FirebaseService {
       console.log('Sử dụng DB', this.PRODUCTS_COLLECTION);
     });
     this.settingCol = collection(this.firestore, this.SETTING_COLLECTION);
+    this.userCol = collection(this.firestore, this.USER_COLLECTION);
   }
 
   fbGetProducts() {
@@ -347,6 +351,34 @@ export class FirebaseService {
     );
   }
 
+  // =====================================================================================================================
+  // USER ============================================================================================================
+  // =====================================================================================================================
+  addUser(docData: I_USER): Observable<any> {
+    docData.created = Date.now();
+    docData.updated = Date.now();
+    return from(addDoc(this.customersCol, docData)).pipe(
+      catchError((err, caught) => {
+        this.handerErr(err);
+        return caught;
+      })
+    );
+  }
+
+  updateUser(docData: ICustomer, id: string) {
+    docData.updated = Date.now();
+    return from(
+      updateDoc(
+        doc(this.firestore, this.CUSTOMERS_COLLECTION, id),
+        docData as any
+      )
+    ).pipe(
+      catchError((err, caught) => {
+        this.handerErr(err);
+        return caught;
+      })
+    );
+  }
   //SETTING ===================================================
   loadSetting(bindingSetting?: any) {
     this.settingGet().subscribe((res) => {

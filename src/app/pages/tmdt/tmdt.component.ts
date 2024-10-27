@@ -6,6 +6,7 @@ import { ToastService } from '../../shared/services/toast.service';
 import { ConfirmationService, MenuItem } from 'primeng/api';
 import { finalize, Subject, takeUntil } from 'rxjs';
 import { HeadersTable } from './tmdt-table/tmdt-table.component';
+import { AddModalComponent } from './add-modal/add-modal.component';
 @Component({
   selector: 'app-tmdt',
   templateUrl: './tmdt.component.html',
@@ -62,21 +63,21 @@ export class TmdtComponent implements OnInit, OnDestroy {
   }
 
   showAddModal() {
-    // this.ref = this.dialogService.open(AddModalComponent, {
-    //   header: 'Đơn hàng mới',
-    //   contentStyle: { overflow: 'auto' },
-    //   maximizable: true,
-    //   baseZIndex: 10000,
-    //   data: {
-    //     data: this.headers,
-    //     callBackAdded: (output: FacebookProduct) => {
-    //       this.addItem(output);
-    //     },
-    //   },
-    // });
-    // this.ref.onClose.subscribe(() => {
-    //   this.getData();
-    // });
+    this.ref = this.dialogService.open(AddModalComponent, {
+      header: 'Đơn hàng mới',
+      contentStyle: { overflow: 'auto' },
+      maximizable: true,
+      baseZIndex: 10000,
+      data: {
+        data: this.headers,
+        callBackAdded: (output: ITmdt) => {
+          this.addItem(output);
+        },
+      },
+    });
+    this.ref.onClose.subscribe(() => {
+      this.getData();
+    });
   }
 
   contextMenuClick(event: { type: CONTEXT_MENU_EVENT; value: ITmdt }) {

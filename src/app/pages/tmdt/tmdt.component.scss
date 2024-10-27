@@ -2,4 +2,14 @@
   .image-col img {
     width: 100px;
   }
+
+  .flat-button-add {
+    position: fixed;
+    bottom: 90px;
+    right: 80px;
+
+    .p-speeddial-action {
+      text-decoration: none;
+    }
+  }
 }
